@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Usuario</title>
+</head>
+<body>
+  <h2>Formulario de Registro</h2>
+  <form action="{% url 'registro' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="usuario">Usuario:</label><br>
+    <input type="text" id="usuario" name="usuario" maxlength="100" required><br><br>
+
+    <label for="contrasenia">Contraseña:</label><br>
+    <input type="password" id="contrasenia" name="contrasenia" maxlength="128" required><br><br>
+
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" maxlength="128" required><br><br>
+
+    <label for="correo">Correo Electrónico:</label><br>
+    <input type="email" id="correo" name="correo" required><br><br>
+
+    <label for="fotoperfil">Foto de Perfil:</label><br>
+    <input type="file" id="fotoperfil" name="fotoperfil" accept="image/*" required><br><br>
+
+    <label for="biografia">Biografía:</label><br>
+    <textarea id="biografia" name="biografia" maxlength="350" rows="4" cols="50" required></textarea><br><br>
+
+    <label for="imgdonaciones">Imagen de Donaciones:</label><br>
+    <input type="file" id="imgdonaciones" name="imgdonaciones" accept="image/*" required><br><br>
+
+    <button type="submit">Registrarse</button>
+</form>
+
+  </body>
+</html>

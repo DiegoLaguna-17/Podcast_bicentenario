@@ -1,0 +1,304 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }} | Podcast Bicentenario</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #f72585;
+            --light: #f8f9fa;
+            --gray: #adb5bd;
+            --dark: #212529;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 1rem;
+        }
+
+        .title {
+            color: var(--primary-dark);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-weight: 300;
+            font-size: 1.1rem;
+        }
+
+        .creadores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 1rem 0;
+        }
+
+        .creador-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .creador-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .creador-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--secondary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .creador-img-container {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+        }
+
+        .creador-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .creador-card:hover .creador-img {
+            transform: scale(1.05);
+        }
+
+        .creador-body {
+            padding: 1.5rem;
+        }
+
+        .creador-name {
+            font-size: 1.25rem;
+            margin: 0 0 0.5rem;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .creador-bio {
+            color: #6c757d;
+            margin-bottom: 1.25rem;
+            font-size: 0.9rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .creador-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .creador-meta svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 0.5rem;
+            fill: currentColor;
+        }
+
+        .donaciones-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 1.25rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            width: 100%;
+            text-align: center;
+        }
+
+        .donaciones-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .donaciones-btn svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 0.5rem;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .empty-title {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-text {
+            color: var(--gray);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .timestamp {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .creadores-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">{{ titulo }}</h1>
+            <p class="subtitle">Descubre y conecta con nuestros creadores de contenido</p>
+        </div>
+        
+        <div class="creadores-grid">
+            {% if creadores %}
+                {% for creador in creadores %}
+                <div class="creador-card">
+                    <div class="creador-badge">Creador</div>
+                    
+                    <div class="image-container" style="position: relative; width: 100%; padding-top: 100%; overflow: hidden; border-radius: 8px;">
+                        {% load static %}
+                        {% with placeholder_path='img/placeholder-user.png' %}
+                        <img src="{{ creador.fotoperfil|default:'' }}" 
+                        alt="{{ creador.usuario }}"
+                        style="position: absolute;
+                               top: 0;
+                               left: 0;
+                               width: 100%;
+                               height: 100%;
+                               object-fit: cover;
+                               object-position: center;
+                               transition: transform 0.3s ease;"
+                            onerror="this.onerror=null; this.src='{% static placeholder_path %}'"
+                            data-placeholder="{% static placeholder_path %}">
+                            {% endwith %}
+                    </div>
+                    
+                    <div class="creador-body">
+                        <h3 class="creador-name">{{ creador.usuario }}</h3>
+                        <p class="creador-bio">{{ creador.biografia|default:"Este creador aún no ha compartido su biografía." }}</p>
+                        
+                        <div class="creador-meta">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
+                            <span>{{ creador.correo|default:"Sin correo" }}</span>
+                        </div>
+                        
+                        <div class="image-container" style="position: relative; width: 100%; padding-top: 100%; overflow: hidden; border-radius: 8px;">
+                            {% load static %}
+                            {% with placeholder_path='img/placeholder-user.png' %}
+                            <img src="{{ creador.imgdonaciones|default:'' }}" 
+                            alt="{{ creador.usuario }}"
+                            style="position: absolute;
+                                   top: 0;
+                                   left: 0;
+                                   width: 100%;
+                                   height: 100%;
+                                   object-fit: cover;
+                                   object-position: center;
+                                   transition: transform 0.3s ease;"
+                                onerror="this.onerror=null; this.src='{% static placeholder_path %}'"
+                                data-placeholder="{% static placeholder_path %}">
+                                {% endwith %}
+                        </div>
+                        
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <h3 class="empty-title">No hay creadores disponibles</h3>
+                    <p class="empty-text">Actualmente no tenemos creadores para mostrar. Vuelve más tarde para descubrir nuevo contenido.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="timestamp">
+            Última actualización: {{ current_time }}
+        </div>
+    </div>
+</body>
+</html>

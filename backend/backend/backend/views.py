@@ -45,6 +45,79 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
+
+
+def obtenerSeguimientos(request):
+    if request.method == 'GET':
+        try:
+            # Obtener el parámetro usuarios_idusuario de la URL
+            usuarios_idusuario = request.GET.get('usuarios_idusuario')
+            
+            if not usuarios_idusuario:
+                return JsonResponse({'error': 'El parámetro usuarios_idusuario es requerido'}, status=400)
+            
+            # Consultar la base de datos
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT usuarios_idusuario, creadores_idcreador 
+                    FROM backend_listaseguidos
+                    WHERE usuarios_idusuario = %s
+                    """,
+                    [usuarios_idusuario]
+                )
+                columns = [col[0] for col in cursor.description]  # Nombres de las columnas
+                seguimientos = [
+                    dict(zip(columns, row))
+                    for row in cursor.fetchall()
+                ]
+                
+            return JsonResponse({'seguimientos': seguimientos}, status=200)
+                
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+@csrf_exempt
+def seguirCreador(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            # Verificar que los campos requeridos estén presentes
+            if 'usuarios_idusuario' not in data or 'creadores_idcreador' not in data:
+                return JsonResponse({'error': 'Faltan campos requeridos'}, status=400)
+            
+            # Insertar directamente (ya que managed=False)
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    INSERT INTO backend_listaseguidos 
+                    (usuarios_idusuario, creadores_idcreador)
+                    VALUES (%s, %s)
+                    RETURNING creadores_idcreador
+                    """,
+                    [data['usuarios_idusuario'], data['creadores_idcreador']]
+                )
+                new_id = cursor.fetchone()[0]
+                # Corregido el typo en 'readores_idcreador' a 'creadores_idcreador'
+                return JsonResponse({
+                    'usuarios_idusuario': data['usuarios_idusuario'], 
+                    'creadores_idcreador': data['creadores_idcreador']
+                }, status=201)
+                
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'JSON inválido'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
 def mostrar_creadores(request):
     try:
         # 1. Configuración Supabase

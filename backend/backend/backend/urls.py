@@ -22,12 +22,15 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('usuarios/crear/', views.crear_usuario, name='crear_usuario'),
-    path('usuarios/listar/', views.listar_usuarios, name='listar_usuarios'),
+    path('usuarios/crear/', views.crear_usuario, name='crear_usuario'),##con Postman
+    path('usuarios/listar/', views.listar_usuarios, name='listar_usuarios'),##con Postman
     path('creadores/listar/',views.listar_creadores,name='listar_creadores'),
     path('creadores/registrar', views.mostrar_formulario_registro, name='registrar'),
     path('registro', views.registro, name='registro'),
     path('creadores/mostrar', views.mostrar_creadores, name='mostrar_creadores'),
+    path('usuarios/seguirCreador',views.seguirCreador,name='seguir_creador'),##con Postman
+        path('usuarios/obtenerSeguimientos/', views.obtenerSeguimientos, name='obtener_seguimientos'),##con Postman
+
 
 
 ]

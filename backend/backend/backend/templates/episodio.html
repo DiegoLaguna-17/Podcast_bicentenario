@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Formulario de crear podcast</h2>
+    <form action="{% url 'subir_episodio' %}" id="formulario_episodio" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <label for="podcast">id podcast:</label><br>
+      <input type="text" id="podcast" name="podcast" maxlength="100" required><br><br>
+  
+      <label for="contrasenia">Titulo:</label><br>
+      <input type="text" id="titulo" name="titulo" maxlength="128" required><br><br>
+  
+      <label for="nombre">descripcion:</label><br>
+      <input type="text" id="descripcion" name="descripcion" maxlength="128" required><br><br>
+  
+      <label for="correo">Fecha:</label><br>
+      <input type="datetime-local" name="fecha" id="fecha" required min="<?= date('Y-m-d\TH:i') ?>"><br><br>
+  
+      <label for="fotoperfil">Audio:</label><br>
+      <input type="file" id="audio" name="audio" accept=".mp3, .aac" required><br><br>
+
+      <label for="nombre">Participantes:</label><br>
+      <input type="text" id="participantes" name="participantes" maxlength="128" required><br><br>
+
+      <button type="submit">Registrarse</button>
+
+      <script>
+        const fechaInput = document.getElementById('fecha');
+        const formulario = document.getElementById('formulario_episodio');
+      
+        function obtenerFechaLocal() {
+          const now = new Date();
+          now.setSeconds(0, 0); // Quitar segundos y milisegundos
+      
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const day = String(now.getDate()).padStart(2, '0');
+          const hour = String(now.getHours()).padStart(2, '0');
+          const minute = String(now.getMinutes()).padStart(2, '0');
+      
+          return `${year}-${month}-${day}T${hour}:${minute}`;
+        }
+      
+        // Establecer valor mínimo al cargar
+        fechaInput.min = obtenerFechaLocal();
+      
+        // Validación antes de enviar
+        formulario.addEventListener('submit', function(event) {
+          const ahora = new Date();
+          ahora.setSeconds(0, 0);
+          const seleccionada = new Date(fechaInput.value);
+      
+          if (seleccionada < ahora) {
+            event.preventDefault();
+            alert("La fecha y hora deben ser actuales o futuras.");
+          }
+        });
+      </script>
+      
+</body>
+</html>

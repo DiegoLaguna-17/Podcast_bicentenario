@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+  <h2>Formulario de crear podcast</h2>
+  <form action="{% url 'podcast' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="usuario">ID creador:</label><br>
+    <input type="text" id="creador" name="creador" maxlength="100" required><br><br>
+
+    <label for="contrasenia">Titulo:</label><br>
+    <input type="text" id="titulo" name="titulo" maxlength="128" required><br><br>
+
+    <label for="nombre">descripcion:</label><br>
+    <input type="text" id="descripcion" name="descripcion" maxlength="128" required><br><br>
+
+    <label for="correo">Categoria:</label><br>
+    <input type="text" id="categoria" name="categoria" required><br><br>
+
+    <label for="fotoperfil">Premium:</label><br>
+    <input type="checkbox" id="premium" name="premium" value="true"><br><br>
+
+    
+
+    <button type="submit">Registrarse</button>
+</form>
+
+</body>
+</html>

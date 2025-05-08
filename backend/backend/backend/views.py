@@ -31,7 +31,7 @@ from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
 import os
 import uuid  # Importar uuid para generar nombres únicos
-
+from django.views.decorators.http import require_GET
 # Configurar la conexión con Supabase
 url = SUPABASE_URL
 key = SUPABASE_KEY
@@ -42,8 +42,166 @@ from datetime import datetime
 
 
 import logging
-
+from django.utils import timezone 
 logger = logging.getLogger(__name__)
+
+def mostrar_formulario_episodio(request):
+    return render(request, 'episodio.html')
+
+@csrf_exempt
+def subir_episodio(request):
+    if request.method == 'POST':
+        try:
+            # Validar campos obligatorios
+            required_fields = ['podcast', 'titulo', 'descripcion', 'fecha']
+            for field in required_fields:
+                if field not in request.POST:
+                    return JsonResponse({'error': f'Falta el campo requerido: {field}'}, status=400)
+
+            # Obtener y formatear datos
+            podcast = request.POST['podcast']
+            titulo = request.POST['titulo'].strip()
+            descripcion = request.POST['descripcion'].strip()
+            fecha_str = request.POST['fecha']
+            participantes = request.POST.get('participantes', '')
+
+            # Convertir y validar fecha
+            try:
+                fecha_hora = datetime.strptime(fecha_str, "%Y-%m-%dT%H:%M")
+                fecha_hora = timezone.make_aware(fecha_hora)
+                fecha_iso = fecha_hora.isoformat()  # Convertir a string ISO
+            except ValueError:
+                return JsonResponse({'error': 'Formato de fecha inválido. Use YYYY-MM-DDTHH:MM'}, status=400)
+
+            # Determinar visibilidad
+            visible = timezone.now() >= fecha_hora
+
+            # Validar archivo de audio
+            if 'audio' not in request.FILES:
+                return JsonResponse({'error': 'No se proporcionó archivo de audio'}, status=400)
+
+            audio = request.FILES['audio']
+            allowed_extensions = ['.mp3', '.aac', '.m4a', '.wav']
+            file_extension = os.path.splitext(audio.name)[1].lower()
+            
+            if file_extension not in allowed_extensions:
+                return JsonResponse({
+                    'error': 'Formato de audio no permitido',
+                    'formatos_aceptados': allowed_extensions
+                }, status=400)
+
+            # Subir audio a Supabase
+            audio_nombre = f'audio_{titulo}_{podcast}_{uuid.uuid4().hex}{file_extension}'
+            nombre_audio_seguro = audio_nombre.replace(' ', '_')
+            camino = f"episodios/{nombre_audio_seguro}"
+
+            try:
+                upload_response = supabase.storage.from_('audios').upload(
+                    path=camino,
+                    file=audio.read(),
+                    file_options={
+                        "content-type": audio.content_type,
+                        "upsert": False
+                    }
+                )
+                audio_url = supabase.storage.from_('audios').get_public_url(camino)
+            except Exception as upload_error:
+                return JsonResponse({'error': f'Error al subir audio: {str(upload_error)}'}, status=500)
+
+            # Preparar datos para Supabase (convertir datetime a string ISO)
+            episodio_data = {
+                "podcast_idpodcast": podcast,
+                "titulo": titulo,
+                "descripcion": descripcion,
+                "fechapublicacion": fecha_iso,  # Usamos el string ISO en lugar del objeto datetime
+                "audio": audio_url,
+                "participantes": participantes,
+                "visible": visible
+            }
+
+            # Insertar en la base de datos
+            response = supabase.table('backend_episodios').insert(episodio_data).execute()
+            
+            if hasattr(response, 'error') and response.error:
+                # Intentar eliminar el audio subido si falla la inserción
+                try:
+                    supabase.storage.from_('audios').remove([camino])
+                except:
+                    pass
+                return JsonResponse({'error': str(response.error)}, status=400)
+            
+            return JsonResponse({
+                'mensaje': 'Episodio subido con éxito',
+                'audio_url': audio_url,
+                'fecha_publicacion': fecha_iso
+            }, status=201)
+            
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+
+
+
+
+@require_GET
+def podcasts_por_creador(request, id_creador):
+    try:
+        # Validar que el id_creador es un número válido
+        id_creador = int(id_creador)
+        
+        # Consulta a Supabase
+        response = supabase.table('backend_podcast')\
+                         .select('*')\
+                         .eq('creadores_idcreador', id_creador)\
+                         .execute()
+        
+        # Verificar si hay resultados
+        if not response.data:
+            return JsonResponse({'mensaje': 'No se encontraron podcasts para este creador'}, status=404)
+        
+        return JsonResponse({'podcasts': response.data}, safe=False)
+    
+    except ValueError:
+        return JsonResponse({'error': 'ID de creador inválido'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
+def mostrar_formulario_podcast(request):
+    return render(request, 'podcast.html')
+
+
+
+
+@csrf_exempt
+def crear_podcast(request):
+    if request.method=='POST':
+        try:
+            creador=request.POST.get('creador')
+            titulo=request.POST.get('titulo')
+            descripcion=request.POST.get('descripcion')
+            categoria=request.POST.get('categoria')
+            premium=request.POST.get('premium','false')
+            premium=premium=='true'
+
+            data = {
+                "creadores_idcreador":creador,
+                "titulo":titulo,
+                "descripcion":descripcion,
+                "categoria":categoria,
+                "premium":premium,
+            }
+            response = supabase.table('backend_podcast').insert(data).execute()
+            if hasattr(response, 'error') and response.error:
+                return JsonResponse({'error': 'Error al registrar en Supabase'}, status=400)
+            return JsonResponse({'mensaje': 'Podcast creado con éxito'}, status=201) 
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
+
+
 
 
 
@@ -119,7 +277,7 @@ def seguirCreador(request):
 
 
 def mostrar_creadores(request):
-    try:
+    try:    
         # 1. Configuración Supabase
         supabase_url = url
         supabase_key = key

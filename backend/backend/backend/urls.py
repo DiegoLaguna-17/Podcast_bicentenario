@@ -29,7 +29,12 @@ urlpatterns = [
     path('registro', views.registro, name='registro'),
     path('creadores/mostrar', views.mostrar_creadores, name='mostrar_creadores'),
     path('usuarios/seguirCreador',views.seguirCreador,name='seguir_creador'),##con Postman
-        path('usuarios/obtenerSeguimientos/', views.obtenerSeguimientos, name='obtener_seguimientos'),##con Postman
+    path('usuarios/obtenerSeguimientos/', views.obtenerSeguimientos, name='obtener_seguimientos'),##con Postman
+    path('podcast',views.crear_podcast,name='podcast'),
+    path('creadores/crearPodcast',views.mostrar_formulario_podcast,name='vistapodcast'),
+    path('creador/<int:id_creador>/podcasts/', views.podcasts_por_creador, name='podcasts-creador'),
+    path('creador/subirEpisodio',views.mostrar_formulario_episodio,name='vistaepisodio'),
+    path('episodio',views.subir_episodio,name='subir_episodio')
 
 
 

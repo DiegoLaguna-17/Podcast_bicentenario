@@ -1,0 +1,46 @@
+<div class="contenedor">
+  <div class="login-container">
+    <div class="registro-container">
+        <h2>Iniciar sesion</h2>
+
+        <div *ngIf="mensajeRespuesta" class="mensaje-exito">
+            {{ mensajeRespuesta }}
+        </div>
+        <div *ngIf="errorRespuesta" class="mensaje-error">
+            {{ errorRespuesta }}
+        </div>
+
+        <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+            <div>
+                <label for="usuario">Usuario:</label><br>
+                <input type="text" id="usuario" name="usuario" ngModel maxlength="100" required #usuarioCtrl="ngModel"><br>
+                <div *ngIf="usuarioCtrl.invalid && (usuarioCtrl.dirty || usuarioCtrl.touched)" class="error-message">
+                    <div *ngIf="usuarioCtrl.errors?.['required']">El usuario es requerido.</div>
+                </div>
+                <br>
+            </div>
+
+            <div>
+                <label for="contrasenia">Contraseña:</label><br>
+                <input type="password" id="contrasenia" name="contrasenia" ngModel maxlength="128" required #contraseniaCtrl="ngModel"><br>
+                <div *ngIf="contraseniaCtrl.invalid && (contraseniaCtrl.dirty || contraseniaCtrl.touched)" class="error-message">
+                    <div *ngIf="contraseniaCtrl.errors?.['required']">La contraseña es requerida.</div>
+                </div>
+                <br>
+            </div>
+
+
+            <label for="rol">Rol:</label>
+            <select id="rol" name="rol" ngModel #rolCtrl="ngModel" required>
+              <option value="Administrador">Administrador</option>
+              <option value="Creador">Creador</option>
+              <option value="Oyente">Oyente</option>
+            </select>
+            <button type="submit" [disabled]="loginForm.invalid">Registrarse</button>
+        </form>
+    </div>
+  </div>
+</div>
+
+
+

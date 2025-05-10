@@ -43,7 +43,67 @@ from datetime import datetime
 
 import logging
 from django.utils import timezone 
+
+
 logger = logging.getLogger(__name__)
+
+from django.contrib.auth.hashers import check_password
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def login_usuario(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+    try:
+        # Obtener datos del formulario
+        usuario = request.POST.get('usuario')
+        contrasenia = request.POST.get('contrasenia')
+        rol = request.POST.get('rol')
+        
+        # Validar campos obligatorios
+        if not all([usuario, contrasenia, rol]):
+            return JsonResponse({'error': 'Usuario, contraseña y rol son requeridos'}, status=400)
+        
+        # Determinar la tabla según el rol
+        if rol == 'Creador':
+            tabla = 'backend_creadores'
+        elif rol in ['Administrador', 'Oyente']:
+            tabla = 'backend_usuario'
+        else:
+            return JsonResponse({'error': 'Rol no válido'}, status=400)
+        
+        # Buscar usuario en la base de datos
+        response = supabase.table(tabla).select('*').eq('usuario', usuario).execute()
+        
+        if not response.data:
+            return JsonResponse({'error': 'Usuario no encontrado'}, status=404)
+        
+        usuario_data = response.data[0]
+        
+        # Verificar contraseña (asumiendo que hay un campo 'contrasenia' en la BD)
+        if check_password(usuario_data.get('contrasenia'),contrasenia):
+            return JsonResponse({'error': 'Contraseña incorrecta'}, status=401)
+        
+        # Verificar rol si está almacenado en la tabla
+        if 'rol' in usuario_data and usuario_data['rol'] != rol:
+            return JsonResponse({'error': 'El rol no coincide para este usuario'}, status=403)
+        
+        # Login exitoso
+        return JsonResponse({
+            'mensaje': 'Login exitoso',
+            'usuario': usuario_data['usuario'],
+            'rol': rol,
+            # Considera no enviar datos sensibles
+        })
+        
+    except Exception as e:
+        # Loggear el error para debugging
+        print(f"Error en login: {str(e)}")
+        return JsonResponse({'error': 'Error en el servidor'}, status=500)
+
+
 
 def mostrar_formulario_episodio(request):
     return render(request, 'episodio.html')
@@ -341,7 +401,7 @@ def mostrar_creadores(request):
 def mostrar_formulario_registro(request):
     return render(request, 'registro.html')
 
-
+@csrf_exempt
 def registro(request):
     if request.method == 'POST':
         try:
@@ -415,27 +475,25 @@ def registro(request):
 def crear_usuario(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
-            
-            # Insertar directamente (ya que managed=False)
-            from django.db import connection
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    INSERT INTO backend_usuario 
-                    (usuario, contrasenia, correo, fecha_ingreso, rol)
-                    VALUES (%s, %s, %s, NOW(), %s)
-                    RETURNING idusuario
-                    """,
-                    [data['usuario'], data['contrasenia'], data['correo'], data.get('rol', 'usuario')]
-                )
-                new_id = cursor.fetchone()[0]
-                return JsonResponse({'idusuario': new_id, 'usuario': data['usuario']}, status=201)
-                
+            usuario=request.POST.get('usuario')
+            contrasenia=request.POST.get('contrasenia')
+            rol=request.POST.get('rol')
+            correo=request.POST.get('correo')
+            fecha=timezone.now().date().isoformat()
+            contrasenia_hash=make_password(contrasenia)
+            data = {
+                "usuario":usuario,
+                "contrasenia":contrasenia_hash,
+                "rol":rol,
+                "correo":correo,
+                "fecha_ingreso":fecha,
+            }
+            response = supabase.table('backend_usuario').insert(data).execute()
+            if hasattr(response, 'error') and response.error:
+                return JsonResponse({'error': 'Error al registrar en Supabase'}, status=400)
+            return JsonResponse({'mensaje': 'Usuario creado con éxito'}, status=201) 
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-    
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
 
 
 

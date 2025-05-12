@@ -27,15 +27,19 @@ urlpatterns = [
     path('creadores/listar/',views.listar_creadores,name='listar_creadores'),
     path('creadores/registrar/', views.mostrar_formulario_registro, name='registrar'),
     path('registro/', views.registro, name='registro'),
-    path('creadores/mostrar', views.mostrar_creadores, name='mostrar_creadores'),
+    path('creadores/mostrar/', views.mostrar_creadores, name='mostrar_creadores'),
     path('usuarios/seguirCreador/',views.seguirCreador,name='seguir_creador'),##con Postman
     path('usuarios/obtenerSeguimientos/', views.obtenerSeguimientos, name='obtener_seguimientos'),##con Postman
     path('podcast/',views.crear_podcast,name='podcast'),
     path('creadores/crearPodcast/',views.mostrar_formulario_podcast,name='vistapodcast'),
-    path('creador/<int:id_creador>/podcasts/', views.podcasts_por_creador, name='podcasts-creador'),
-    path('creador/subirEpisodio',views.mostrar_formulario_episodio,name='vistaepisodio'),
+    path('creador/podcasts/', views.podcasts_por_creador, name='podcasts-creador'),
+    path('creador/subirEpisodio/',views.mostrar_formulario_episodio,name='vistaepisodio'),
     path('episodio/',views.subir_episodio,name='subir_episodio'),
-    path('login/',views.login_usuario,name='login')
+    path('login/',views.login_usuario,name='login'),
+
+    path('crear/oyente',views.mostrar_formulario_oyente,name='crearOyente'),
+    path('perfil/',views.perfil_usuario,name='perfil'),
+    path('creador/',views.perfil_creador,name='creador')
 
 
 

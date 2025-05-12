@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Usuario</title>
+</head>
+<body>
+  <h2>Formulario de Registro</h2>
+  
+  <form action="{% url 'crear_usuario' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="usuario">Usuario:</label><br>
+    <input type="text" id="usuario" name="usuario" maxlength="100" required><br><br>
+
+    <label for="contrasenia">Contraseña:</label><br>
+    <input type="password" id="contrasenia" name="contrasenia" maxlength="128" required><br><br>
+
+   
+
+    <label for="correo">Correo Electrónico:</label><br>
+    <input type="email" id="correo" name="correo" required><br><br>
+
+    
+
+    <button type="submit">Registrarse</button>
+</form>
+
+  </body>
+</html>

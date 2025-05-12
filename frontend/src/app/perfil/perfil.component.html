@@ -1,0 +1,21 @@
+<div *ngIf="datosper.rol == 'Creador'; else noDatos">
+  <h2>Datos recibidos:</h2>
+  <p>id: {{datosper.id}}</p>
+  <p><strong>usuario:</strong> {{ datosper.usuario }}</p>
+  <p>nombre: {{datosper.nombre}}</p>
+  <p>correo: {{datosper.correo}}</p>
+  <p>rol: {{datosper.rol}}</p>
+  <img src="{{datosper.fotoPerfil}}" alt="foto perfil">
+  <p>Biografia {{datosper.biografia}}</p>
+  <img src="{{datosper.donaciones}}" alt="donacion">
+
+  <button (click)="subirEpisodio()">Subir episodio</button>
+</div>
+
+<ng-template #noDatos>
+   <h2>Datos recibidos:</h2>
+  <p><strong>usuario:</strong> {{ datosper.usuario }}</p>
+  <p>correo: {{datosper.correo}}</p>
+  <p>rol: {{datosper.rol}}</p>
+  <p>fecha: {{datosper.fecha}}</p>
+</ng-template>

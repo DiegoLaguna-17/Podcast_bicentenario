@@ -51,6 +51,94 @@ from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+
+
+
+
+@csrf_exempt
+def perfil_creador(request):
+    
+    if request.method == 'GET':
+        try:
+            # Obtener el parámetro usuarios_idusuario de la URL
+            creadores_idcreador = request.GET.get('creadores_idcreador')
+            print(creadores_idcreador)
+            if not creadores_idcreador:
+                return JsonResponse({'error': 'El parámetro creadores_idcreador es requerido'}, status=400)
+            
+            # Consultar la base de datos
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT nombre, fotoperfil 
+                    FROM backend_creadores
+                    WHERE idcreador = %s
+                    """,
+                    [creadores_idcreador]
+                )
+                columns = [col[0] for col in cursor.description]  # Nombres de las columnas
+                creador = [
+                    dict(zip(columns, row))
+                    for row in cursor.fetchall()
+                ]
+                
+            return JsonResponse({'creador': creador}, status=200)
+                
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+
+@csrf_exempt
+def perfil_usuario(request):
+    if request.method=='POST':
+        try:
+            id=request.POST.get('id')
+            rol=request.POST.get('rol')
+            if rol in ['Administrador','Oyente']:
+                response=response = supabase.table('backend_usuario').select('*').eq('idusuario', id).execute()
+            else:
+                response=response = supabase.table('backend_creadores').select('*').eq('idcreador', id).execute()
+            
+            if not response.data:
+                return JsonResponse({'error': 'Usuario no encontrado'}, status=404)
+            
+            usuario_data=response.data[0]
+            
+            if rol in ['Administrador','Oyente']:
+                usuario={
+                    'id':usuario_data['idusuario'],
+                    'usuario':usuario_data['usuario'],
+                    'rol':usuario_data['rol'],
+                    'correo':usuario_data['correo'],
+                    'fecha':usuario_data['fecha_ingreso']
+                }
+            else:
+                usuario={
+                    'id':usuario_data['idcreador'],
+                    'usuario':usuario_data['usuario'],
+                    'nombre':usuario_data['nombre'],
+                    'correo':usuario_data['correo'],
+                    'rol':'Creador',
+                    'fotoPerfil':usuario_data['fotoperfil'],
+                    'biografia':usuario_data['biografia'],
+                    'donaciones':usuario_data['imgdonaciones']
+                }
+            
+            return JsonResponse(usuario)
+        except Exception as e:
+        # Loggear el error para debugging
+            print(f"Error en login: {str(e)}")
+            return JsonResponse({'error': 'Error en el servidor'}, status=500)
+
+
+        
+
+
+
 @csrf_exempt
 def login_usuario(request):
     if request.method != 'POST':
@@ -68,9 +156,11 @@ def login_usuario(request):
         
         # Determinar la tabla según el rol
         if rol == 'Creador':
+            user='idcreador'
             tabla = 'backend_creadores'
         elif rol in ['Administrador', 'Oyente']:
             tabla = 'backend_usuario'
+            user='idusuario'
         else:
             return JsonResponse({'error': 'Rol no válido'}, status=400)
         
@@ -89,14 +179,21 @@ def login_usuario(request):
         # Verificar rol si está almacenado en la tabla
         if 'rol' in usuario_data and usuario_data['rol'] != rol:
             return JsonResponse({'error': 'El rol no coincide para este usuario'}, status=403)
+        if 'rol' in usuario_data and usuario_data['rol'] in ['Administrador', 'Oyente']:
+            usuario={
+                'id':usuario_data['idusuario'],
+                'rol':usuario_data['rol']
+            }
+            
+        else:
+            usuario={
+                'id':usuario_data['idcreador'],
+                'rol':'Creador'
+                
+            }
         
         # Login exitoso
-        return JsonResponse({
-            'mensaje': 'Login exitoso',
-            'usuario': usuario_data['usuario'],
-            'rol': rol,
-            # Considera no enviar datos sensibles
-        })
+        return JsonResponse(usuario)
         
     except Exception as e:
         # Loggear el error para debugging
@@ -206,28 +303,24 @@ def subir_episodio(request):
 
 
 
-@require_GET
-def podcasts_por_creador(request, id_creador):
-    try:
-        # Validar que el id_creador es un número válido
-        id_creador = int(id_creador)
-        
-        # Consulta a Supabase
-        response = supabase.table('backend_podcast')\
-                         .select('*')\
-                         .eq('creadores_idcreador', id_creador)\
-                         .execute()
-        
-        # Verificar si hay resultados
-        if not response.data:
-            return JsonResponse({'mensaje': 'No se encontraron podcasts para este creador'}, status=404)
-        
-        return JsonResponse({'podcasts': response.data}, safe=False)
-    
-    except ValueError:
-        return JsonResponse({'error': 'ID de creador inválido'}, status=400)
-    except Exception as e:
-        return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+@csrf_exempt
+def podcasts_por_creador(request):
+    if request.method == 'POST':
+        try:
+            id_creador = request.POST.get('id')
+            response = supabase.table('backend_podcast')\
+                               .select('*')\
+                               .eq('creadores_idcreador', id_creador)\
+                               .execute()
+            podcasts = response.data or []
+
+            return JsonResponse({'podcasts': podcasts}, status=200)
+
+        except Exception as e:
+            print(f"Error en obtener podcasts: {str(e)}")
+            return JsonResponse({'error': 'Error en el servidor'}, status=500)
+
+
 
 def mostrar_formulario_podcast(request):
     return render(request, 'podcast.html')
@@ -265,7 +358,7 @@ def crear_podcast(request):
 
 
 
-
+@csrf_exempt
 def obtenerSeguimientos(request):
     if request.method == 'GET':
         try:
@@ -292,7 +385,7 @@ def obtenerSeguimientos(request):
                     for row in cursor.fetchall()
                 ]
                 
-            return JsonResponse({'seguimientos': seguimientos}, status=200)
+            return JsonResponse({'siguiendo': seguimientos}, status=200)
                 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
@@ -471,13 +564,18 @@ def registro(request):
     return render(request, 'registro.html')
 
 
+def mostrar_formulario_oyente(request):
+    return render(request, 'usuario.html')
+
+
+
 @csrf_exempt
 def crear_usuario(request):
     if request.method == 'POST':
         try:
             usuario=request.POST.get('usuario')
             contrasenia=request.POST.get('contrasenia')
-            rol=request.POST.get('rol')
+            rol='Oyente'
             correo=request.POST.get('correo')
             fecha=timezone.now().date().isoformat()
             contrasenia_hash=make_password(contrasenia)

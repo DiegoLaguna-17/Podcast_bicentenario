@@ -1,0 +1,128 @@
+.video-upload-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: var(--verde-fuerte);
+}
+
+.video-upload-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--blanco);
+  font-size: 50px;
+  text-shadow: 2px 2px 4px var(--dorado-claro);
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.episodio {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.datos {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.video-preview {
+  background-color: var(--dorado-claro);
+  padding: 5px;
+  border-radius: 8px;
+  text-align: center;
+  width: 90%;
+  height: 70%;
+}
+
+.video-preview video {
+  max-width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.enviar {
+  flex-basis: 100%;
+  text-align: center;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 25px;
+  background-color: var(--dorado);
+  color: var(--verde-fuerte);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+button:disabled {
+  background-color: var(--verde);
+  color: var(--blanco);
+  cursor: not-allowed;
+  font-weight: lighter;
+}
+
+input[type="text"],
+input[type="file"] {
+  border: none;
+  padding: 8px;
+  border-bottom: 1px solid var(--blanco);
+  border-radius: 10px;
+  width: 100%;
+  color: var(--blanco);
+  background: none;
+}
+
+.datos input[type="radio"] {
+  margin-right: 5px;
+  margin-left: 15px;
+}
+
+label{
+  color: var(--blanco);
+  font-size: 25px;
+  font-weight: bold;
+}
+
+/* Añade esto al final de tu CSS */
+.radio-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  color: var(--blanco);
+  font-size: 20px;
+}
+
+input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--blanco);
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+input[type="radio"]:checked {
+  background-color: var(--dorado-claro);
+}

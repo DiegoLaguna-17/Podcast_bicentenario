@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http'; // Importa HttpClient
 import { CommonModule } from '@angular/common'; // Necesario para *ngIf, etc., en el template
 import { FormsModule, NgForm } from '@angular/forms'; // Necesario para (ngSubmit), ngModel, y #registroForm="ngForm"
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true, // Marcamos el componente como standalone
@@ -22,7 +23,7 @@ export class LoginComponent {
   errorRespuesta: string | null = null;
 
   // Inyecta HttpClient en el constructor
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit() {
     this.mensajeRespuesta = null; // Limpiar mensajes previos
@@ -55,6 +56,10 @@ export class LoginComponent {
         console.log('Login exitoso:', response);
         this.mensajeRespuesta = '¡Login exitoso!';
         this.loginForm.resetForm();
+        this.router.navigate(['/menu-principal'], {
+          state: { datos: response } // Envías un objeto completo
+        });
+
 
         
       },

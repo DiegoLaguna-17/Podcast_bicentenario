@@ -1,0 +1,193 @@
+.profile-container {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, var(--dorado), var(--dorado-fuerte), var(--verde), var(--verde-fuerte));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.profile-card {
+  position: relative;
+  background-color: var(--blanco);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-header h2 {
+  font-size: 32px;
+  color: var(--verde-fuerte);
+  margin-bottom: 10px;
+}
+
+.profile-content {
+  display: flex;
+  gap: 30px;
+}
+
+.profile-image-container {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--dorado);
+}
+
+.donation-image {
+  width: 200px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+}
+
+.profile-details {
+  flex: 1;
+}
+
+.profile-details p {
+  margin: 12px 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.profile-details strong {
+  color: var(--verde-fuerte);
+  font-weight: bold;
+}
+
+.biography {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border-left: 4px solid var(--dorado);
+}
+
+.upload-button {
+  align-self: center;
+  padding: 12px 30px;
+  background-color: var(--verde-fuerte);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.upload-button:hover {
+  background-color: var(--verde);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.no-data-template {
+  position: relative;
+  text-align: center;
+  padding: 30px;
+}
+
+.no-data-template img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border: 3px solid var(--dorado);
+}
+
+.update-photo-button {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, var(--dorado), var(--dorado-fuerte));
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.update-photo-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.no-data-template .update-photo-button {
+  margin: 15px auto;
+  display: block;
+}
+
+.profile-image-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.attributes-container {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.attribute-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.attribute-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.attribute-label {
+  font-weight: bold;
+  color: var(--verde-fuerte);
+  flex: 0 0 120px;
+}
+
+.attribute-value {
+  flex: 1;
+  text-align: right;
+  color: #555;
+}
+
+.no-data-template {
+  text-align: center;
+  padding: 30px;
+  position: relative;
+}
+
+.no-data-template h2 {
+  margin-bottom: 25px;
+}

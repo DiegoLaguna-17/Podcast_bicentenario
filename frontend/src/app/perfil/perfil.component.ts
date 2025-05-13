@@ -4,10 +4,11 @@ import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
+import { PodcastListComponent } from '../podcast-list/podcast-list.component';
 
 @Component({
   selector: 'app-perfil',
-  imports: [NgIf],
+  imports: [NgIf,PodcastListComponent],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.css'
 })
@@ -44,10 +45,5 @@ export class PerfilComponent {
       });
   }
 
-  subirEpisodio(){
-    console.log('enviando a subir '+this.id)
-    this.router.navigate(['/subir-episodio'], {
-          state: { datos: this.id } // Envías un objeto completo
-        });
-  }
+  
 }

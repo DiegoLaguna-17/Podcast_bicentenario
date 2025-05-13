@@ -8,10 +8,12 @@ import { SiguiendoComponent } from './siguiendo/siguiendo.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { MenuPrincipalComponent } from './menu-principal/menu-principal.component';
 import { SubirEpisodioComponent } from './subir-episodio/subir-episodio.component';
-
+import { VerificarComponent } from './verificar/verificar.component';
+import { ReproductorComponent }from './reproductor/reproductor.component';
 export const routes: Routes = [
   { path: '', component: InicioComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'verificar',component:VerificarComponent},
   { path: 'registrar', component: RegistrarComponent },
   { path: 'inicio', component: InicioComponent},
   { path: 'menu-principal', component: MenuPrincipalComponent},
@@ -19,5 +21,6 @@ export const routes: Routes = [
   { path: 'buscar', component: BuscarComponent},
   { path: 'siguiendo', component: SiguiendoComponent},
   { path: 'perfil', component: PerfilComponent},
-  { path: 'subir-episodio', component: SubirEpisodioComponent}
+  { path: 'subir-episodio', component: SubirEpisodioComponent},
+  { path: 'reproductor', component:ReproductorComponent}
 ];

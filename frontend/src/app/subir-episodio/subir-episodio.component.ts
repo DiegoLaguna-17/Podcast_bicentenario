@@ -1,10 +1,11 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy,HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import {DataService} from '../DataService';
 import {Router} from '@angular/router';
 import { HttpClient } from '@angular/common/http'; 
 import { environment } from '../../environments/environment';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -84,7 +85,7 @@ podcasts: any[] = [];
       URL.revokeObjectURL(this.audioUrl);
     }
   }
-  constructor(private dataService: DataService,private http: HttpClient,private router: Router) {
+  constructor(private dataService: DataService,private http: HttpClient,private router: Router,private location:Location) {
         this.datosend=this.router.getCurrentNavigation()?.extras.state?.['datos'];
         console.log('llego a subir ep '+this.datosend);
         const formData=new FormData();
@@ -102,8 +103,20 @@ podcasts: any[] = [];
           console.error('Error en el perfil:', error);
         }
       });
+      
 
 
+  }
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event: any) {
+    // Acción personalizada cuando se presiona la flecha atrás
+    console.log('Flecha atrás presionada', event);
+    
+    // Evitar que el usuario regrese a la página anterior
+    this.router.navigate(['/menu-principal']);
+  }
+  irAtras() {
+    this.location.back();
   }
 
 }

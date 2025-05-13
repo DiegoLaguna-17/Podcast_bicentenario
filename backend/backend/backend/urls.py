@@ -36,10 +36,11 @@ urlpatterns = [
     path('creador/subirEpisodio/',views.mostrar_formulario_episodio,name='vistaepisodio'),
     path('episodio/',views.subir_episodio,name='subir_episodio'),
     path('login/',views.login_usuario,name='login'),
-
-    path('crear/oyente',views.mostrar_formulario_oyente,name='crearOyente'),
+    path('crear/oyente/',views.mostrar_formulario_oyente,name='crearOyente'),
     path('perfil/',views.perfil_usuario,name='perfil'),
-    path('creador/',views.perfil_creador,name='creador')
+    path('creador/',views.perfil_creador,name='creador'),
+    path('episodios/',views.episodios,name='creador'),
+    
 
 
 

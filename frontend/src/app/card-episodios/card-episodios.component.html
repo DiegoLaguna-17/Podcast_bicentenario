@@ -1,0 +1,25 @@
+<mat-card class="podcast-card">
+  <div class="podcast-header">
+    <div class="general">
+      <h3 class="podcast-title">{{ episodio.titulo }}</h3>
+      <span class="podcast-category">{{ episodio.creador }}</span>
+      <span class="podcast-category">{{episodio.podcast}}</span>
+        <span class="podcast-category">{{episodio.fechapublicacion  }}</span>
+
+    </div>
+    
+    
+  </div>
+
+  <div class="podcast-content">
+    <p class="podcast-description">
+      {{ episodio.descripcion  }}
+    </p>
+    
+    <div class="podcast-footer">
+      <button mat-raised-button (click)="abrirReproductor(episodio)">
+        Buscar
+      </button>
+    </div>
+  </div>
+</mat-card>

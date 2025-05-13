@@ -1,8 +1,9 @@
 <div class="contenedor">
   <div class="login-container">
     <div class="registro-container">
-        <h2>Iniciar sesion</h2>
+        <h2>Iniciar sesión</h2>
 
+        <!-- Mensajes de éxito y error -->
         <div *ngIf="mensajeRespuesta" class="mensaje-exito">
             {{ mensajeRespuesta }}
         </div>
@@ -10,16 +11,19 @@
             {{ errorRespuesta }}
         </div>
 
+        <!-- Formulario de login -->
         <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+            <!-- Campo de usuario -->
             <div>
-                <label for="usuario">Usuario:</label><br>
+                <label for="usuario">Correo electrónico:</label><br>
                 <input type="text" id="usuario" name="usuario" ngModel maxlength="100" required #usuarioCtrl="ngModel"><br>
                 <div *ngIf="usuarioCtrl.invalid && (usuarioCtrl.dirty || usuarioCtrl.touched)" class="error-message">
-                    <div *ngIf="usuarioCtrl.errors?.['required']">El usuario es requerido.</div>
+                    <div *ngIf="usuarioCtrl.errors?.['required']">El correo electrónico es requerido.</div>
                 </div>
                 <br>
             </div>
 
+            <!-- Campo de contraseña -->
             <div>
                 <label for="contrasenia">Contraseña:</label><br>
                 <input type="password" id="contrasenia" name="contrasenia" ngModel maxlength="128" required #contraseniaCtrl="ngModel"><br>
@@ -29,18 +33,22 @@
                 <br>
             </div>
 
+            <!-- Campo de rol -->
+            <div>
+                <label for="rol">Rol:</label>
+                <select id="rol" name="rol" ngModel #rolCtrl="ngModel" required>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Creador">Creador</option>
+                    <option value="Oyente">Oyente</option>
+                </select>
+                <div *ngIf="rolCtrl.invalid && (rolCtrl.dirty || rolCtrl.touched)" class="error-message">
+                    <div *ngIf="rolCtrl.errors?.['required']">El rol es requerido.</div>
+                </div>
+            </div>
 
-            <label for="rol">Rol:</label>
-            <select id="rol" name="rol" ngModel #rolCtrl="ngModel" required>
-              <option value="Administrador">Administrador</option>
-              <option value="Creador">Creador</option>
-              <option value="Oyente">Oyente</option>
-            </select>
-            <button type="submit" [disabled]="loginForm.invalid">Registrarse</button>
+            <!-- Botón de enviar -->
+            <button type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>
         </form>
     </div>
   </div>
 </div>
-
-
-

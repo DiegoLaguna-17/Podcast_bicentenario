@@ -1,0 +1,35 @@
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+
+@Component({
+  selector: 'app-reproductor',
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule,
+     MatIconModule,
+  ],
+  templateUrl: './reproductor.component.html',
+  styleUrl: './reproductor.component.css'
+})
+export class ReproductorComponent {
+  episodio:any;
+  constructor(  private router: Router) {
+    this.episodio=this.router.getCurrentNavigation()?.extras.state?.['datos'];
+    console.log('reproduciendo '+this.episodio.audio)
+    
+  }
+   velocidades: number[] = [0.5, 0.75, 1, 1.25, 1.5, 2];
+
+  cambiarVelocidad(event: any, audioPlayer: HTMLAudioElement) {
+    audioPlayer.playbackRate = event.value;
+  }
+   
+}

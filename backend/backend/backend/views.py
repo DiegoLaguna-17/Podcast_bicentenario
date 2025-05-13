@@ -53,6 +53,38 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 
+@csrf_exempt
+def episodios(request):
+    if request.method=='GET':
+        try:
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    
+                    
+SELECT bc.idepisodio,bc.titulo,bc.descripcion,bc.fechapublicacion,bc.audio,bc.participantes, c.nombre as creador, p.titulo as podcast
+                    FROM backend_episodios bc, 
+                    backend_creadores c,
+                    backend_podcast p
+                    WHERE bc.podcast_idpodcast  = p.idpodcast
+                    AND p.creadores_idcreador =c.idcreador
+                    AND bc.visible=True
+                    ORDER BY fechapublicacion DESC
+                    LIMIT 10;         
+                    """
+                )
+                columns= [col[0] for col in cursor.description] 
+                episodios = [
+                    dict(zip(columns, row))
+                    for row in cursor.fetchall()
+                ]
+                return JsonResponse({'episodios': episodios}, status=200)
+                
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 
 @csrf_exempt
@@ -71,7 +103,7 @@ def perfil_creador(request):
             with connection.cursor() as cursor:
                 cursor.execute(
                     """
-                    SELECT nombre, fotoperfil 
+                    SELECT * 
                     FROM backend_creadores
                     WHERE idcreador = %s
                     """,
@@ -96,6 +128,7 @@ def perfil_creador(request):
 def perfil_usuario(request):
     if request.method=='POST':
         try:
+            
             id=request.POST.get('id')
             rol=request.POST.get('rol')
             if rol in ['Administrador','Oyente']:
@@ -165,7 +198,7 @@ def login_usuario(request):
             return JsonResponse({'error': 'Rol no válido'}, status=400)
         
         # Buscar usuario en la base de datos
-        response = supabase.table(tabla).select('*').eq('usuario', usuario).execute()
+        response = supabase.table(tabla).select('*').eq('correo', usuario).execute()
         
         if not response.data:
             return JsonResponse({'error': 'Usuario no encontrado'}, status=404)

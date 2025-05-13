@@ -1,6 +1,6 @@
 .video-upload-container {
-  max-width: 1000px;
-  margin: 0 auto;
+  height: 100%;
+  margin: 0;
   padding: 40px;
   background-color: var(--verde-fuerte);
 }
@@ -19,14 +19,7 @@ form {
   gap: 30px;
 }
 
-.episodio {
-  flex: 1;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
+.episodio,
 .datos {
   flex: 1;
   min-width: 300px;
@@ -90,18 +83,18 @@ input[type="file"] {
   margin-left: 15px;
 }
 
-label{
+label {
   color: var(--blanco);
   font-size: 25px;
   font-weight: bold;
 }
 
-/* Añade esto al final de tu CSS */
 .radio-group {
   display: flex;
   align-items: center;
   gap: 15px;
   margin-top: 5px;
+  flex-wrap: wrap;
 }
 
 .radio-option {
@@ -125,4 +118,69 @@ input[type="radio"] {
 
 input[type="radio"]:checked {
   background-color: var(--dorado-claro);
+}
+
+/* --- RESPONSIVE --- */
+
+/* Tablets (≤768px) */
+@media (max-width: 768px) {
+  .video-upload-container {
+    padding: 30px 20px;
+  }
+
+  .video-upload-container h2 {
+    font-size: 36px;
+  }
+
+  .episodio,
+  .datos {
+    min-width: 100%;
+  }
+
+  .video-preview {
+    width: 100%;
+    height: auto;
+  }
+
+  label {
+    font-size: 22px;
+  }
+
+  .radio-option {
+    font-size: 18px;
+  }
+
+  button {
+    font-size: 15px;
+    padding: 8px 20px;
+  }
+}
+
+/* Móviles (≤480px) */
+@media (max-width: 480px) {
+  .video-upload-container {
+    padding: 20px 10px;
+  }
+
+  .video-upload-container h2 {
+    font-size: 28px;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  label {
+    font-size: 20px;
+  }
+
+  .radio-option {
+    font-size: 16px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
 }

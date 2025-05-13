@@ -1,8 +1,8 @@
 <div class="prin">
   <div class="container">
     <div class="header">
-      <h1 class="title">Podcasts del Creador</h1>
-      <button mat-raised-button class="refresh-btn" (click)="loadPodcasts()" [disabled]="isLoading">
+      <h1 class="title">Episodios para ti</h1>
+      <button mat-raised-button class="refresh-btn" [disabled]="isLoading">
         Actualizar
       </button>
     </div>
@@ -11,21 +11,21 @@
       <div class="error-container">
         <mat-icon>error_outline</mat-icon>
         <p>{{ error }}</p>
-        <button mat-raised-button color="primary" (click)="loadPodcasts()">
+        <button mat-raised-button color="primary" >
           Reintentar
         </button>
       </div>
     } @else {
-      @if (podcasts.length === 0) {
+      @if (episodios.length === 0) {
         <div class="empty-state">
-          <mat-icon class="empty-icon">podcasts</mat-icon>
+          <mat-icon class="empty-icon">Episodios</mat-icon>
           <h3>No se encontraron podcasts</h3>
           <p>Este creador no tiene podcasts publicados aún</p>
         </div>
       } @else {
         <div class="podcast-grid">
-          @for (podcast of podcasts; track podcast.id) {
-            <app-podcast-card [podcast]="podcast"></app-podcast-card>
+          @for (episodio of episodios; track episodio.id) {
+            <app-card-episodios [episodio]="episodio"></app-card-episodios>
           }
         </div>
       }

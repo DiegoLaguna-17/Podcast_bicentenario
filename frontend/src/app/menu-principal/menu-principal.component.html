@@ -1,9 +1,29 @@
-<div class="contenedor">
-    <div class="menu">
-        <button routerLink="/para-ti">Para Ti</button>
-        <button routerLink="/buscar">Buscar</button>
-        <button (click)="enviarSiguiendo()">Siguiendo</button>
-        <button (click)="enviarPerfil()">Perfil</button>
-    </div>
+<!-- Oyente -->
+<div class="contenedor" *ngIf="usuario.rol === 'Oyente'">
+  <div class="menu">
+    <button routerLink="/para-ti">Para Ti</button>
+    <button routerLink="/buscar">Buscar</button>
+    <button (click)="enviarSiguiendo()">Siguiendo</button>
+    <button (click)="enviarPerfil()">Perfil</button>
+  </div>
 </div>
 
+<!-- Creador -->
+<div class="contenedor" *ngIf="usuario.rol === 'Creador'">
+  <div class="menu">
+    <button routerLink="/buscar">Buscar</button>
+    <button routerLink="/crear-podcast">Crear Podcast</button>
+    <button (click)="subirEpisodio()">Subir Episodio</button>
+    <button (click)="enviarPerfil()">Perfil</button>
+  </div>
+</div>
+
+<!-- Administrador -->
+<div class="contenedor" *ngIf="usuario.rol === 'Administrador'">
+  <div class="menu">
+    <button routerLink="/admin/usuarios">Gestionar Usuarios</button>
+    <button routerLink="/admin/podcasts">Revisar Podcasts</button>
+    <button routerLink="/admin/reportes">Ver Reportes</button>
+    <button (click)="enviarPerfil()">Perfil</button>
+  </div>
+</div>

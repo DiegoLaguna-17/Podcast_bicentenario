@@ -9,3 +9,5 @@ class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = ['usuario', 'contrasenia', 'correo', 'rol']
+
+

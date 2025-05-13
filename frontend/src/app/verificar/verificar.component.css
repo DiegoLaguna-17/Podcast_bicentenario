@@ -1,0 +1,12 @@
+.verificar-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}

@@ -1,21 +1,62 @@
-<div *ngIf="datosper.rol == 'Creador'; else noDatos">
-  <h2>Datos recibidos:</h2>
-  <p>id: {{datosper.id}}</p>
-  <p><strong>usuario:</strong> {{ datosper.usuario }}</p>
-  <p>nombre: {{datosper.nombre}}</p>
-  <p>correo: {{datosper.correo}}</p>
-  <p>rol: {{datosper.rol}}</p>
-  <img src="{{datosper.fotoPerfil}}" alt="foto perfil">
-  <p>Biografia {{datosper.biografia}}</p>
-  <img src="{{datosper.donaciones}}" alt="donacion">
-
-  <button (click)="subirEpisodio()">Subir episodio</button>
+<div *ngIf="datosper.rol == 'Creador'; else noDatos" class="profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <h2>Datos recibidos:</h2>
+    </div>
+    
+    <div class="profile-content">
+      <div class="profile-image-container">
+        <img src="{{datosper.fotoPerfil}}" alt="foto perfil" class="profile-image">
+        <button class="update-photo-button" (click)="updateProfilePhoto()">Actualizar foto de perfil</button>
+        <img src="{{datosper.donaciones}}" alt="donacion" class="donation-image" *ngIf="datosper.donaciones">
+      </div>
+      
+      <div class="profile-details">
+        <p><strong>ID:</strong> {{datosper.id}}</p>
+        <p><strong>Usuario:</strong> {{ datosper.usuario }}</p>
+        <p><strong>Nombre:</strong> {{datosper.nombre}}</p>
+        <p><strong>Correo:</strong> {{datosper.correo}}</p>
+        <p><strong>Rol:</strong> {{datosper.rol}}</p>
+        
+        <div class="biography" *ngIf="datosper.biografia">
+          <h3>Biografía</h3>
+          <p>{{datosper.biografia}}</p>
+        </div>
+      </div>
+    </div>
+    
+    <button class="upload-button" (click)="subirEpisodio()">Subir episodio</button>
+  </div>
 </div>
 
 <ng-template #noDatos>
-   <h2>Datos recibidos:</h2>
-  <p><strong>usuario:</strong> {{ datosper.usuario }}</p>
-  <p>correo: {{datosper.correo}}</p>
-  <p>rol: {{datosper.rol}}</p>
-  <p>fecha: {{datosper.fecha}}</p>
+  <div class="profile-container">
+    <div class="profile-card no-data-template">
+      <h2>Perfil de Usuario</h2>
+      
+      <div class="profile-image-container">
+        <img [src]="datosper.fotoPerfil" alt="Profile photo" class="profile-image">
+        <button class="update-photo-button" (click)="updateProfilePhoto()">Actualizar foto de perfil</button>
+      </div>
+      
+      <div class="attributes-container">
+        <div class="attribute-item">
+          <span class="attribute-label">Usuario:</span>
+          <span class="attribute-value">{{ datosper.usuario }}</span>
+        </div>
+        <div class="attribute-item">
+          <span class="attribute-label">Correo:</span>
+          <span class="attribute-value">{{ datosper.correo }}</span>
+        </div>
+        <div class="attribute-item">
+          <span class="attribute-label">Rol:</span>
+          <span class="attribute-value">{{ datosper.rol }}</span>
+        </div>
+        <div class="attribute-item">
+          <span class="attribute-label">Fecha de registro:</span>
+          <span class="attribute-value">{{ datosper.fecha }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </ng-template>

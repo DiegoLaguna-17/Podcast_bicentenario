@@ -50,4 +50,8 @@ export class PerfilComponent {
           state: { datos: this.id } // Envías un objeto completo
         });
   }
+
+  updateProfilePhoto() {
+    
+  }
 }

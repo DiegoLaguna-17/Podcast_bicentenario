@@ -1,0 +1,25 @@
+<mat-card class="podcast-card">
+  <div class="podcast-header">
+    <img src="{{creador.fotoperfil}}" alt="foto perfil" class="profile-image">
+    <div class="general">
+      <h3 class="podcast-title">{{creador.nombre }}</h3>
+      <span class="podcast-category">{{ creador.correo }}</span>
+      
+      
+    </div>
+    
+    
+  </div>
+
+  <div class="podcast-content">
+    <p class="podcast-description">
+      {{ creador.biografia  }}
+    </p>
+    
+    <div class="podcast-footer">
+      <button mat-raised-button >
+        Buscar
+      </button>
+    </div>
+  </div>
+</mat-card>

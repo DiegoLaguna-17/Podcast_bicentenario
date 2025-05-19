@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { environment } from '../../environments/environment';
+
 
 @Component({
   selector: 'app-reproductor',
@@ -21,9 +23,24 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class ReproductorComponent {
   episodio:any;
-  constructor(  private router: Router) {
+  constructor( private http: HttpClient, private router: Router) {
     this.episodio=this.router.getCurrentNavigation()?.extras.state?.['datos'];
     console.log('reproduciendo '+this.episodio.audio)
+    const formData = new FormData();
+    console.log("episodio a actualiar",this.episodio.idepisodio)
+        formData.append('idepisodio', this.episodio.idepisodio);
+    
+        const endpoint = environment.apiUrl + '/actualizar_visualizaciones/';
+    
+        this.http.post(endpoint, formData).subscribe({
+          next: (response) => {
+            
+    
+          },
+          error: (error) => {
+            console.error('Error en al actualizar vistas:', error);
+          }
+        });
 
     
   }

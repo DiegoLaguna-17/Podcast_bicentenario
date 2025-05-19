@@ -23,7 +23,7 @@ import { environment } from '../../environments/environment';
 export class ListEpisodiosComponent {
 
   episodios: any[] = [];
-  isLoading = true;
+  isLoading = false;
   error: string | null = null;
   
   constructor(private  http: HttpClient) {}

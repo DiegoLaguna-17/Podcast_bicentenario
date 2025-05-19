@@ -44,8 +44,10 @@ urlpatterns = [
     path('episodios/',views.episodios,name='creador'),
     path('comentar/', views.subir_comentarios,name='subir_comentario'),
     path('obtener_comentarios/',views.obtenerComentarios,name='obtener_comentarios'),
-
-    
+    path('buscar_general/', views.buscar_general, name='buscar_general'),
+    path('buscar_anio/',views.buscar_anio,name='buscar_anio'),
+    path('buscar_tematica/', views.buscar_tematica,name='buscar_tematica'),
+    path('actualizar_visualizaciones/',views.sumar_visualizacion,name='actualizar_visualizaciones')
     
 
 

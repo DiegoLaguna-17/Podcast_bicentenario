@@ -301,6 +301,135 @@ def subir_comentarios(request):
 
 
 
+# Configuración de Supabase (ajusta con tus claves reales)
+
+def buscar_general(request):
+    query = request.GET.get('q', '').strip()
+
+    if not query:
+        return JsonResponse({
+            'creadores': [],
+            'podcasts': [],
+            'episodios': []
+        })
+
+    try:
+        # Buscar en creadores (filtramos por nombre Y username por separado)
+        creadores1 = supabase.table('backend_creadores').select("*").ilike('nombre', f'%{query}%').execute()
+        creadores2 = supabase.table('backend_creadores').select("*").ilike('usuario', f'%{query}%').execute()
+        creadores = {c['idcreador']: c for c in (creadores1.data + creadores2.data)}.values()
+
+        # Buscar en podcasts (por título y descripción)
+        podcasts1 = supabase.table('backend_podcast').select("*").ilike('titulo', f'%{query}%').execute()
+        podcasts2 = supabase.table('backend_podcast').select("*").ilike('descripcion', f'%{query}%').execute()
+        podcasts = {p['idpodcast']: p for p in (podcasts1.data + podcasts2.data)}.values()
+
+        # Buscar en episodios (por título y descripción)
+        episodios1 = supabase.table('backend_episodios').select("*").ilike('titulo', f'%{query}%').execute()
+        episodios2 = supabase.table('backend_episodios').select("*").ilike('descripcion', f'%{query}%').execute()
+        episodios = {e['idepisodio']: e for e in (episodios1.data + episodios2.data)}.values()
+
+        return JsonResponse({
+            'creadores': list(creadores),
+            'podcasts': list(podcasts),
+            'episodios': list(episodios)
+        })
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+
+def buscar_anio (request):
+    if request.method=='GET':
+        anio=request.GET.get('q','').strip()
+        if not anio:
+            return JsonResponse({
+                'creadores': [],
+                'podcasts': [],
+                'episodios': []
+            })
+        fecha_inicio = f"{anio}-01-01"
+        fecha_fin = f"{int(anio)+1}-01-01"
+        try:
+            episodios = supabase.table('backend_episodios') .select("*").gte('fechapublicacion', fecha_inicio).lt('fechapublicacion', fecha_fin).execute()
+            podcasts=supabase.table('backend_podcast') .select("*").gte('fecha', fecha_inicio).lt('fecha', fecha_fin).execute()
+            creadores=supabase.table('backend_creadores') .select("*").gte('fechaingreso', fecha_inicio).lt('fechaingreso', fecha_fin).execute()
+            return JsonResponse({
+                'creadores':creadores.data,
+                'podcasts': podcasts.data,
+                'episodios': episodios.data
+            })
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+def buscar_tematica(request):
+    if request.method=='GET':
+        tematica=request.GET.get('q','').strip()
+        if not tematica:
+            return JsonResponse({
+                'creadores': [],
+                'podcasts': [],
+                'episodios': []
+            })
+        try:
+           # Podcasts filtrados por categoría (temática)
+            podcasts = supabase.table('backend_podcast')\
+                .select('*')\
+                .ilike('categoria', f'%{tematica}%')\
+                .execute()
+            idsP=supabase.table('backend_podcast').select('idpodcast').ilike('categoria',f'%{tematica}%').execute()
+            idpodcasts = [p['idpodcast'] for p in idsP.data]
+            # Episodios con info de podcast (incluye categoría), filtrados por categoría del podcast
+            episodios = supabase.table('backend_episodios')\
+                .select('*')\
+                .in_('podcast_idpodcast', idpodcasts)\
+                .execute()
+
+            # Creadores con info de podcast (incluye categoría), filtrados por categoría del podcast
+            idsC=supabase.table('backend_podcast').select('creadores_idcreador').ilike('categoria',f'%{tematica}%').execute()
+            idCreadores=[c['creadores_idcreador'] for c in idsC.data]
+            creadores = supabase.table('backend_creadores')\
+                .select('*')\
+                .in_('idcreador',idCreadores)\
+                .execute()
+            return JsonResponse({
+                'creadores':creadores.data,
+                'podcasts': podcasts.data,
+                'episodios': episodios.data
+            })
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+        
+
+def sumar_visualizacion(request):
+    if request.method=='POST':
+        idEpisodio=request.POST.get('idepisodio')
+        print('episodio= ',idEpisodio)
+        if not idEpisodio:
+            return JsonResponse({
+                'error':'error al obtener episodio'
+            })
+        try:
+            vistas = supabase.table('backend_episodios')\
+                .select('visualizaciones')\
+                .eq('idepisodio', idEpisodio)\
+                .execute()
+
+            visualizaciones_actuales = vistas.data[0]['visualizaciones'] if vistas.data else 0
+            nuevas = visualizaciones_actuales + 1
+
+            actualizar = supabase.table('backend_episodios')\
+                .update({'visualizaciones': nuevas})\
+                .eq('idepisodio', idEpisodio)\
+                .execute()
+
+            return JsonResponse({
+                'exito': 'vistas aumentadas en 1'
+            })
+        except Exception as e:
+            return JsonResponse({'error': 'error al actualizar visualizaciones'}, status=500)
+            
+
 
 
 
@@ -434,6 +563,8 @@ def podcasts_por_creador(request):
         except Exception as e:
             print(f"Error en obtener podcasts: {str(e)}")
             return JsonResponse({'error': 'Error en el servidor'}, status=500)
+
+
 
 
 

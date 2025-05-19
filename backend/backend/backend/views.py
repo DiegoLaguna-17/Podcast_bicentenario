@@ -38,7 +38,6 @@ key = SUPABASE_KEY
 supabase: Client = create_client(url, key)
 # views.py
 
-from datetime import datetime
 
 
 import logging
@@ -50,10 +49,89 @@ logger = logging.getLogger(__name__)
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+import datetime
+import jwt
+from django.conf import settings
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.response import Response
+from rest_framework import status
+
+from .decorators import token_required
+from django.http import JsonResponse
+from .decorators import token_required
 
 
 
 @csrf_exempt
+def login_usuario(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+    try:
+        usuario = request.POST.get('usuario')
+        contrasenia = request.POST.get('contrasenia')
+        rol = request.POST.get('rol')
+        
+        if not all([usuario, contrasenia, rol]):
+            return JsonResponse({'error': 'Usuario, contraseña y rol son requeridos'}, status=400)
+        
+        if rol == 'Creador':
+            user_id_field = 'idcreador'
+            tabla = 'backend_creadores'
+        elif rol in ['Administrador', 'Oyente']:
+            tabla = 'backend_usuario'
+            user_id_field = 'idusuario'
+        else:
+            return JsonResponse({'error': 'Rol no válido'}, status=400)
+        
+        response = supabase.table(tabla).select('*').eq('correo', usuario).execute()
+        
+        if not response.data:
+            return JsonResponse({'error': 'Usuario no encontrado'}, status=404)
+        
+        usuario_data = response.data[0]
+        
+        # Verificación de contraseña
+        if not check_password( contrasenia,usuario_data.get('contrasenia')):
+            return JsonResponse({'error': 'Contraseña incorrecta'}, status=401)
+        
+        # Verificar rol si está en la tabla
+        if 'rol' in usuario_data and usuario_data['rol'] != rol:
+            return JsonResponse({'error': 'El rol no coincide para este usuario'}, status=403)
+        
+        # Datos que irán dentro del token
+        # Crear el payload con tiempo de expiración
+        payload = {
+            'id': usuario_data[user_id_field],
+            'rol': usuario_data.get('rol', rol),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1),  # Token válido por 1 hora
+            'iat': datetime.datetime.utcnow()
+        }
+
+        # Codificar el token con la clave secreta de Django
+        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+
+        return JsonResponse({
+            'access': token,
+            'usuario': {
+                'id': payload['id'],
+                'rol': payload['rol']
+            }
+        })
+
+        
+    except Exception as e:
+        print(f"Error en login: {str(e)}")
+        return JsonResponse({'error': 'Error en el servidor'}, status=500)
+
+
+
+
+@token_required
 def episodios(request):
     if request.method=='GET':
         try:
@@ -63,7 +141,7 @@ def episodios(request):
                     """
                     
                     
-SELECT bc.idepisodio,bc.titulo,bc.descripcion,bc.fechapublicacion,bc.audio,bc.participantes, c.nombre as creador, p.titulo as podcast
+SELECT bc.idepisodio,bc.titulo,bc.descripcion,bc.fechapublicacion,bc.audio,bc.participantes,bc.visualizaciones, c.nombre as creador, p.titulo as podcast
                     FROM backend_episodios bc, 
                     backend_creadores c,
                     backend_podcast p
@@ -86,8 +164,7 @@ SELECT bc.idepisodio,bc.titulo,bc.descripcion,bc.fechapublicacion,bc.audio,bc.pa
     
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-
-@csrf_exempt
+@token_required
 def perfil_creador(request):
     
     if request.method == 'GET':
@@ -124,121 +201,121 @@ def perfil_creador(request):
 
 
 
-@csrf_exempt
+@token_required
 def perfil_usuario(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         try:
+            id = request.POST.get('id')
+            rol = request.POST.get('rol')
             
-            id=request.POST.get('id')
-            rol=request.POST.get('rol')
-            if rol in ['Administrador','Oyente']:
-                response=response = supabase.table('backend_usuario').select('*').eq('idusuario', id).execute()
+            if not id or not rol:
+                return JsonResponse({'error': 'Faltan datos requeridos'}, status=400)
+            
+            try:
+                id_int = int(id)
+            except ValueError:
+                return JsonResponse({'error': 'id inválido'}, status=400)
+            
+            if rol in ['Administrador', 'Oyente']:
+                response = supabase.table('backend_usuario').select('*').eq('idusuario', id_int).execute()
             else:
-                response=response = supabase.table('backend_creadores').select('*').eq('idcreador', id).execute()
+                response = supabase.table('backend_creadores').select('*').eq('idcreador', id_int).execute()
             
             if not response.data:
                 return JsonResponse({'error': 'Usuario no encontrado'}, status=404)
             
-            usuario_data=response.data[0]
+            usuario_data = response.data[0]
             
-            if rol in ['Administrador','Oyente']:
-                usuario={
-                    'id':usuario_data['idusuario'],
-                    'usuario':usuario_data['usuario'],
-                    'rol':usuario_data['rol'],
-                    'correo':usuario_data['correo'],
-                    'fecha':usuario_data['fecha_ingreso']
+            if rol in ['Administrador', 'Oyente']:
+                usuario = {
+                    'id': usuario_data['idusuario'],
+                    'usuario': usuario_data['usuario'],
+                    'rol': usuario_data['rol'],
+                    'correo': usuario_data['correo'],
+                    'fecha': usuario_data['fecha_ingreso']
                 }
             else:
-                usuario={
-                    'id':usuario_data['idcreador'],
-                    'usuario':usuario_data['usuario'],
-                    'nombre':usuario_data['nombre'],
-                    'correo':usuario_data['correo'],
-                    'rol':'Creador',
-                    'fotoPerfil':usuario_data['fotoperfil'],
-                    'biografia':usuario_data['biografia'],
-                    'donaciones':usuario_data['imgdonaciones']
+                usuario = {
+                    'id': usuario_data['idcreador'],
+                    'usuario': usuario_data['usuario'],
+                    'nombre': usuario_data['nombre'],
+                    'correo': usuario_data['correo'],
+                    'rol': 'Creador',
+                    'fotoPerfil': usuario_data['fotoperfil'],
+                    'biografia': usuario_data['biografia'],
+                    'donaciones': usuario_data['imgdonaciones']
                 }
             
             return JsonResponse(usuario)
+        
         except Exception as e:
-        # Loggear el error para debugging
-            print(f"Error en login: {str(e)}")
+            print(f"Error en perfil_usuario: {str(e)}")
             return JsonResponse({'error': 'Error en el servidor'}, status=500)
-
-
-        
-
-
-
-@csrf_exempt
-def login_usuario(request):
-    if request.method != 'POST':
+    else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
-    
-    try:
-        # Obtener datos del formulario
-        usuario = request.POST.get('usuario')
-        contrasenia = request.POST.get('contrasenia')
-        rol = request.POST.get('rol')
+
+
+def obtenerComentarios(request):
+    if request.method=='GET':
+        try:
+            idEpisodio=request.GET.get('episodios_idepisodio')
+            response=supabase.table('backend_comentarios').select('*').eq('episodios_idepisodio',idEpisodio).execute()
+            if hasattr(response, 'error') and response.error:
+                return JsonResponse({'error': 'Error al consultar Supabase'}, status=400)
+
+            return JsonResponse({'comentarios': response.data}, status=200, safe=False)
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
         
-        # Validar campos obligatorios
-        if not all([usuario, contrasenia, rol]):
-            return JsonResponse({'error': 'Usuario, contraseña y rol son requeridos'}, status=400)
-        
-        # Determinar la tabla según el rol
-        if rol == 'Creador':
-            user='idcreador'
-            tabla = 'backend_creadores'
-        elif rol in ['Administrador', 'Oyente']:
-            tabla = 'backend_usuario'
-            user='idusuario'
-        else:
-            return JsonResponse({'error': 'Rol no válido'}, status=400)
-        
-        # Buscar usuario en la base de datos
-        response = supabase.table(tabla).select('*').eq('correo', usuario).execute()
-        
-        if not response.data:
-            return JsonResponse({'error': 'Usuario no encontrado'}, status=404)
-        
-        usuario_data = response.data[0]
-        
-        # Verificar contraseña (asumiendo que hay un campo 'contrasenia' en la BD)
-        if check_password(usuario_data.get('contrasenia'),contrasenia):
-            return JsonResponse({'error': 'Contraseña incorrecta'}, status=401)
-        
-        # Verificar rol si está almacenado en la tabla
-        if 'rol' in usuario_data and usuario_data['rol'] != rol:
-            return JsonResponse({'error': 'El rol no coincide para este usuario'}, status=403)
-        if 'rol' in usuario_data and usuario_data['rol'] in ['Administrador', 'Oyente']:
-            usuario={
-                'id':usuario_data['idusuario'],
-                'rol':usuario_data['rol']
+
+
+def subir_comentarios(request):
+    if request.method=='POST':
+        try:
+            idEpisodio=request.POST.get('idEpisodio')
+            idOyente=request.POST.get('idOyente')
+            contenido=request.POST.get('contenido')
+
+            if not idEpisodio or not idOyente or not contenido:
+                return JsonResponse({'error':'No hay datos para el comentario'})
+            comentario = {
+                'usuarios_idusuario':idOyente,
+                'episodios_idepisodio':idEpisodio,
+                'contenido':contenido,
             }
-            
-        else:
-            usuario={
-                'id':usuario_data['idcreador'],
-                'rol':'Creador'
                 
-            }
-        
-        # Login exitoso
-        return JsonResponse(usuario)
-        
-    except Exception as e:
-        # Loggear el error para debugging
-        print(f"Error en login: {str(e)}")
-        return JsonResponse({'error': 'Error en el servidor'}, status=500)
+            
+            response=supabase.table('backend_comentarios').insert(comentario).execute()
+            if hasattr(response, 'error') and response.error:
+                return JsonResponse({'error': 'Error al registrar en Supabase'}, status=400)
+            return JsonResponse({'mensaje': 'Comentario enviado'}, status=201) 
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+
+
+
+
 
 
 
 def mostrar_formulario_episodio(request):
     return render(request, 'episodio.html')
 
-@csrf_exempt
+from django.http import JsonResponse
+from django.utils import timezone
+import traceback
+import os
+import uuid
+
+
+@token_required
 def subir_episodio(request):
     if request.method == 'POST':
         try:
@@ -254,10 +331,15 @@ def subir_episodio(request):
             descripcion = request.POST['descripcion'].strip()
             fecha_str = request.POST['fecha']
             participantes = request.POST.get('participantes', '')
+            print(podcast)
+            print(titulo)
+            print(descripcion)
+            print(fecha_str)
+            print(participantes)
 
             # Convertir y validar fecha
             try:
-                fecha_hora = datetime.strptime(fecha_str, "%Y-%m-%dT%H:%M")
+                fecha_hora = datetime.datetime.strptime(fecha_str, "%Y-%m-%dT%H:%M")
                 fecha_hora = timezone.make_aware(fecha_hora)
                 fecha_iso = fecha_hora.isoformat()  # Convertir a string ISO
             except ValueError:
@@ -336,7 +418,7 @@ def subir_episodio(request):
 
 
 
-@csrf_exempt
+@token_required
 def podcasts_por_creador(request):
     if request.method == 'POST':
         try:
@@ -391,7 +473,7 @@ def crear_podcast(request):
 
 
 
-@csrf_exempt
+@token_required
 def obtenerSeguimientos(request):
     if request.method == 'GET':
         try:

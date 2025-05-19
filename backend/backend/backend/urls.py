@@ -33,13 +33,19 @@ urlpatterns = [
     path('podcast/',views.crear_podcast,name='podcast'),
     path('creadores/crearPodcast/',views.mostrar_formulario_podcast,name='vistapodcast'),
     path('creador/podcasts/', views.podcasts_por_creador, name='podcasts-creador'),
+
     path('creador/subirEpisodio/',views.mostrar_formulario_episodio,name='vistaepisodio'),
     path('episodio/',views.subir_episodio,name='subir_episodio'),
     path('login/',views.login_usuario,name='login'),
     path('crear/oyente/',views.mostrar_formulario_oyente,name='crearOyente'),
     path('perfil/',views.perfil_usuario,name='perfil'),
     path('creador/',views.perfil_creador,name='creador'),
+
     path('episodios/',views.episodios,name='creador'),
+    path('comentar/', views.subir_comentarios,name='subir_comentario'),
+    path('obtener_comentarios/',views.obtenerComentarios,name='obtener_comentarios'),
+
+    
     
 
 

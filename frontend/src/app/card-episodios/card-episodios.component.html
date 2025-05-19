@@ -3,9 +3,12 @@
     <div class="general">
       <h3 class="podcast-title">{{ episodio.titulo }}</h3>
       <span class="podcast-category">{{ episodio.creador }}</span>
+      <br>
       <span class="podcast-category">{{episodio.podcast}}</span>
-        <span class="podcast-category">{{episodio.fechapublicacion  }}</span>
-
+      <br>
+        <span class="podcast-category">{{episodio.fechapublicacion  | date: 'yyyy-MM-dd'  }}</span>
+      <br>
+      <span class="podcast-category">{{episodio.visualizaciones}} visualizaciones</span>
     </div>
     
     

@@ -13,11 +13,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './menu-principal.component.css'
 })
 export class MenuPrincipalComponent {
-  usuario: any
-  
-   constructor(private router: Router,private dataService: DataService,) {
-    this.usuario = this.router.getCurrentNavigation()?.extras.state?.['datos'];
-    console.log('llego a menu: '+this.usuario.id+' '+this.usuario.rol); // { id: 1, nombre: "Ejemplo" }
+  respuesta: any
+  usuario:  any
+    constructor(private router: Router,private dataService: DataService,) {
+    this.usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    console.log('llego a menu: '+this.usuario.id); // { id: 1, nombre: "Ejemplo" }
   }
 
   enviarPerfil(){

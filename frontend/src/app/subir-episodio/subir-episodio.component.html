@@ -1,7 +1,7 @@
 
 <div class="video-upload-container">
   <h2>Subir Episodio</h2>
-  <form (ngSubmit)="onSubmit(videoForm)" #videoForm="ngForm">
+  <form (ngSubmit)="onSubmit(videoForm)" id="formulario_episodio" #videoForm="ngForm">
     
     <!-- Vista previa del audio -->
     <div class="episodio">
@@ -38,25 +38,7 @@
         required 
       />
 
-      <label>Contenido Premium:</label>
-      <div class="radio-group">
-        <label class="radio-option">
-          <input 
-            type="radio" 
-            name="premium" 
-            [value]="true" 
-            [(ngModel)]="episode.premium"
-          /> Sí
-        </label>
-        <label class="radio-option">
-          <input 
-            type="radio" 
-            name="premium" 
-            [value]="false" 
-            [(ngModel)]="episode.premium"
-          /> No
-        </label>
-      </div>
+      
 
       <!-- Selección de podcast -->
       <label for="podcast_id">Podcast:</label>
@@ -65,8 +47,8 @@
         [(ngModel)]="episode.podcast_id" 
         required
       >
-        <option value="" disabled selected>Selecciona un podcast</option>
-        <option *ngFor="let p of podcasts" [value]="p.idpodcast">
+        <option value="" disabled>Selecciona un podcast</option>
+        <option *ngFor="let p of podcasts" [value]="p.idpodcast" style="color: black;">
           {{ p.titulo }}
         </option>
       </select>
@@ -97,18 +79,20 @@
     <div>
       <label for="fecha">Fecha:</label><br />
       <input 
-        type="datetime-local" 
-        name="fecha" 
-        id="fecha" 
-        [(ngModel)]="episode.fecha" 
-        required 
-      /><br /><br />
+  type="datetime-local" 
+  name="fecha" 
+  id="fecha" 
+  [(ngModel)]="episode.fecha" 
+  [min]="minDate"
+  required 
+/><br /><br />
     </div>
 
     <!-- Botón enviar -->
     <div class="enviar">
       <button 
         type="submit" 
+        
         [disabled]="!videoForm.valid || !audioFile"
       >
         Subir Episodio
@@ -149,4 +133,5 @@
           }
         });
       </script>
+    
 </div>

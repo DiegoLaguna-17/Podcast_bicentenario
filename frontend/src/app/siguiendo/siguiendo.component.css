@@ -1,9 +1,22 @@
+:root {
+  --dorado: #e0c26e;
+  --dorado-fuerte: #c9a63e;
+  --verde: #7cac3f;
+  --verde-fuerte: #4c7525;
+  --blanco: #ffffff;
+  --gris-claro: #e0e0e0;
+  --gris-oscuro: #555555;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --border-radius-medium: 8px;
+  --border-radius-small: 4px;
+  --bottom-nav-height: 60px;
+}
 
 .following-page-wrapper {
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg, var(--dorado), var(--dorado-fuerte), var(--verde), var(--verde-fuerte));
   padding: 20px;
-  min-height: calc(100vh - var(--bottom-nav-height, 60px));
+  min-height: calc(100vh - var(--bottom-nav-height));
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -11,7 +24,7 @@
 }
 
 .following-page-wrapper h1 {
-    color: #f0f0f0;
+  color: #f0f0f0;
 }
 
 .search-bar-container {
@@ -72,8 +85,6 @@
   border-bottom: 1px solid var(--gris-claro);
 }
 
-
-
 .sidebar-option {
   padding: 8px 5px;
   margin-bottom: 8px;
@@ -86,13 +97,13 @@
 }
 
 .sidebar-option input[type="radio"] {
-    margin-right: 8px;
-    cursor: pointer;
+  margin-right: 8px;
+  cursor: pointer;
 }
 
 .sidebar-option label {
-    flex-grow: 1;
-    cursor: pointer;
+  flex-grow: 1;
+  cursor: pointer;
 }
 
 .sidebar-option:hover {
@@ -113,11 +124,11 @@
   box-shadow: 0 2px 5px var(--shadow-color);
   display: flex;
   align-items: center;
-  gap: 15px; 
+  gap: 15px;
 }
 
 .creator-image-container {
-    flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .profile-image {
@@ -126,23 +137,23 @@
   border-radius: 50%;
   border: 3px solid var(--verde);
   object-fit: cover;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  background-color: var(--gris-claro); 
-  display: block; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: var(--gris-claro);
+  display: block;
 }
 
 .creator-details {
-    display: flex;
-    flex-direction: column; 
-    flex-grow: 1;
-    text-align: left;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-align: left;
 }
 
 .creator-username {
   color: var(--verde-fuerte);
   margin-top: 0;
-  margin-bottom: 5px; 
-  font-size: 1.1em; 
+  margin-bottom: 5px;
+  font-size: 1.1em;
   word-break: break-word;
 }
 
@@ -175,6 +186,7 @@
   font-size: 0.8em;
 }
 
+/* Responsive: Tablets */
 @media (max-width: 768px) {
   .following-content {
     flex-direction: column;
@@ -187,15 +199,14 @@
     margin-bottom: 10px;
   }
 
-   .sidebar-option {
-        padding: 6px 5px;
-        margin-bottom: 6px;
-   }
+  .sidebar-option {
+    padding: 6px 5px;
+    margin-bottom: 6px;
+  }
 
-    .sidebar-option input[type="radio"] {
-        margin-right: 6px;
-    }
-
+  .sidebar-option input[type="radio"] {
+    margin-right: 6px;
+  }
 
   .creators-list {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -203,46 +214,43 @@
   }
 
   .creator-item {
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      text-align: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
   }
 
-    .creator-image-container {
-        margin-bottom: 10px;
-        flex-shrink: auto;
-    }
-
+  .creator-image-container {
+    margin-bottom: 10px;
+    flex-shrink: auto;
+  }
 
   .profile-image {
     width: 50px;
     height: 50px;
   }
 
-    .creator-details {
-        text-align: center;
-    }
-
+  .creator-details {
+    text-align: center;
+  }
 
   .creator-username {
     font-size: 1em;
   }
 
   .themes-area {
-      margin-top: 8px;
-      padding-top: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
   }
 
   .themes-area h5 {
-      font-size: 0.8em;
-      margin-bottom: 8px;
+    font-size: 0.8em;
+    margin-bottom: 8px;
   }
 
   .themes-list {
-       justify-content: center;
+    justify-content: center;
   }
-
 
   .theme-tag {
     padding: 3px 6px;
@@ -250,6 +258,7 @@
   }
 }
 
+/* Responsive: Phones */
 @media (max-width: 480px) {
   .following-page-wrapper {
     padding: 10px;
@@ -273,14 +282,13 @@
     margin-bottom: 5px;
   }
 
-    .sidebar-option input[type="radio"] {
-        margin-right: 5px;
-    }
-
+  .sidebar-option input[type="radio"] {
+    margin-right: 5px;
+  }
 
   .creators-list {
-     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-     gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
   }
 
   .creator-item {
@@ -288,9 +296,9 @@
     gap: 8px;
   }
 
-    .creator-image-container {
-        margin-bottom: 8px;
-    }
+  .creator-image-container {
+    margin-bottom: 8px;
+  }
 
   .profile-image {
     width: 40px;
@@ -302,13 +310,13 @@
   }
 
   .themes-area {
-      margin-top: 6px;
-      padding-top: 6px;
+    margin-top: 6px;
+    padding-top: 6px;
   }
 
   .themes-area h5 {
-      font-size: 0.7em;
-      margin-bottom: 6px;
+    font-size: 0.7em;
+    margin-bottom: 6px;
   }
 
   .theme-tag {

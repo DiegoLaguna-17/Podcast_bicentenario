@@ -1,186 +1,137 @@
 .video-upload-container {
-  height: 100%;
-  margin: 0;
+  height: 130%;
   padding: 40px;
   background-color: var(--verde-fuerte);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .video-upload-container h2 {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+  font-size: 48px;
   color: var(--blanco);
-  font-size: 50px;
-  text-shadow: 2px 2px 4px var(--dorado-claro);
+  text-shadow: 2px 2px 6px var(--dorado-claro);
+  font-weight: 800;
 }
 
 form {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 30px;
 }
 
-.episodio,
-.datos {
-  flex: 1;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.form-section,
+.textarea-group {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 25px 20px;
+  border-radius: 15px;
+  border: 1px solid var(--dorado-claro); 
+}
+
+legend {
+  color: var(--dorado);
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0 10px;
 }
 
 .video-preview {
   background-color: var(--dorado-claro);
-  padding: 5px;
-  border-radius: 8px;
+  padding: 10px;
+  border-radius: 12px;
   text-align: center;
-  width: 90%;
-  height: 70%;
 }
 
-.video-preview video {
-  max-width: 100%;
-  height: 100%;
-  border-radius: 4px;
-}
-
-.enviar {
-  flex-basis: 100%;
-  text-align: center;
-  margin-top: 20px;
-}
-
-button {
-  padding: 10px 25px;
-  background-color: var(--dorado);
-  color: var(--verde-fuerte);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-button:disabled {
-  background-color: var(--verde);
-  color: var(--blanco);
-  cursor: not-allowed;
-  font-weight: lighter;
-}
-
+textarea,
 input[type="text"],
-input[type="file"] {
-  border: none;
-  padding: 8px;
-  border-bottom: 1px solid var(--blanco);
-  border-radius: 10px;
+input[type="file"],
+select,
+input[type="datetime-local"] {
   width: 100%;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.1);
   color: var(--blanco);
-  background: none;
+  border: 1px solid var(--blanco);
+  border-radius: 8px;
+  font-size: 16px;
 }
 
-.datos input[type="radio"] {
-  margin-right: 5px;
-  margin-left: 15px;
+textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
-label {
-  color: var(--blanco);
-  font-size: 25px;
-  font-weight: bold;
+input[type="file"] {
+  background-color: transparent;
 }
 
 .radio-group {
   display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-top: 5px;
+  gap: 20px;
   flex-wrap: wrap;
 }
 
 .radio-option {
   display: flex;
   align-items: center;
+  gap: 8px;
+  font-size: 18px;
   color: var(--blanco);
-  font-size: 20px;
 }
 
 input[type="radio"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   width: 18px;
   height: 18px;
-  border: 2px solid var(--blanco);
-  border-radius: 50%;
-  margin-right: 8px;
-  cursor: pointer;
+  accent-color: var(--dorado-claro);
 }
 
-input[type="radio"]:checked {
+label {
+  color: var(--blanco);
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.enviar {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.btn-subir {
+  padding: 12px 32px;
+  background-color: var(--dorado);
+  color: var(--verde-fuerte);
+  font-weight: bold;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-subir:hover {
   background-color: var(--dorado-claro);
 }
 
-/* --- RESPONSIVE --- */
+.btn-subir:disabled {
+  background-color: var(--verde);
+  color: var(--blanco);
+  cursor: not-allowed;
+  font-weight: normal;
+}
 
-/* Tablets (≤768px) */
+/* Responsive */
 @media (max-width: 768px) {
-  .video-upload-container {
-    padding: 30px 20px;
-  }
-
   .video-upload-container h2 {
     font-size: 36px;
   }
 
-  .episodio,
-  .datos {
-    min-width: 100%;
-  }
-
-  .video-preview {
-    width: 100%;
-    height: auto;
-  }
-
-  label {
-    font-size: 22px;
-  }
-
-  .radio-option {
+  legend {
     font-size: 18px;
   }
 
-  button {
-    font-size: 15px;
-    padding: 8px 20px;
-  }
-}
-
-/* Móviles (≤480px) */
-@media (max-width: 480px) {
-  .video-upload-container {
-    padding: 20px 10px;
-  }
-
-  .video-upload-container h2 {
-    font-size: 28px;
-  }
-
-  .radio-group {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  label {
-    font-size: 20px;
-  }
-
-  .radio-option {
+  .btn-subir {
     font-size: 16px;
-  }
-
-  button {
-    font-size: 14px;
-    padding: 8px 16px;
   }
 }

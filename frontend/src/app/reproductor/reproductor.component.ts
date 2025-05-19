@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -24,6 +24,7 @@ export class ReproductorComponent {
   constructor(  private router: Router) {
     this.episodio=this.router.getCurrentNavigation()?.extras.state?.['datos'];
     console.log('reproduciendo '+this.episodio.audio)
+
     
   }
    velocidades: number[] = [0.5, 0.75, 1, 1.25, 1.5, 2];

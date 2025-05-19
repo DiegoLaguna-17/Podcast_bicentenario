@@ -1,34 +1,45 @@
-<div class="prin">
-  <div class="container">
-    <div class="header">
-      <h1 class="title">Episodios para ti</h1>
-      <button mat-raised-button class="refresh-btn" [disabled]="isLoading">
-        Actualizar
-      </button>
-    </div>
-    
-    @if (error) {
-      <div class="error-container">
-        <mat-icon>error_outline</mat-icon>
-        <p>{{ error }}</p>
-        <button mat-raised-button color="primary" >
-          Reintentar
+
+  <div class="prin">
+    <div class="container">
+      <div class="header">
+        <h1 class="title">Episodios para ti</h1>
+        <button mat-raised-button class="refresh-btn" [disabled]="isLoading">
+          Actualizar
         </button>
       </div>
-    } @else {
-      @if (episodios.length === 0) {
-        <div class="empty-state">
-          <mat-icon class="empty-icon">Episodios</mat-icon>
-          <h3>No se encontraron podcasts</h3>
-          <p>Este creador no tiene podcasts publicados aún</p>
-        </div>
-      } @else {
-        <div class="podcast-grid">
-          @for (episodio of episodios; track episodio.id) {
-            <app-card-episodios [episodio]="episodio"></app-card-episodios>
+      @if(isLoading===false){
+          @if (error) {
+            <div class="error-container">
+              <mat-icon>error_outline</mat-icon>
+              <p>{{ error }}</p>
+              <button mat-raised-button color="primary" >
+                Reintentar
+              </button>
+            </div>
+          } @else {
+            @if (episodios.length === 0) {
+              <div class="empty-state">
+                <mat-icon class="empty-icon">Episodios</mat-icon>
+                <h3>No se encontraron podcasts</h3>
+                <p>Este creador no tiene podcasts publicados aún</p>
+              </div>
+            } @else {
+              <div class="podcast-grid">
+                @for (episodio of episodios; track episodio.id) {
+                  <app-card-episodios [episodio]="episodio"></app-card-episodios>
+                }
+              </div>
+            }
           }
-        </div>
-      }
-    }
+        }@else{
+          <div id="cargar">
+            <div class="cargar-loader">
+              <div class="rueda"></div>
+            </div>
+            <div class="cargando">Cargando...</div>
+            
+          </div>
+        }
+    </div>
   </div>
-</div>
+

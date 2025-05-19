@@ -5,7 +5,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CardEpisodiosComponent } from '../card-episodios/card-episodios.component';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient , HttpHeaders} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -29,24 +29,31 @@ export class ListEpisodiosComponent {
   constructor(private  http: HttpClient) {}
 
   ngOnInit(): void {
+    this.isLoading=true;
     this.loadEpisodios();
+
   }
 
   loadEpisodios(): void {
-
-    this.isLoading = true;
+    const token = localStorage.getItem('access_token');
+  
+        
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`,
+        });
     this.error = null;
      const endpoint = environment.apiUrl + '/episodios/';
-      this.http.get<{episodios: any[]}>(endpoint).subscribe({
+      this.http.get<{episodios: any[]}>(endpoint,{headers}).subscribe({
         next: (response) => {
           console.log(response);
           this.episodios= response.episodios || [];
           console.log('episodios  '+this.episodios);
-          
+          this.isLoading=false;
           // Aquí marcamos que los datos han sido cargados
         },
         error: (error) => {
           console.error('Error en el perfil:', error);
+
         }
       });
     

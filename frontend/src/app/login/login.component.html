@@ -1,54 +1,59 @@
-<div class="contenedor">
+<div class="login-page">
   <div class="login-container">
-    <div class="registro-container">
+    <div class="login-card">
+      <div class="login-header">
         <h2>Iniciar sesión</h2>
-
-        <!-- Mensajes de éxito y error -->
-        <div *ngIf="mensajeRespuesta" class="mensaje-exito">
-            {{ mensajeRespuesta }}
+      </div>
+      <!-- Formulario de login -->
+      <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="login-form">
+        <!-- Campo de usuario -->
+        <div class="form-group">
+          <label for="usuario">Correo electrónico:</label>
+          <div class="input-container">
+            <i class="fas fa-envelope"></i>
+            <input type="text" id="usuario" name="usuario" ngModel maxlength="100" required #usuarioCtrl="ngModel">
+          </div>
+          <div *ngIf="usuarioCtrl.invalid && (usuarioCtrl.dirty || usuarioCtrl.touched)" class="error-message">
+            <div *ngIf="usuarioCtrl.errors?.['required']">El correo electrónico es requerido.</div>
+          </div>
         </div>
-        <div *ngIf="errorRespuesta" class="mensaje-error">
-            {{ errorRespuesta }}
+
+        <!-- Campo de contraseña -->
+        <div class="form-group">
+            <label for="contrasenia">Contraseña:</label>
+            <div class="input-container">
+            <i class="fas fa-lock"></i>
+            <input [type]="showPassword ? 'text' : 'password'" id="contrasenia" name="contrasenia" ngModel maxlength="128" required #contraseniaCtrl="ngModel">
+            <i class="fas {{showPassword ? 'fa-eye-slash' : 'fa-eye'}} toggle-password" (click)="togglePasswordVisibility()"></i>
+            </div>
+            <div *ngIf="contraseniaCtrl.invalid && (contraseniaCtrl.dirty || contraseniaCtrl.touched)" class="error-message">
+            <div *ngIf="contraseniaCtrl.errors?.['required']">La contraseña es requerida.</div>
+            </div>
         </div>
 
-        <!-- Formulario de login -->
-        <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
-            <!-- Campo de usuario -->
-            <div>
-                <label for="usuario">Correo electrónico:</label><br>
-                <input type="text" id="usuario" name="usuario" ngModel maxlength="100" required #usuarioCtrl="ngModel"><br>
-                <div *ngIf="usuarioCtrl.invalid && (usuarioCtrl.dirty || usuarioCtrl.touched)" class="error-message">
-                    <div *ngIf="usuarioCtrl.errors?.['required']">El correo electrónico es requerido.</div>
-                </div>
-                <br>
-            </div>
+        <!-- Campo de rol -->
+        <div class="form-group">
+          <label for="rol">Rol:</label>
+          <div class="select-container">
+            <i class="fas fa-user-tag"></i>
+            <select id="rol" name="rol" ngModel #rolCtrl="ngModel" required>
+              <option value="" disabled selected>Seleccione un rol</option>
+              <option value="Administrador">Administrador</option>
+              <option value="Creador">Creador</option>
+              <option value="Oyente">Oyente</option>
+            </select>
+          </div>
+          <div *ngIf="rolCtrl.invalid && (rolCtrl.dirty || rolCtrl.touched)" class="error-message">
+            <div *ngIf="rolCtrl.errors?.['required']">El rol es requerido.</div>
+          </div>
+        </div>
 
-            <!-- Campo de contraseña -->
-            <div>
-                <label for="contrasenia">Contraseña:</label><br>
-                <input type="password" id="contrasenia" name="contrasenia" ngModel maxlength="128" required #contraseniaCtrl="ngModel"><br>
-                <div *ngIf="contraseniaCtrl.invalid && (contraseniaCtrl.dirty || contraseniaCtrl.touched)" class="error-message">
-                    <div *ngIf="contraseniaCtrl.errors?.['required']">La contraseña es requerida.</div>
-                </div>
-                <br>
-            </div>
-
-            <!-- Campo de rol -->
-            <div>
-                <label for="rol">Rol:</label>
-                <select id="rol" name="rol" ngModel #rolCtrl="ngModel" required>
-                    <option value="Administrador">Administrador</option>
-                    <option value="Creador">Creador</option>
-                    <option value="Oyente">Oyente</option>
-                </select>
-                <div *ngIf="rolCtrl.invalid && (rolCtrl.dirty || rolCtrl.touched)" class="error-message">
-                    <div *ngIf="rolCtrl.errors?.['required']">El rol es requerido.</div>
-                </div>
-            </div>
-
-            <!-- Botón de enviar -->
-            <button type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>
-        </form>
+        <!-- Botón de enviar -->
+        <button type="submit" class="login-btn" [disabled]="loginForm.invalid">
+          <span>Iniciar sesión</span>
+          <i class="fas fa-sign-in-alt"></i>
+        </button>
+      </form>
     </div>
   </div>
 </div>

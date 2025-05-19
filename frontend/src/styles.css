@@ -1,12 +1,38 @@
 :root {
-    --verde-fuerte: #002e04;
-    --verde: #10810c;
-    --verde-claro: #1ec20f;
-    --dorado-fuerte:#9b8d10;
-    --dorado:#ecd719;
-    --dorado-claro:#e9e16d;
-    --blanco:#ffffff;
-  }/* You can add global styles to this file, and also import other style files */
-
+  /* Paleta de colores principal */
+  --color-primary-dark: #1a3a1a;       /* Verde oscuro elegante */
+  --color-primary: #2d5a2d;            /* Verde principal */
+  --color-accent: #d4af37;             /* Dorado para acentos */
+  --color-accent-light: #f1e5ac;       /* Dorado claro */
+  --color-light: #f8f8f8;              /* Blanco suave */
+  --color-dark: #121212;               /* Negro profundo */
+  
+  /* Colores secundarios/textos */
+  --color-text-primary: var(--color-light);
+  --color-text-secondary: var(--color-accent-light);
+  --color-text-dark: var(--color-dark);
+  
+  /* Sombras y efectos */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.25);
+  --transition: all 0.3s ease-in-out;
+  
+  /* Bordes */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  
+  /* Espaciado */
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+}
+*{
+  padding: 0;
+  margin: 0 ;
+}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+

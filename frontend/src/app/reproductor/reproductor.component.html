@@ -1,32 +1,56 @@
+<div class="repro">
+  
+  <div class="episodio-container">
+    <h1 class="episodio-titulo">🎧 Episodio: {{episodio.titulo}}</h1>
 
-<div style="background-color: aqua;">
-    <h1>Episodio: {{episodio.titulo}}</h1>
-    <h2>Podcast: {{episodio.podcast}}</h2>
-    <h2>Creador: {{episodio.creador}}</h2>
-    <h2>Descripcion: {{episodio.descripcion}}</h2>
-    <h3>Fecha de publicacion: {{episodio.fechapublicacion}}</h3>
-    <h3>Participantes: {{episodio.participantes}}</h3>
+    <div class="episodio-meta">
+      <h2>Podcast: {{episodio.podcast}}</h2>
+      <h2>Creador: {{episodio.creador}}</h2>
+    </div>
+
+    <p class="episodio-descripcion">{{episodio.descripcion}}</p>
+
+    <div class="episodio-detalles">
+      <h3>📅 Fecha de publicación: <span>{{episodio.fechapublicacion}}</span></h3>
+      <h3>👥 Participantes: <span>{{episodio.participantes}}</span></h3>
+      <h3>Visualizaciones: <span>{{episodio.visualizaciones}}</span></h3>
+    </div>
+
     <div class="audio-material-container mat-elevation-z8">
-  <h2 class="titulo-episodio">🎙️ Episodio</h2>
+      <h2 class="titulo-episodio">🎙️ Reproductor de Episodio</h2>
 
-  <audio #audioPlayer controls class="audio-player">
-    <source [src]="episodio.audio" type="audio/mpeg" />
-    <source [src]="episodio.audio" type="audio/aac" />
-    Tu navegador no soporta el reproductor de audio.
-  </audio>
+      <audio #audioPlayer controls class="audio-player">
+        <source [src]="episodio.audio" type="audio/mpeg" />
+        <source [src]="episodio.audio" type="audio/aac" />
+        Tu navegador no soporta el reproductor de audio.
+      </audio>
 
-  <div class="audio-controls">
-    <mat-form-field appearance="fill" class="velocidad-selector">
-      <mat-label>Velocidad</mat-label>
-      <mat-select (selectionChange)="cambiarVelocidad($event, audioPlayer)">
-        <mat-option *ngFor="let v of velocidades" [value]="v">{{ v }}x</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <div class="audio-controls">
+        <mat-form-field appearance="fill" class="velocidad-selector">
+          <mat-label>Velocidad</mat-label>
+          <mat-select (selectionChange)="cambiarVelocidad($event, audioPlayer)">
+            <mat-option *ngFor="let v of velocidades" [value]="v">{{ v }}x</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-    <!-- Botón de descarga que descarga el archivo -->
+        
+      </div>
+      
+    </div>
+
+    <div>
+      <h1>Transcripcion</h1>
+      <p></p>
+    </div>
+    <div>
+      <h2>Calificar</h2>
+    </div>
     
   </div>
-</div>
+  <div>
+    <h1>Comentarios</h1>
+    <div>
 
+    </div>
+  </div>
 </div>
-

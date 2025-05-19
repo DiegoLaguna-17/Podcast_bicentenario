@@ -45,13 +45,13 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # aquí antes de CommonMiddleware
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-     'corsheaders.middleware.CorsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'backend.urls'
 import os
@@ -135,9 +135,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200", # El puerto donde se ejecuta tu app Angular
-    "http://127.0.0.1:8000",
 ]
 USE_TZ = True
+SECRET_KEY = 'clave.123456.pod.bicentenario'
+
 
 # Ajusta la zona horaria según tu ubicación
 TIME_ZONE = 'America/La_Paz' 
@@ -145,3 +146,12 @@ TIME_ZONE = 'America/La_Paz'
 SUPABASE_URL = 'https://cbhcdgfzpwcwgqvtyanp.supabase.co'
 SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiaGNkZ2Z6cHdjd2dxdnR5YW5wIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NDU3NDkwMSwiZXhwIjoyMDYwMTUwOTAxfQ.kOaHJXZNuFLOkZVEiCkIRvEmft_R7-gVY0xzAKr-K2c'
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}

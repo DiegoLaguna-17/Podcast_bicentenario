@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import {DataService} from '../DataService';
 import {Router} from '@angular/router';
-import { HttpClient } from '@angular/common/http'; 
+import { HttpClient,HttpHeaders } from '@angular/common/http'; 
 import { environment } from '../../environments/environment';
 import { Location } from '@angular/common';
 
@@ -24,12 +24,28 @@ export class SubirEpisodioComponent implements OnDestroy{
 podcasts: any[] = [];
   episode = {
   title: '',
-  premium: false,
   podcast_id: '',
   descripcion: '',
   participantes: '',
   fecha: ''
 };
+cargando=false
+minDate: string = '';
+
+ngOnInit() {
+  this.minDate = this.obtenerFechaLocal();
+}
+
+obtenerFechaLocal(): string {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hour = String(now.getHours()).padStart(2, '0');
+  const minute = String(now.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day}T${hour}:${minute}`;
+}
 
 
  onFileSelected(event: any) {
@@ -50,25 +66,60 @@ podcasts: any[] = [];
 
 
   onSubmit(form: NgForm) {
-    console.log(this.datosend);
-    
+    const token = localStorage.getItem('access_token');
+  
+        if (!token) {
+          this.errorRespuesta = 'No se encontró token de autenticación.';
+          return;
+        }
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`,
+        });
     if (this.audioFile && form.valid) {
        const formData = new FormData();
       // Aquí iría la lógica para subir el video 
+      if (this.episode.fecha < this.minDate) {
+        alert('La fecha y hora deben ser actuales o futuras.');
+        return;
+      }
+      console.log('podcast id:', this.episode.podcast_id);
+      console.log('titulo:', this.episode.title);
+      console.log('descripcion:', this.episode.descripcion);
+      console.log('Fecha enviada:', this.episode.fecha);
+      console.log('participantes:', this.episode.participantes);
+
       formData.append('podcast', this.episode.podcast_id);
       formData.append('titulo', this.episode.title);
       formData.append('descripcion', this.episode.descripcion);
       formData.append('fecha', this.episode.fecha);
       formData.append('audio', this.audioFile);
       formData.append('participantes', this.episode.participantes);
+      this.cargando=true;
       const endpoint = environment.apiUrl + '/episodio/';
-      this.http.post(endpoint, formData).subscribe({
+      this.http.post(endpoint, formData,{headers}).subscribe({
         next: (response) => {
           console.log(response);
-
+          this.cargando=false;
+          alert('episodio publicado')
+           form.resetForm(); // <-- esto limpia el NgForm
+          this.audioFile = null;
+          this.episode = {
+            podcast_id: '',
+            title: '',
+            descripcion: '',
+            fecha: '',
+            participantes: ''
+          };
+          this.audioUrl=null;
+          this.audioFile=null;
+          const inaudio=document.getElementById('audioFile')as HTMLInputElement;;
+          if(inaudio){
+            inaudio.value='';
+          }
+          
+            
           
           
-          // Aquí marcamos que los datos han sido cargados
           
         },
         error: (error) => {
@@ -86,12 +137,22 @@ podcasts: any[] = [];
     }
   }
   constructor(private dataService: DataService,private http: HttpClient,private router: Router,private location:Location) {
-        this.datosend=this.router.getCurrentNavigation()?.extras.state?.['datos'];
+        const token = localStorage.getItem('access_token');
+  
+        if (!token) {
+          this.errorRespuesta = 'No se encontró token de autenticación.';
+          return;
+        }
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`,
+        });
+        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+        this.datosend=usuario.id;
         console.log('llego a subir ep '+this.datosend);
         const formData=new FormData();
         formData.append('id',this.datosend);
         const endpoint = environment.apiUrl+'/creador/podcasts/';
-        this.http.post<{podcasts: any[]}>(endpoint, formData).subscribe({
+        this.http.post<{podcasts: any[]}>(endpoint, formData,{headers}).subscribe({
         next: (response) => {
            this.podcasts = response.podcasts || [];
            console.log('Podcasts cargados:', this.podcasts);

@@ -4,7 +4,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PodcastCardComponent } from '../podcast-card/podcast-card.component';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient ,HttpHeaders} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -35,14 +35,19 @@ export class PodcastListComponent implements OnInit {
   }
 
   loadPodcasts(): void {
-
+    const token = localStorage.getItem('access_token');
+  
+        
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`,
+        });
     this.isLoading = true;
     this.error = null;
     const formData =new FormData();
     let creador=this.creadorId;
     formData.append('id',creador);
     const endpoint = environment.apiUrl+'/creador/podcasts/';
-    this.http.post<{podcasts: any[]}>(endpoint,formData).subscribe({
+    this.http.post<{podcasts: any[]}>(endpoint,formData,{headers}).subscribe({
       next: (response) => {
          this.podcasts = response.podcasts || [];
          console.log(this.podcasts);

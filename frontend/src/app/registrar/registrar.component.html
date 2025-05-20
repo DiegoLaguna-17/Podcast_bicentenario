@@ -1,75 +1,164 @@
-<div class="contenedor">
-    <div class="registro-container">
-        <h2>Registro de Usuario</h2>
-
-        <div *ngIf="mensajeRespuesta" class="mensaje-exito">
-            {{ mensajeRespuesta }}
+<div class="registration-page">
+  <div class="registration-container">
+    <div class="registration-card">
+      <div class="registration-header">
+        <h2>Registro</h2>
+        <div class="user-type-tabs">
+          <button 
+            [class.active]="selectedUserType === 'Oyente'"
+            (click)="selectedUserType = 'Oyente'">
+            <i class="fas fa-headphones"></i> Oyente
+          </button>
+          <button 
+            [class.active]="selectedUserType === 'Creador'"
+            (click)="selectedUserType = 'Creador'">
+            <i class="fas fa-microphone"></i> Creador
+          </button>
+          <button 
+            [class.active]="selectedUserType === 'Administrador'"
+            (click)="selectedUserType = 'Administrador'">
+            <i class="fas fa-user-shield"></i> Administrador
+          </button>
         </div>
-        <div *ngIf="errorRespuesta" class="mensaje-error">
-            {{ errorRespuesta }}
+      </div>
+
+      <!-- Formulario para Oyente -->
+      <form *ngIf="selectedUserType === 'Oyente'" #oyenteForm="ngForm" 
+            (ngSubmit)="onSubmitOyente(oyenteForm)" class="registration-form">
+        <div class="form-group">
+          <label for="oyente-usuario">Usuario:</label>
+          <input type="text" id="oyente-usuario" name="usuario" 
+                 [(ngModel)]="oyente.usuario" required>
         </div>
 
-        <form #registroForm="ngForm" (ngSubmit)="onSubmit()">
-            <div>
-                <label for="usuario">Usuario:</label><br>
-                <input type="text" id="usuario" name="usuario" ngModel maxlength="100" required #usuarioCtrl="ngModel"><br>
-                <div *ngIf="usuarioCtrl.invalid && (usuarioCtrl.dirty || usuarioCtrl.touched)" class="error-message">
-                    <div *ngIf="usuarioCtrl.errors?.['required']">El usuario es requerido.</div>
-                </div>
-                <br>
-            </div>
+        <div class="form-group">
+          <label for="oyente-contrasenia">Contraseña:</label>
+          <div class="input-container">
+            <input [type]="showPassword ? 'text' : 'password'" id="oyente-contrasenia" 
+                   name="contrasenia" [(ngModel)]="oyente.contrasenia" required>
+            <i class="fas {{showPassword ? 'fa-eye-slash' : 'fa-eye'}} toggle-password" 
+               (click)="showPassword = !showPassword"></i>
+          </div>
+        </div>
 
-            <div>
-                <label for="contrasenia">Contraseña:</label><br>
-                <input type="password" id="contrasenia" name="contrasenia" ngModel maxlength="128" required #contraseniaCtrl="ngModel"><br>
-                <div *ngIf="contraseniaCtrl.invalid && (contraseniaCtrl.dirty || contraseniaCtrl.touched)" class="error-message">
-                    <div *ngIf="contraseniaCtrl.errors?.['required']">La contraseña es requerida.</div>
-                </div>
-                <br>
-            </div>
+        <div class="form-group">
+          <label for="oyente-correo">Correo electrónico:</label>
+          <input type="email" id="oyente-correo" name="correo" 
+                 [(ngModel)]="oyente.correo" required>
+        </div>
 
-            <div>
-                <label for="nombre">Nombre:</label><br>
-                <input type="text" id="nombre" name="nombre" ngModel maxlength="128" required #nombreCtrl="ngModel"><br>
-                <div *ngIf="nombreCtrl.invalid && (nombreCtrl.dirty || nombreCtrl.touched)" class="error-message">
-                    <div *ngIf="nombreCtrl.errors?.['required']">El nombre es requerido.</div>
-                </div>
-                <br>
-            </div>
+        <div class="form-group">
+          <label for="oyente-fotoPerfil">Foto de perfil:</label>
+          <input type="file" id="oyente-fotoPerfil" name="fotoPerfil" 
+                 (change)="onFileChange($event, 'fotoPerfil', 'oyente')" accept="image/*">
+          <div *ngIf="oyente.fotoPerfilPreview" class="image-preview">
+            <img [src]="oyente.fotoPerfilPreview" alt="Vista previa foto de perfil" width="200" height="200">
+          </div>
+        </div>
 
-            <div>
-                <label for="correo">Correo Electrónico:</label><br>
-                <input type="email" id="correo" name="correo" ngModel required email #correoCtrl="ngModel"><br>
-                <div *ngIf="correoCtrl.invalid && (correoCtrl.dirty || correoCtrl.touched)" class="error-message">
-                    <div *ngIf="correoCtrl.errors?.['required']">El correo es requerido.</div>
-                    <div *ngIf="correoCtrl.errors?.['email']">El formato del correo no es válido.</div>
-                </div>
-                <br>
-            </div>
+        <button type="submit" class="submit-btn" [disabled]="oyenteForm.invalid">
+          <i class="fas fa-user-plus"></i> Registrarse como Oyente
+        </button>
+      </form>
 
-            <div>
-                <label for="fotoperfil">Foto de Perfil:</label><br>
-                <input type="file" id="fotoperfil" name="fotoperfil" accept="image/*" required #fotoperfil><br>
-                <br>
-            </div>
+      <!-- Formulario para Creador -->
+      <form *ngIf="selectedUserType === 'Creador'" #creadorForm="ngForm" 
+            (ngSubmit)="onSubmitCreador(creadorForm)" class="registration-form">
+        <div class="form-group">
+          <label for="creador-usuario">Usuario:</label>
+          <input type="text" id="creador-usuario" name="usuario" 
+                 [(ngModel)]="creador.usuario" required>
+        </div>
 
-            <div>
-                <label for="biografia">Biografía:</label><br>
-                <textarea id="biografia" name="biografia" ngModel maxlength="350" rows="4" cols="50" required #biografiaCtrl="ngModel"></textarea><br>
-                <div *ngIf="biografiaCtrl.invalid && (biografiaCtrl.dirty || biografiaCtrl.touched)" class="error-message">
-                    <div *ngIf="biografiaCtrl.errors?.['required']">La biografía es requerida.</div>
-                </div>
-                <br>
-            </div>
+        <div class="form-group">
+          <label for="creador-contrasenia">Contraseña:</label>
+          <div class="input-container">
+            <input [type]="showPassword ? 'text' : 'password'" id="creador-contrasenia" 
+                   name="contrasenia" [(ngModel)]="creador.contrasenia" required>
+            <i class="fas {{showPassword ? 'fa-eye-slash' : 'fa-eye'}} toggle-password" 
+               (click)="showPassword = !showPassword"></i>
+          </div>
+        </div>
 
-            <div>
-                <label for="imgdonaciones">Imagen de Donaciones:</label><br>
-                <input type="file" id="imgdonaciones" name="imgdonaciones" accept="image/*" required #imgdonaciones><br>
-                <br>
-            </div>
+        <div class="form-group">
+          <label for="creador-correo">Correo electrónico:</label>
+          <input type="email" id="creador-correo" name="correo" 
+                 [(ngModel)]="creador.correo" required>
+        </div>
 
-            <button type="submit" [disabled]="registroForm.invalid">Registrarse</button>
-        </form>
+        <div class="form-group">
+          <label for="creador-nombre">Nombre:</label>
+          <input type="text" id="creador-nombre" name="nombre" 
+                 [(ngModel)]="creador.nombre" required>
+        </div>
+
+        <div class="form-group">
+          <label for="creador-biografia">Biografía:</label>
+          <textarea id="creador-biografia" name="biografia" 
+                    [(ngModel)]="creador.biografia" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="creador-fotoPerfil">Foto de perfil:</label>
+          <input type="file" id="creador-fotoPerfil" name="fotoPerfil" 
+                 (change)="onFileChange($event, 'fotoPerfil', 'creador')" accept="image/*">
+          <div *ngIf="creador.fotoPerfilPreview" class="image-preview">
+            <img [src]="creador.fotoPerfilPreview" alt="Vista previa foto de perfil" width="200" height="200">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="creador-imagenDonaciones">Imagen para donaciones:</label>
+          <input type="file" id="creador-imagenDonaciones" name="imagenDonaciones" 
+                 (change)="onFileChange($event, 'imagenDonaciones', 'creador')" accept="image/*">
+          <div *ngIf="creador.imagenDonacionesPreview" class="image-preview">
+            <img [src]="creador.imagenDonacionesPreview" alt="Vista previa imagen donaciones" width="200" height="200">
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="creadorForm.invalid">
+          <i class="fas fa-user-plus"></i> Registrarse como Creador
+        </button>
+      </form>
+
+      <!-- Formulario para Administrador -->
+      <form *ngIf="selectedUserType === 'Administrador'" #administradorForm="ngForm" 
+            (ngSubmit)="onSubmitAdministrador(administradorForm)" class="registration-form">
+        <div class="form-group">
+          <label for="admin-usuario">Usuario:</label>
+          <input type="text" id="admin-usuario" name="usuario" 
+                 [(ngModel)]="administrador.usuario" required>
+        </div>
+
+        <div class="form-group">
+          <label for="admin-contrasenia">Contraseña:</label>
+          <div class="input-container">
+            <input [type]="showPassword ? 'text' : 'password'" id="admin-contrasenia" 
+                   name="contrasenia" [(ngModel)]="administrador.contrasenia" required>
+            <i class="fas {{showPassword ? 'fa-eye-slash' : 'fa-eye'}} toggle-password" 
+               (click)="showPassword = !showPassword"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="admin-correo">Correo electrónico:</label>
+          <input type="email" id="admin-correo" name="correo" 
+                 [(ngModel)]="administrador.correo" required>
+        </div>
+
+        <div class="form-group">
+          <label for="admin-fotoPerfil">Foto de perfil:</label>
+          <input type="file" id="admin-fotoPerfil" name="fotoPerfil" 
+                 (change)="onFileChange($event, 'fotoPerfil', 'administrador')" accept="image/*">
+          <div *ngIf="administrador.fotoPerfilPreview" class="image-preview">
+            <img [src]="administrador.fotoPerfilPreview" alt="Vista previa foto de perfil" width="200" height="200">
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="administradorForm.invalid">
+          <i class="fas fa-user-plus"></i> Registrarse como Administrador
+        </button>
+      </form>
     </div>
+  </div>
 </div>
-

@@ -1,55 +1,210 @@
-.contenedor {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, var(--dorado),var(--dorado-fuerte),var(--verde), var(--verde-fuerte));
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-  }
-  .registro-container {
-    margin-top: 30px;
-    margin-bottom: 30px;
-    background-color: var(--blanco);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 700px;
-  }
+.registration-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, 
+              rgba(26, 58, 26, 0.9) 0%, 
+              rgba(45, 90, 45, 0.85) 30%, 
+              rgba(212, 175, 55, 0.8) 100%);
+  padding: var(--space-xl);
+  position: relative;
+}
 
-  .registro-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 50px;
-    color: var(--verde-fuerte);
-  }
+.registration-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.05;
+  z-index: 0;
+}
 
-  .registro-container label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-  }
+.registration-container {
+  width: 100%;
+  max-width: 800px;
+  z-index: 1;
+}
 
-  .registro-container input,
-  .registro-container select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+.registration-card {
+  background: rgba(18, 18, 18, 0.8);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-accent);
+  overflow: hidden;
+}
 
-  .registro-container button {
-    width: 100%;
-    margin-top: 20px;
-    padding: 10px;
-    background-color: var(--verde-fuerte);
-    color: white;
-    border: none;
-    border-radius: 15px;
-    font-weight: bold;
-    cursor: pointer;
-  }
+.registration-header {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
 
-  .registro-container button:hover {
-    background-color: var(--verde);
+.registration-header h2 {
+  color: var(--color-accent);
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  margin-bottom: var(--space-md);
+}
+
+.user-type-tabs {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.user-type-tabs button {
+  padding: var(--space-md) var(--space-lg);
+  background: none;
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent-light);
+  cursor: pointer;
+  border-radius: var(--border-radius-md);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 600;
+}
+
+.user-type-tabs button.active {
+  background: var(--color-accent);
+  color: var(--color-primary-dark);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.user-type-tabs button:hover:not(.active) {
+  background: rgba(212, 175, 55, 0.2);
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.form-group {
+  margin-bottom: var(--space-md);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--space-sm);
+  color: var(--color-accent-light);
+  font-weight: 500;
+}
+
+.form-group input:not([type="file"]),
+.form-group textarea,
+.form-group select {
+  width: 95%;
+  padding: var(--space-md);
+  background: var(--color-light);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--border-radius-md);
+
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-accent-light);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+}
+
+.input-container {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: var(--space-md);
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--color-accent-light);
+}
+
+.image-preview {
+  margin-top: var(--space-md);
+  display: flex; /* necesario para usar justify-content */
+  justify-content: center; /* centra horizontalmente */
+  align-items: center; /* centra verticalmente si tiene altura definida */
+}
+
+.image-preview img {
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-accent);
+}
+
+.submit-btn {
+  background: var(--color-accent);
+  color: var(--color-primary-dark);
+  border: none;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--border-radius-lg);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  background: var(--color-accent-light);
+}
+
+.submit-btn:disabled {
+  background: var(--color-accent-light);
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .registration-page {
+    padding: var(--space-md);
   }
+  
+  .registration-card {
+    padding: var(--space-lg);
+  }
+  
+  .user-type-tabs {
+    flex-direction: column;
+  }
+  
+  .registration-header h2 {
+    font-size: 1.8rem;
+  }
+}
+
+#creador-fotoPerfil,
+#oyente-fotoPerfil,
+#creador-imagenDonaciones,
+#admin-fotoPerfil{
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px dashed var(--color-accent);
+  border-radius: var(--border-radius-md);
+  color: var(--color-accent-light);
+  cursor: pointer;
+  transition: var(--transition);
+  width: 93%;
+}

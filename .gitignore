@@ -1,0 +1,15 @@
+.coverage
+htmlcov/
+.mypy_cache/
+.pytest_cache/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+.coverage
+htmlcov/
+.mypy_cache/
+.pytest_cache/

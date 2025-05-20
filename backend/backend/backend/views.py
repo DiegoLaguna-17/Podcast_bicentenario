@@ -741,7 +741,7 @@ def mostrar_formulario_registro(request):
     return render(request, 'registro.html')
 
 @csrf_exempt
-def registro(request):
+def registro_creador(request):
     if request.method == 'POST':
         try:
             # 1. Obtener datos del formulario
@@ -801,13 +801,13 @@ def registro(request):
                 return JsonResponse({'error': 'Error al registrar en Supabase'}, status=400)
 
             # 6. Éxito: Redirigir o devolver éxito
-            return render(request, 'registro_exitoso.html', {"message": "¡Registro exitoso!"})
+            return JsonResponse( {"message": "¡Registro exitoso!"})
         except Exception as e:
             # Captura cualquier error inesperado y devuelve un mensaje genérico
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
 
-    # Si no es POST, mostrar el formulario
-    return render(request, 'registro.html')
+    
+    
 
 
 def mostrar_formulario_oyente(request):
@@ -816,21 +816,38 @@ def mostrar_formulario_oyente(request):
 
 
 @csrf_exempt
-def crear_usuario(request):
+def registro_usuario(request):
     if request.method == 'POST':
         try:
             usuario=request.POST.get('usuario')
             contrasenia=request.POST.get('contrasenia')
-            rol='Oyente'
+            rol=request.POST.get('tipoUsuario')
             correo=request.POST.get('correo')
             fecha=timezone.now().date().isoformat()
             contrasenia_hash=make_password(contrasenia)
+            fotoperfil = None
+            if 'fotoPerfil' in request.FILES:
+                
+                fotoperfil = request.FILES['fotoPerfil']
+                try:
+                    # Subir a Supabase Storage
+                    foto_perfil_name = f'perfil_{usuario}_{uuid.uuid4().hex}.jpg'
+                    supabase.storage.from_('fotosusuarios').upload(
+                        path=foto_perfil_name,
+                        file=fotoperfil.read(),
+                    )
+                    fotoperfilstr = supabase.storage.from_('fotosusuarios').get_public_url(foto_perfil_name)
+                    
+                except Exception as e:
+                    
+                    return JsonResponse({'error': f'Error al subir foto de perfil: {str(e)}'}, status=400)
             data = {
                 "usuario":usuario,
                 "contrasenia":contrasenia_hash,
                 "rol":rol,
                 "correo":correo,
                 "fecha_ingreso":fecha,
+                "fotoperfil":fotoperfilstr
             }
             response = supabase.table('backend_usuario').insert(data).execute()
             if hasattr(response, 'error') and response.error:

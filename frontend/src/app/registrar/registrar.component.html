@@ -100,8 +100,8 @@
 
         <div class="form-group">
           <label for="creador-fotoPerfil">Foto de perfil:</label>
-          <input type="file" id="creador-fotoPerfil" name="fotoPerfil" 
-                 (change)="onFileChange($event, 'fotoPerfil', 'creador')" accept="image/*">
+          <input type="file" id="creadorfotoPerfil" name="fotoPerfil" 
+                 (change)="onFileChange($event, 'fotoPerfil', 'creador')" accept="image/*" #creadorFotoPerfil>
           <div *ngIf="creador.fotoPerfilPreview" class="image-preview">
             <img [src]="creador.fotoPerfilPreview" alt="Vista previa foto de perfil" width="200" height="200">
           </div>
@@ -110,7 +110,7 @@
         <div class="form-group">
           <label for="creador-imagenDonaciones">Imagen para donaciones:</label>
           <input type="file" id="creador-imagenDonaciones" name="imagenDonaciones" 
-                 (change)="onFileChange($event, 'imagenDonaciones', 'creador')" accept="image/*">
+                 (change)="onFileChange($event, 'imagenDonaciones', 'creador')" accept="image/*" #creadorImagenDonaciones>
           <div *ngIf="creador.imagenDonacionesPreview" class="image-preview">
             <img [src]="creador.imagenDonacionesPreview" alt="Vista previa imagen donaciones" width="200" height="200">
           </div>

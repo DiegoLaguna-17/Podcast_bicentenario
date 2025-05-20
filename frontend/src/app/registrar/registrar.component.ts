@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild,ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -17,7 +17,9 @@ import { environment } from '../../environments/environment';
 export class RegistrarComponent {
   selectedUserType: 'Oyente' | 'Creador' | 'Administrador' = 'Oyente';
   showPassword = false;
-
+  @ViewChild('creadorfotoPerfil') creadorFotoperfilInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('creadorimagenDonaciones') creadorImgdonacionesInput!: ElementRef<HTMLInputElement>;
+  extension:any
   // Modelos para cada tipo de usuario
   oyente = {
     usuario: '',
@@ -107,7 +109,7 @@ export class RegistrarComponent {
     formData.append('correo', this.oyente.correo);
     formData.append('fotoPerfil', this.oyente.fotoPerfil);
     formData.append('tipoUsuario', 'Oyente');
-
+    this.extension='usuario'
     this.enviarRegistro(formData, form);
   }
 
@@ -127,15 +129,17 @@ export class RegistrarComponent {
       this.mostrarError('La imagen para donaciones es requerida.');
       return;
     }
-
+    
     const formData = new FormData();
     formData.append('usuario', this.creador.usuario);
     formData.append('contrasenia', this.creador.contrasenia);
     formData.append('correo', this.creador.correo);
     formData.append('nombre', this.creador.nombre);
     formData.append('biografia', this.creador.biografia);
-    formData.append('fotoPerfil', this.creador.fotoPerfil);
-    formData.append('imagenDonaciones', this.creador.imagenDonaciones);
+    formData.append('fotoperfil',this.creador.fotoPerfil);
+    formData.append('imgdonaciones',this.creador.imagenDonaciones);
+    this.extension='creador'
+
     formData.append('tipoUsuario', 'Creador');
 
     this.enviarRegistro(formData, form);
@@ -159,6 +163,7 @@ export class RegistrarComponent {
     formData.append('correo', this.administrador.correo);
     formData.append('fotoPerfil', this.administrador.fotoPerfil);
     formData.append('tipoUsuario', 'Administrador');
+    this.extension='usuario'
 
     this.enviarRegistro(formData, form);
   }
@@ -168,7 +173,7 @@ export class RegistrarComponent {
     this.mensajeRespuesta = null;
     this.errorRespuesta = null;
 
-    const endpoint = environment.apiUrl + '/registro/';
+    const endpoint = environment.apiUrl + '/registro/'+this.extension+'/';
 
     this.http.post(endpoint, formData).subscribe({
       next: (response) => {

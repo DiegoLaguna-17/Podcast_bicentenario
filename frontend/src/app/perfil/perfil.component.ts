@@ -52,6 +52,9 @@ export class PerfilComponent {
       next: (response) => {
         console.log(response);
         this.datosper = response;
+        if (this.datosper?.fotoPerfil && !this.datosper.fotoPerfil.startsWith('http')) {
+          this.datosper.fotoPerfil = environment.apiUrl + this.datosper.fotoPerfil;
+        }
         this.id = this.datosper.id;
         this.rol = this.datosper.rol;
         console.log('id del perfil: ' + this.id + ' ' + this.rol);

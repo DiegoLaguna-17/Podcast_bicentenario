@@ -3,7 +3,18 @@
     <div class="profile-header">
       <h2>Datos recibidos:</h2>
     </div>
+    <div *ngIf="datosCargados && datosper">
+    <h2>{{ datosper.nombre }}</h2>
 
+    <img *ngIf="datosper.fotoperfil"
+        [src]="datosper.fotoperfil"
+        alt="Foto de perfil"
+        width="150"
+        height="150"
+        style="border-radius: 50%; object-fit: cover;" />
+
+    <!-- Otros datos del perfil... -->
+  </div>
     <div class="profile-content">
       <div class="profile-image-container">
         <img src="{{datosper.fotoPerfil}}" alt="foto perfil" class="profile-image">

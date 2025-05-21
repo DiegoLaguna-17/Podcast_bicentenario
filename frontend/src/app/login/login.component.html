@@ -49,9 +49,11 @@
         </div>
 
         <!-- Botón de enviar -->
-        <button type="submit" class="login-btn" [disabled]="loginForm.invalid">
-          <span>Iniciar sesión</span>
-          <i class="fas fa-sign-in-alt"></i>
+        <button type="submit" class="login-btn" [disabled]="loginForm.invalid || isLoading">
+          <span *ngIf="!isLoading">Iniciar sesión</span>
+          <span *ngIf="isLoading">Procesando...</span>
+          <i *ngIf="!isLoading" class="fas fa-sign-in-alt"></i>
+          <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
         </button>
       </form>
     </div>

@@ -206,3 +206,23 @@
     font-size: 1.8rem;
   }
 }
+
+
+.success-toast {
+  background-color: #4CAF50 !important;
+  color: white !important;
+}
+
+.error-toast {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

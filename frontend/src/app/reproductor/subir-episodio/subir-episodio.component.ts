@@ -1,10 +1,10 @@
 import { Component, OnDestroy,HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import {DataService} from '../DataService';
+import {DataService} from '../../DataService';
 import {Router} from '@angular/router';
 import { HttpClient,HttpHeaders } from '@angular/common/http'; 
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { Location } from '@angular/common';
 
 

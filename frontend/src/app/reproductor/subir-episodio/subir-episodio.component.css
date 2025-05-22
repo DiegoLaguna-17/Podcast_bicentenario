@@ -87,10 +87,10 @@ input[type="radio"] {
 }
 
 label {
-  color: var(--blanco);
-  font-size: 20px;
-  font-weight: 600;
-  margin-top: 10px;
+  display: block;
+  margin-bottom: var(--space-sm);
+  color: var(--color-accent-light);
+  font-weight: 500;
 }
 
 .enviar {
@@ -134,4 +134,63 @@ label {
   .btn-subir {
     font-size: 16px;
   }
+}
+
+
+.subirEpi {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    padding: var(--space-md) var(--space-xl);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    box-shadow: var(--shadow-sm);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.subirEpi {
+    background: transparent;
+    color: var(--color-light);
+    border: 2px solid var(--color-accent);
+}
+
+.subirEpi::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+    transition: all 0.7s ease;
+    z-index: -1;
+}
+
+.subirEpi:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.subirEpi:hover::before {
+    left: 100%;
+}
+
+.subirEpi:hover {
+    background: rgba(212, 175, 55, 0.2);
+}
+
+.subirEpi:active {
+    transform: translateY(2px);
+    transition: all 0.1s ease;
 }

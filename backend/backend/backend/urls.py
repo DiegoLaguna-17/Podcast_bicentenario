@@ -47,8 +47,8 @@ urlpatterns = [
     path('buscar_general/', views.buscar_general, name='buscar_general'),
     path('buscar_anio/',views.buscar_anio,name='buscar_anio'),
     path('buscar_tematica/', views.buscar_tematica,name='buscar_tematica'),
-    path('actualizar_visualizaciones/',views.sumar_visualizacion,name='actualizar_visualizaciones')
-    
+    path('actualizar_visualizaciones/',views.sumar_visualizacion,name='actualizar_visualizaciones'),
+    path('verificarCodigo/',views.verificar_codigo,name='verficar_mensaje')      
 
 
 

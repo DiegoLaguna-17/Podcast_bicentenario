@@ -7,7 +7,7 @@ import { BuscarComponent } from './buscar/buscar.component';
 import { SiguiendoComponent } from './siguiendo/siguiendo.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { MenuPrincipalComponent } from './menu-principal/menu-principal.component';
-import { SubirEpisodioComponent } from './subir-episodio/subir-episodio.component';
+import { SubirEpisodioComponent } from './reproductor/subir-episodio/subir-episodio.component';
 import { VerificarComponent } from './verificar/verificar.component';
 import { ReproductorComponent }from './reproductor/reproductor.component';
 export const routes: Routes = [

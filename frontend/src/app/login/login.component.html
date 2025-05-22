@@ -4,6 +4,11 @@
       <div class="login-header">
         <h2>Iniciar sesión</h2>
       </div>
+      <div style="width: 30vh;height: 20;" *ngIf="verificar">
+        <h3>Ingresa tu codigo de verificacion</h3>
+        <input type="number" #txtverificar>
+        <button (click)="verificarCodigo(txtverificar)">Verificar</button>
+      </div>
       <!-- Formulario de login -->
       <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="login-form">
         <!-- Campo de usuario -->

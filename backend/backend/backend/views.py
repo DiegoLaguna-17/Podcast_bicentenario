@@ -63,9 +63,10 @@ from rest_framework import status
 from .decorators import token_required
 from django.http import JsonResponse
 from .decorators import token_required
+import random
+import requests
 
-
-
+codigos_temporales = {}
 @csrf_exempt
 def login_usuario(request):
     if request.method != 'POST':
@@ -102,32 +103,88 @@ def login_usuario(request):
         # Verificar rol si está en la tabla
         if 'rol' in usuario_data and usuario_data['rol'] != rol:
             return JsonResponse({'error': 'El rol no coincide para este usuario'}, status=403)
-        
+        if not usuario_data['telefono']:
+            return JsonResponse({'error': 'No hay telefono para este usuario'}, status=403)
         # Datos que irán dentro del token
         # Crear el payload con tiempo de expiración
-        payload = {
-            'id': usuario_data[user_id_field],
-            'rol': usuario_data.get('rol', rol),
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1),  # Token válido por 1 hora
-            'iat': datetime.datetime.utcnow()
-        }
-
+        
+        telefono=usuario_data['telefono']
         # Codificar el token con la clave secreta de Django
-        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-
-        return JsonResponse({
-            'access': token,
-            'usuario': {
-                'id': payload['id'],
-                'rol': payload['rol']
-            }
-        })
+        respuest=enviar_codigo_whatsapp(telefono)
+        codigo=respuest
+        
+        return JsonResponse({'mensaje':'Codigo enviado','validador':codigo,
+                             'id':usuario_data[user_id_field],'rol':rol})
 
         
     except Exception as e:
         print(f"Error en login: {str(e)}")
         return JsonResponse({'error': 'Error en el servidor'}, status=500)
 
+
+
+def enviar_codigo_whatsapp(telefono):
+    if not telefono:
+        return JsonResponse({"error": "Número no proporcionado"}, status=400)
+
+    codigo = str(random.randint(100000, 999999))
+    print(f"Código generado: {codigo}")
+
+    token = "0l5pdfxicmpxub44"
+    url = "https://api.ultramsg.com/instance121270/messages/chat"
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+
+    data = {
+        "token": token,
+        "to": telefono,
+        "body": f"Tu código de inicio de sesión es: {codigo}",
+    }
+
+    response = requests.post(url, headers=headers, data=data)
+
+    if response.status_code == 200:
+        # Puedes guardar también ID o rol si ya los tienes
+        
+        return codigo
+    else:
+        return JsonResponse({"error": "Error al enviar el mensaje", "detalles": response.json()}, status=500)
+
+
+
+def verificar_codigo(request):
+    if request.method == "POST":
+        codigo_ingresado = request.POST.get("codigo")
+        codigo_generado=request.POST.get("validador")
+        id_usuario=request.POST.get('id')
+        rol_usuario=request.POST.get('rol')
+        print("Código ingresado:", codigo_ingresado)
+
+
+        if codigo_ingresado == codigo_generado :
+            
+
+            payload = {
+                'id': id_usuario,
+                'rol': rol_usuario,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1),
+                'iat': datetime.datetime.utcnow()
+            }
+
+            token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+
+            # Limpiar OTP después de usarlo
+
+            return JsonResponse({
+                'access': token,
+                'usuario': {
+                    'id': id_usuario,
+                    'rol': rol_usuario
+                }
+            })
+        else:
+            return HttpResponse("Código incorrecto.", status=401)
+
+    return JsonResponse({"error": "Método no permitido"}, status=405)
 
 
 
@@ -232,7 +289,8 @@ def perfil_usuario(request):
                     'usuario': usuario_data['usuario'],
                     'rol': usuario_data['rol'],
                     'correo': usuario_data['correo'],
-                    'fecha': usuario_data['fecha_ingreso']
+                    'fecha': usuario_data['fecha_ingreso'],
+                    'fotoperfil':usuario_data['fotoperfil']
                 }
             else:
                 usuario = {
@@ -749,6 +807,7 @@ def registro_creador(request):
             contrasenia = request.POST.get('contrasenia')
             nombre = request.POST.get('nombre')
             correo = request.POST.get('correo')
+            telefono=request.POST.get('telefono')
             biografia = request.POST.get('biografia')
 
             # 2. Procesar archivos (foto de perfil y QR de donaciones)
@@ -792,6 +851,7 @@ def registro_creador(request):
                 "biografia": biografia,
                 "fotoperfil": fotoperfil,
                 "imgdonaciones": imgdonaciones,
+                "telefono":telefono
             }
             
             response = supabase.table('backend_creadores').insert(data).execute()
@@ -823,6 +883,7 @@ def registro_usuario(request):
             contrasenia=request.POST.get('contrasenia')
             rol=request.POST.get('tipoUsuario')
             correo=request.POST.get('correo')
+            telefono=request.POST.get('telefono')
             fecha=timezone.now().date().isoformat()
             contrasenia_hash=make_password(contrasenia)
             fotoperfil = None
@@ -847,7 +908,8 @@ def registro_usuario(request):
                 "rol":rol,
                 "correo":correo,
                 "fecha_ingreso":fecha,
-                "fotoperfil":fotoperfilstr
+                "fotoperfil":fotoperfilstr,
+                "telefono":telefono
             }
             response = supabase.table('backend_usuario').insert(data).execute()
             if hasattr(response, 'error') and response.error:

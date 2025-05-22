@@ -46,6 +46,11 @@
           <input type="email" id="oyente-correo" name="correo" 
                  [(ngModel)]="oyente.correo" required>
         </div>
+         <div class="form-group">
+          <label for="oyente-telefono">Telefono:</label>
+          <input type="number" id="oyente-telefono" name="oyente-telefono" 
+                 [(ngModel)]="oyente.telefono" required>
+        </div>
 
         <div class="form-group">
           <label for="oyente-fotoPerfil">Foto de perfil:</label>
@@ -85,7 +90,11 @@
           <input type="email" id="creador-correo" name="correo" 
                  [(ngModel)]="creador.correo" required>
         </div>
-
+        <div class="form-group">
+          <label for="creador-telefono">Telefono:</label>
+          <input type="number" id="creador-telefono" name="creador-telefono" 
+                 [(ngModel)]="creador.telefono" required>
+        </div>
         <div class="form-group">
           <label for="creador-nombre">Nombre:</label>
           <input type="text" id="creador-nombre" name="nombre" 
@@ -146,6 +155,11 @@
                  [(ngModel)]="administrador.correo" required>
         </div>
 
+        <div class="form-group">
+          <label for="administrador-telefono">Telefono:</label>
+          <input type="number" id="creador-telefono" name="administrador-telefono" 
+                 [(ngModel)]="administrador.telefono" required>
+        </div>
         <div class="form-group">
           <label for="admin-fotoPerfil">Foto de perfil:</label>
           <input type="file" id="admin-fotoPerfil" name="fotoPerfil" 

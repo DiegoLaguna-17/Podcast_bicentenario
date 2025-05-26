@@ -187,6 +187,46 @@ def verificar_codigo(request):
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
 
+def crear_calificacion(request):
+    if request.method=='POST':
+        try:
+            idusuario=request.POST.get('idusuario')
+            idepisodio=request.POST.get('idepisodio')
+            puntuacion=request.POST.get('puntuacion')
+            resenia=request.POST.get('resenia')
+            data = {
+                'usuarios_idusuario':idusuario,
+                'episodios_idepisodio':idepisodio,
+                'puntuacion':puntuacion,
+                'resenia':resenia,
+            }
+            response=supabase.table('calificacion').insert(data).execute()
+            if hasattr(response, 'error') and response.error:
+                return JsonResponse({'error': 'Error al registrar calificacion'}, status=400)
+            return JsonResponse({'mensaje': 'Calificacion enviada'}, status=201) 
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+def obtener_calificacion(request):
+    if request.method=='GET':
+        try:
+            episodio=request.GET.get('episodios_idepisodio')
+            response=supabase.table('calificacion').select('*').eq('episodios_idepisodio',episodio).execute()
+            if hasattr(response, 'error') and response.error:
+                return JsonResponse({'error': 'Error al obtener reseñas'}, status=400)
+
+            return JsonResponse({'Reseñas': response.data}, status=200, safe=False)
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+
+
+
 
 @token_required
 def episodios(request):
@@ -196,9 +236,8 @@ def episodios(request):
             with connection.cursor() as cursor:
                 cursor.execute(
                     """
-                    
-                    
-SELECT bc.idepisodio,bc.titulo,bc.descripcion,bc.fechapublicacion,bc.audio,bc.participantes,bc.visualizaciones, c.nombre as creador, p.titulo as podcast
+                    SELECT bc.idepisodio,bc.titulo,bc.descripcion,bc.fechapublicacion,bc.audio,bc.participantes,
+                    bc.visualizaciones, c.nombre as creador, p.titulo as podcast
                     FROM backend_episodios bc, 
                     backend_creadores c,
                     backend_podcast p
@@ -970,4 +1009,58 @@ def listar_creadores(request):
         return JsonResponse({'error': str(e)}, status=500)
     finally:
         conn.close()
+
+
+#para el dashBoard de creador
+def obtener_visualizaciones(request):
+    if request.method=='GET':
+        try:
+            idcreador=request.GET.get('idcreador')
+            podcasts=supabase.table('backend_podcast').select('idpodcast').eq('creadores_idcreador',idcreador).execute()
+            arreglo_podcasts=[podcast['idpodcast']for podcast in podcasts.data]
+            print(arreglo_podcasts)
+            response=supabase.table('backend_episodios').select('visualizaciones').in_('podcast_idpodcast',arreglo_podcasts).execute()
+            if hasattr(response, 'error') and response.error:
+                return JsonResponse({'error': 'Error al obtener visualizaciones'}, status=400)
+            episodios=response.data
+            suma_vistas = sum(episodio["visualizaciones"] for episodio in episodios)
+            return JsonResponse({'Vistas del creador': suma_vistas})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+def obtener_ep_mas_visto(request):
+    if request.method=='GET':
+        try:
+            idcreador=request.GET.get('idcreador')
+            podcasts=supabase.table('backend_podcast').select('idpodcast').eq('creadores_idcreador',idcreador).execute()
+            arreglo_podcasts=[podcast['idpodcast']for podcast in podcasts.data]
+            res = supabase.table("backend_episodios").select("*").in_('podcast_idpodcast',arreglo_podcasts).order("visualizaciones", desc=True).limit(1).execute()
+            if hasattr(res, 'error') and res.error:
+                return JsonResponse({'error': 'Error al obtener epidosio más visto'}, status=400)
+            return JsonResponse({'episodio mas visto':res.data[0]})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+def obtenerSeguidores(request):
+    if request.method=='GET':
+        try:
+            idcreador=request.GET.get('idcreador')
+            seguidores=supabase.table('backend_listaseguidos').select('*',count="exact").eq('creadores_idcreador',idcreador).execute()
+            if hasattr(seguidores, 'error') and seguidores.error:
+                return JsonResponse({'error': 'Error al obtener conteo de seguidores'}, status=400)
+            conteo=seguidores.count
+            return JsonResponse({'Cantidad de seguidores':conteo})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+        
+
+        
 

@@ -1,12 +1,14 @@
-.podcast-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--blanco);
-}
+  .podcast-card {
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--blanco);
+    width: 60vh;
+    
+  }
 
 .podcast-card:hover {
   transform: translateY(-5px);
@@ -43,7 +45,7 @@
 }
 
 .podcast-description {
-  margin-bottom: 16px;
+  margin-bottom: 1px;
   color: var(--negro);
   line-height: 1.5;
   flex-grow: 1;

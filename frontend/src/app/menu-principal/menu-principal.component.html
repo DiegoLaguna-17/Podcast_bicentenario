@@ -9,6 +9,29 @@
 </div>
 
 <!-- Creador -->
+ <div *ngIf="usuario.rol==='Creador'">
+  <div style="height: 200px;width: 200px;background-color: beige;">
+    <h1>
+      Total de vistas: 
+    </h1><br>
+    <p>{{vistasTotales}}</p>
+  </div>
+  <br>
+   <div style="height: 200px;width: 200px;background-color: beige;">
+    <h1>
+      Episodio mas visto: 
+    </h1><br>
+    <p>{{episodioVisto.titulo}}</p><br><p>Vistas: {{episodioVisto.visualizaciones}}</p>
+  </div>
+
+  <br>
+   <div style="height: 200px;width: 200px;background-color: beige;">
+    <h1>
+     Cantidad de seguidores: 
+    </h1><br>
+    <p> {{seguidores}}</p>
+  </div>
+ </div>
 <div class="contenedor" *ngIf="usuario.rol === 'Creador'">
   <div class="menu">
     <button routerLink="/buscar">Buscar</button>

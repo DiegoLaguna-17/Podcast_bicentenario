@@ -46,36 +46,54 @@
       </svg>
     </div>
   </div>
+
 @if(cargando){
-    <div id="cargar">
-            <div class="cargar-loader">
-              <div class="rueda"></div>
-            </div>
-            <div class="cargando">Cargando...</div>
-            
+    <div id="cargar" style="padding-left: 95vh;">
+      <div class="cargar-loader">
+        <div class="rueda"></div>
+      </div>
+      <div class="cargando">Cargando...</div>          
+    </div>
+}
+<div>
+      @if(podcasts.length!=0){
+        <div style="width: 100%;">
+              <h1>Podcasts</h1>
+          <div style="width: 100%;display: flex;flex-wrap: wrap;justify-content: space-between;gap: 1rem;">
+          @for (podcast of podcasts; track podcast.idpodcast) {
+          <app-podcast-card [podcast]="podcast"></app-podcast-card>
+          }
           </div>
-}
-@if(podcasts.length!=0){
-        <h1>Podcasts</h1>
-    @for (podcast of podcasts; track podcast.idpodcast) {
-    <app-podcast-card [podcast]="podcast"></app-podcast-card>
-    }
-}
+        </div>
+        <br><br>
+      }
 
-@if(episodios.length!=0){
-    <h1>Episodios</h1>
-    @for(episodio of episodios;track episodio.idepisodio){
-        <app-card-episodios [episodio]="episodio"></app-card-episodios>
+      @if(episodios.length!=0){
+        <div style="width: 100%;">
+          <h1>Episodios</h1>
+          
+        
+        <div style="width: 100%;display: flex;flex-wrap: wrap;justify-content: space-between;gap: 1rem;">
+          @for(episodio of episodios;track episodio.idepisodio){
+              <app-card-episodios [episodio]="episodio"></app-card-episodios>
+          }
+          </div>
+        </div>
+        <br>
+          
+      }
 
-    }
-}
-
-@if(creadores.length!=0){
-    <h1>Creadores</h1>
-    @for(creador of creadores;track creador.idcreador){
-        <app-card-creadores [creador]="creador"></app-card-creadores>
-    }
-}
+      @if(creadores.length!=0){
+        <div style="width: 100%;" >
+          <h1>Creadores</h1>
+          <div style="width: 100%;display: flex;flex-wrap: wrap;justify-content: space-between;gap: 1rem;">
+          @for(creador of creadores;track creador.idcreador){
+              <app-card-creadores [creador]="creador"></app-card-creadores>
+          }
+          </div>
+          </div>
+      }
+      </div>
 @if(sinResultados){
     <h1>Sin resultados</h1>
 }

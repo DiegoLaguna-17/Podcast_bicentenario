@@ -25,6 +25,7 @@ export class RegistrarComponent {
     usuario: '',
     contrasenia: '',
     correo: '',
+    telefono:'',
     fotoPerfil: null as File | null,
     fotoPerfilPreview: ''
   };
@@ -33,6 +34,7 @@ export class RegistrarComponent {
     usuario: '',
     contrasenia: '',
     correo: '',
+     telefono:'',
     nombre: '',
     biografia: '',
     fotoPerfil: null as File | null,
@@ -45,6 +47,7 @@ export class RegistrarComponent {
     usuario: '',
     contrasenia: '',
     correo: '',
+     telefono:'',
     fotoPerfil: null as File | null,
     fotoPerfilPreview: ''
   };
@@ -107,6 +110,7 @@ export class RegistrarComponent {
     formData.append('usuario', this.oyente.usuario);
     formData.append('contrasenia', this.oyente.contrasenia);
     formData.append('correo', this.oyente.correo);
+    formData.append('telefono', this.oyente.telefono);
     formData.append('fotoPerfil', this.oyente.fotoPerfil);
     formData.append('tipoUsuario', 'Oyente');
     this.extension='usuario'
@@ -134,6 +138,7 @@ export class RegistrarComponent {
     formData.append('usuario', this.creador.usuario);
     formData.append('contrasenia', this.creador.contrasenia);
     formData.append('correo', this.creador.correo);
+    formData.append('telefono', this.creador.telefono);
     formData.append('nombre', this.creador.nombre);
     formData.append('biografia', this.creador.biografia);
     formData.append('fotoperfil',this.creador.fotoPerfil);
@@ -161,6 +166,7 @@ export class RegistrarComponent {
     formData.append('usuario', this.administrador.usuario);
     formData.append('contrasenia', this.administrador.contrasenia);
     formData.append('correo', this.administrador.correo);
+    formData.append('telefono', this.administrador.telefono);
     formData.append('fotoPerfil', this.administrador.fotoPerfil);
     formData.append('tipoUsuario', 'Administrador');
     this.extension='usuario'
@@ -196,6 +202,7 @@ export class RegistrarComponent {
         usuario: '',
         contrasenia: '',
         correo: '',
+         telefono:'',
         fotoPerfil: null,
         fotoPerfilPreview: ''
       };
@@ -204,6 +211,7 @@ export class RegistrarComponent {
         usuario: '',
         contrasenia: '',
         correo: '',
+         telefono:'',
         nombre: '',
         biografia: '',
         fotoPerfil: null,
@@ -216,6 +224,7 @@ export class RegistrarComponent {
         usuario: '',
         contrasenia: '',
         correo: '',
+         telefono:'',
         fotoPerfil: null,
         fotoPerfilPreview: ''
       };

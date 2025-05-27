@@ -1,0 +1,15 @@
+<mat-card class="comentario-card">
+  <div class="comentario-header">
+    <div class="user-info">
+      <mat-icon class="user-icon">account_circle</mat-icon>
+      <div class="user-details">
+        <span class="username">{{ comentario.usuario }}</span>
+        <span class="date">{{ comentario.fecha | date: 'medium' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="comentario-content">
+    <p class="comentario-text">{{ comentario.contenido }}</p>
+  </div>
+</mat-card>

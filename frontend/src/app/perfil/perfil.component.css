@@ -191,3 +191,62 @@
 .no-data-template h2 {
   margin-bottom: 25px;
 }
+
+
+.cierre {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    padding: var(--space-md) var(--space-xl);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    box-shadow: var(--shadow-sm);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cierre {
+    background: transparent;
+    color: var(--rojo);
+    border: 2px solid var(--color-accent);
+}
+
+.cierre::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+    transition: all 0.7s ease;
+    z-index: -1;
+}
+
+.cierre:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.cierre:hover::before {
+    left: 100%;
+}
+
+.cierre:hover {
+    background: rgba(212, 175, 55, 0.2);
+}
+
+.cierre:active {
+    transform: translateY(2px);
+    transition: all 0.1s ease;
+}

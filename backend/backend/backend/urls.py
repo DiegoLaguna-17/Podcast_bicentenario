@@ -25,7 +25,7 @@ urlpatterns = [
     path('registro/usuario/', views.registro_usuario, name='crear_usuario'),##con Postman
     path('usuarios/listar/', views.listar_usuarios, name='listar_usuarios'),##con Postman
     path('creadores/listar/',views.listar_creadores,name='listar_creadores'),
-    path('creadores/registrar/', views.mostrar_formulario_registro, name='registrar'),
+        path('creadores/registrar/', views.mostrar_formulario_registro, name='registrar'),
     path('registro/creador/', views.registro_creador, name='registro'),
     path('creadores/mostrar/', views.mostrar_creadores, name='mostrar_creadores'),
     path('usuarios/seguirCreador/',views.seguirCreador,name='seguir_creador'),##con Postman
@@ -47,8 +47,15 @@ urlpatterns = [
     path('buscar_general/', views.buscar_general, name='buscar_general'),
     path('buscar_anio/',views.buscar_anio,name='buscar_anio'),
     path('buscar_tematica/', views.buscar_tematica,name='buscar_tematica'),
-    path('actualizar_visualizaciones/',views.sumar_visualizacion,name='actualizar_visualizaciones')
-    
+    path('actualizar_visualizaciones/',views.sumar_visualizacion,name='actualizar_visualizaciones'),
+    path('verificarCodigo/',views.verificar_codigo,name='verficar_mensaje'),
+    path('subirCalificacion/',views.crear_calificacion,name='subir-Calificacion'),
+    path('obtenerCalificaciones/',views.obtener_calificacion,name='obtener_calificaciones'),
+    #endpoint de dashboard creador
+    path('obtenerVistasCreador/',views.obtener_visualizaciones,name='vistas_creador'),
+    path('obtenerMasVisto/',views.obtener_ep_mas_visto,name='episodio_mas_visto'),
+    path('obtenerConteoSeguidores/',views.obtenerSeguidores,name='obtener_seguidores')
+
 
 
 

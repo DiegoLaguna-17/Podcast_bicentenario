@@ -54,6 +54,7 @@ export class PerfilComponent {
         this.datosper = response;
         this.id = this.datosper.id;
         this.rol = this.datosper.rol;
+        console.log(this.datosper.fotoperfil);
         console.log('id del perfil: ' + this.id + ' ' + this.rol);
         this.datosCargados = true;
       },
@@ -62,5 +63,8 @@ export class PerfilComponent {
         this.errorRespuesta = 'Error al cargar el perfil.';
       }
     });
+  }
+  cerrarSesion(){
+    this.router.navigate(['/login']);
   }
 }

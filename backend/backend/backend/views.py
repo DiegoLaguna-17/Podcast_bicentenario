@@ -1,28 +1,13 @@
 # backend/views.py
 from django.http import JsonResponse
 from .db_connection import obtener_conexion
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import json
-from .models.Usuarios import Usuario
 # backend/views.py
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from .models import Creadores
-from django.utils.crypto import get_random_string
-from django.views import View
 import datetime
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 import os
-
-
-
-
-
-
-
-from django.shortcuts import render
 from .settings import SUPABASE_URL, SUPABASE_KEY,DEBUG
 from supabase import create_client, Client
 # views.py
@@ -37,36 +22,20 @@ url = SUPABASE_URL
 key = SUPABASE_KEY
 supabase: Client = create_client(url, key)
 # views.py
-
-
-
 import logging
 from django.utils import timezone 
-
-
 logger = logging.getLogger(__name__)
-
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import datetime
 import jwt
 from django.conf import settings
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.response import Response
-from rest_framework import status
-
 from .decorators import token_required
 from django.http import JsonResponse
-from .decorators import token_required
 import random
 import requests
-
-codigos_temporales = {}
+from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def login_usuario(request):
     if request.method != 'POST':
@@ -671,7 +640,6 @@ def mostrar_formulario_podcast(request):
 
 
 
-@csrf_exempt
 def crear_podcast(request):
     if request.method=='POST':
         try:
@@ -735,7 +703,6 @@ def obtenerSeguimientos(request):
     
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-@csrf_exempt
 def seguirCreador(request):
     if request.method == 'POST':
         try:
@@ -837,7 +804,6 @@ def mostrar_creadores(request):
 def mostrar_formulario_registro(request):
     return render(request, 'registro.html')
 
-@csrf_exempt
 def registro_creador(request):
     if request.method == 'POST':
         try:
@@ -914,7 +880,6 @@ def mostrar_formulario_oyente(request):
 
 
 
-@csrf_exempt
 def registro_usuario(request):
     if request.method == 'POST':
         try:

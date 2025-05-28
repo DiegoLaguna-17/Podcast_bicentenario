@@ -500,8 +500,6 @@ def sumar_visualizacion(request):
 
 
 
-def mostrar_formulario_episodio(request):
-    return render(request, 'episodio.html')
 
 from django.http import JsonResponse
 from django.utils import timezone
@@ -634,9 +632,6 @@ def podcasts_por_creador(request):
 
 
 
-def mostrar_formulario_podcast(request):
-    return render(request, 'podcast.html')
-
 
 
 
@@ -738,6 +733,33 @@ def seguirCreador(request):
     
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
+def dejarSeguirCreador(request):
+    if request.method == 'POST':
+        try:
+            idusuario = request.POST.get('idusuario')
+            idcreador = request.POST.get('idcreador')
+            print(f"idusuario: {idusuario}, idcreador: {idcreador}")  # <-- imprime los datos
+
+            if not idusuario or not idcreador:
+                return JsonResponse({'error': 'Datos faltantes'}, status=400)
+
+            response = supabase.table('backend_listaseguidos') \
+                               .delete() \
+                               .eq('usuarios_idusuario', idusuario) \
+                               .eq('creadores_idcreador', idcreador) \
+                               .execute()
+
+            print(f"Response: {response}")  # <-- imprime la respuesta
+
+            if hasattr(response, 'error') and response.error:
+                return JsonResponse({'error': 'Error al registrar en Supabase'}, status=400)
+
+            return JsonResponse({'mensaje': 'Se dejo de seguir al creador'}, status=201)
+        except Exception as e:
+            print(f"Excepción: {str(e)}")  # <-- imprime el error exacto
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
+
 
 def mostrar_creadores(request):
     try:    
@@ -801,8 +823,6 @@ def mostrar_creadores(request):
 
 
 
-def mostrar_formulario_registro(request):
-    return render(request, 'registro.html')
 
 def registro_creador(request):
     if request.method == 'POST':
@@ -875,8 +895,7 @@ def registro_creador(request):
     
 
 
-def mostrar_formulario_oyente(request):
-    return render(request, 'usuario.html')
+
 
 
 
@@ -1025,7 +1044,256 @@ def obtenerSeguidores(request):
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-        
 
-        
+
+
+##endpoints nuevos
+def donarCreador(request):
+    if request.method=='POST':
+        try:
+            idcreador=request.POST.get('idcreador')
+            monto=request.POST.get('monto')
+            monto = float(monto) 
+            recaudado=supabase.table('backend_creadores').select('recaudado').eq('idcreador',idcreador).execute()
+            recaudadoActual = recaudado.data[0]['recaudado'] if recaudado.data else 0
+            nuevas = recaudadoActual + monto
+
+            actualizar = supabase.table('backend_creadores')\
+                .update({'recaudado': nuevas})\
+                .eq('idcreador', idcreador)\
+                .execute()
+            if hasattr(actualizar, 'error') and actualizar.error:
+                return JsonResponse({'error': 'Error al actualizar recaudado'}, status=400)
+            return JsonResponse({'mensaje':'Donacion completa'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+            
+def crearListaReproduccion(request):
+    if request.method=='POST':
+        try:
+            idusuario=request.POST.get('idusuario')
+            titulo=request.POST.get('tituloLista')
+            
+            if not idusuario or not titulo:
+                return JsonResponse({'error': 'Datos faltantes'}, status=400)
+            data={
+                "usuarios_idusuario":idusuario,
+                "titulo":titulo
+            }
+            lista=supabase.table('listareproduccion').insert(data).execute()
+            if hasattr(lista, 'error') and lista.error:
+                return JsonResponse({'error': 'Error al crear lista de reproduccion'}, status=400)
+            return JsonResponse({'mensaje':'lista creada'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+def agregarEpisodioLista(request):
+    if request.method=='POST':
+        try:
+            episodio=request.POST.get('idepisodio')
+            lista=request.POST.get('idLista')
+            if not episodio or not lista:
+                return JsonResponse({'error': 'Datos faltantes'}, status=400)
+            data={
+                "episodios_idepisodio":episodio,
+                "listareproduccion_idlista":lista
+            }
+            agregado=supabase.table('episodioslista').insert(data).execute()
+            if hasattr(agregado, 'error') and agregado.error:
+                return JsonResponse({'error': 'Error al agregar episodio a lista'}, status=400)
+            return JsonResponse({'mensaje':'episodio agregado a lista'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+def quitarEpisodio(request):
+    if request.method=='POST':
+        try:
+            episodio=request.POST.get('idepisodio')
+            lista=request.POST.get('idLista')
+            if not episodio or not lista:
+                return JsonResponse({'error': 'Datos faltantes'}, status=400)
+            borrado=supabase.table('episodioslista').delete().eq('episodios_idepisodio',episodio).eq('listareproduccion_idlista',lista).execute()
+            if hasattr(borrado, 'error') and borrado.error:
+                return JsonResponse({'error': 'Error al borrar episodio de lista'}, status=400)
+            return JsonResponse({'mensaje':'episodio eliminado de lista'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+def borrarComentario(request):
+    if request.method=='POST':
+        try:
+            idcomentario=request.POST.get('idcomentario')
+            if not idcomentario:
+                return JsonResponse({'error': 'Datos faltantes'}, status=400)
+            comentarioBorrado=supabase.table('backend_comentarios').delete().eq('idcomentario',idcomentario).execute()
+            if hasattr(comentarioBorrado, 'error') and comentarioBorrado.error:
+                return JsonResponse({'error': 'Error al borrar comentario'}, status=400)
+            return JsonResponse({'mensaje':'comentario eliminado'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+def borrarEpisodio(request):
+    if request.method=='POST':
+        try:
+            idEpisodio=request.POST.get('idepisodio')
+            comentarios=supabase.table('backend_comentarios').delete().eq('episodios_idepisodio',idEpisodio).execute()
+            if hasattr(comentarios, 'error') and comentarios.error:
+                return JsonResponse({'error': 'Error al borrar comentarios'}, status=400)
+            calificacion=supabase.table('calificacion').delete().eq('episodios_idepisodios',idEpisodio).execute()
+            if hasattr(calificacion, 'error') and calificacion.error:
+                return JsonResponse({'error': 'Error al borrar calificacion'}, status=400)
+            listaEpisodio=supabase.table('episodioslista').delete().eq('episodios_idepisodio',idEpisodio).execute()
+            if hasattr(listaEpisodio,'erro') and listaEpisodio.error:
+                return JsonResponse({'error':'error al borrar episodios de listas'})
+            episodio=supabase.table('backend_episodios').delete().eq('idepisodio',idEpisodio).execute()
+            if hasattr(episodio, 'error') and  episodio.error:
+                return JsonResponse({'error': 'Error al borrar episodio'}, status=400) 
+            return JsonResponse({'mensaje':'Episodio eliminado'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
+    
+def borrarPodcast(request):
+    if request.method=='POST':
+        try:
+            idpodcast=request.POST.get('idpodcast')
+            episodios=supabase.table('backend_episodios').select('idepisodio').eq('podcast_idpodcast',idpodcast).execute()
+            idepisodios = [e['idepisodio'] for e in episodios.data]
+            comentarios=supabase.table('backend_comentarios').delete().in_('episodios_idepisodio',idepisodios).execute()
+            if hasattr(comentarios, 'error') and comentarios.error:
+                return JsonResponse({'error': 'Error al borrar comentarios'}, status=400)
+            calificacion=supabase.table('calificacion').delete().in_('episodios_idepisodio',idepisodios).execute()
+            if hasattr(calificacion, 'error') and calificacion.error:
+                return JsonResponse({'error': 'Error al borrar calificacion'}, status=400)
+            episodioslistas=supabase.table('episodioslista').delete().in_('episodios_idepisodio',idepisodios).execute()
+            if hasattr(episodioslistas, 'error') and  episodioslistas.error:
+                return JsonResponse({'error': 'Error al borrar episodio de lista de reproduccion'}, status=400)     
+            episodios=supabase.table('backend_episodios').delete().eq('podcast_idpodcast',idpodcast)
+            if hasattr(episodios, 'error') and  episodios.error:
+                return JsonResponse({'error': 'Error al borrar episodios'}, status=400) 
+            suscripcion=supabase.table('suscripcion').delete().eq('podcast_idpodcast',idpodcast).execute()
+            if hasattr(suscripcion, 'error') and suscripcion.error:
+                return JsonResponse({'error': 'Error al borrar suscripcion'}, status=400)
+            podcast=supabase.table('backend_podcast').delete().eq('idpodcast',idpodcast)
+            if hasattr(podcast, 'error') and podcast.error:
+                return JsonResponse({'error': 'Error al borrar podcast'}, status=400)
+            return JsonResponse({'mensaje':'podcast eliminado'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+def borrarCreador(request):
+    if request.method=='POST':
+        try:
+            idCreador=request.POST.get('idcreador')
+            podcasts=supabase.table('backend_podcast').select('idpodcast').eq('creadores_idcreador',idCreador).execute()
+            idpodcasts = [e['idpodcast'] for e in podcasts.data]
+            episodios=supabase.table('backend_episodios').select('idepisodio').in_('podcast_idpodcast',idpodcasts).execute()
+            idepisodios = [e['idepisodio'] for e in episodios.data]
+            comentarios=supabase.table('backend_comentarios').delete().in_('episodios_idepisodio',idepisodios).execute()
+            if hasattr(comentarios, 'error') and comentarios.error:
+                return JsonResponse({'error': 'Error al borrar comentarios'}, status=400)
+            calificacion=supabase.table('calificacion').delete().in_('episodios_idepisodio',idepisodios).execute()
+            if hasattr(calificacion, 'error') and calificacion.error:
+                return JsonResponse({'error': 'Error al borrar calificacion'}, status=400)
+            episodioslistas=supabase.table('episodioslista').delete().in_('episodios_idepisodio',idepisodios).execute()
+            if hasattr(episodioslistas, 'error') and  episodioslistas.error:
+                return JsonResponse({'error': 'Error al borrar episodio de lista de reproduccion'}, status=400)     
+            episodios=supabase.table('backend_episodios').delete().in_('podcast_idpodcast',idpodcasts).execute()
+            if hasattr(episodios, 'error') and  episodios.error:
+                return JsonResponse({'error': 'Error al borrar episodios'}, status=400) 
+            suscripcion=supabase.table('suscripcion').delete().in_('podcast_idpodcast',idpodcasts).execute()
+            if hasattr(suscripcion, 'error') and suscripcion.error:
+                return JsonResponse({'error': 'Error al borrar suscripcion'}, status=400)
+            podcast=supabase.table('backend_podcast').delete().eq('creadores_idcreador',idCreador).execute()
+            if hasattr(podcast, 'error') and podcast.error:
+                return JsonResponse({'error': 'Error al borrar podcast'}, status=400)
+            seguidos=supabase.table('backend_listaseguidos').delete().eq('creadores_idcreador',idCreador).execute()
+            if hasattr(seguidos, 'error') and seguidos.error:
+                return JsonResponse({'error': 'Error al borrar seguidos'}, status=400)
+            creador=supabase.table('backend_creadores').delete().eq('idcreador',idCreador).execute()
+            if hasattr(creador, 'error') and creador.error:
+                return JsonResponse({'error': 'Error al borrar creador'}, status=400)
+            return JsonResponse({'mensaje':'creador eliminado'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+    
+def borrarUsuario(request):
+    if request.method=='POST':
+        try:
+            idusuario=request.POST.get('idusuario')
+            comentarios=supabase.table('backend_comentarios').delete().eq('usuarios_idusuario',idusuario).execute()
+            if hasattr(comentarios, 'error') and comentarios.error:
+                return JsonResponse({'error': 'Error al borrar comentarios'}, status=400)
+            calificacion=supabase.table('calificacion').delete().eq('usuarios_idusuario',idusuario).execute()
+            if hasattr(calificacion, 'error') and calificacion.error:
+                return JsonResponse({'error': 'Error al borrar calificacion'}, status=400)
+            listasseguidos=supabase.table('backend_listaseguidos').delete().eq('usuarios_idusuario',idusuario).execute()
+            if hasattr(listasseguidos, 'error') and listasseguidos.error:
+                return JsonResponse({'error': 'Error al borrar listas seguidos'}, status=400)
+            suscripcion=supabase.table('suscripcion').delete().eq('usuarios_idusuario',idusuario).execute()
+            if hasattr(suscripcion, 'error') and suscripcion.error:
+                return JsonResponse({'error': 'Error al borrar suscripcion'}, status=400)
+            listasRepro=supabase.table('listareproduccion').select('idlista').eq('usuarios_idusuario',idusuario).execute()
+            if hasattr(listasRepro, 'error') and listasRepro.error:
+                return JsonResponse({'error': 'Error al obtener listas repro'}, status=400)
+            ideplistas = [e['idlista'] for e in listasRepro.data]
+            borrarEPlista=supabase.table('episodioslista').delete().in_('listareproduccion_idlista',ideplistas).execute()
+            if hasattr(borrarEPlista, 'error') and borrarEPlista.error:
+                return JsonResponse({'error': 'Error al borrar episodios de la lista'}, status=400)
+            listas=supabase.table('listareproduccion').delete().eq('usuarios_idusuario',idusuario).execute()
+            if hasattr(listas, 'error') and listas.error:
+                return JsonResponse({'error': 'Error al borrar listas de reproduccion'}, status=400)
+            usuario=supabase.table('backend_usuario').delete().eq('idusuario',idusuario).execute()
+            if hasattr(usuario, 'error') and usuario.error:
+                return JsonResponse({'error': 'Error al borrar usuario'}, status=400)
+            return JsonResponse({'mensaje':'usuario eliminado'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+                
+
+def agregarSuscripcion(request):
+    if request.method=='POST':
+        try:
+            idUsuario=request.POST.get('idusuario')
+            idPodcast=request.POST.get('idpodcast')
+            data={
+                "usuarios_idusuario":idUsuario,
+                "podcast_idpodcast":idPodcast
+            }
+            suscripcion=supabase.table('suscripcion').insert(data).execute()
+            if hasattr(suscripcion, 'error') and suscripcion.error:
+                return JsonResponse({'error': 'Error al suscribirse'}, status=400)
+            idCreador=supabase.table('backend_podcast').select('creadores_idcreador').eq('idpodcast',idPodcast).execute()
+            idCreador=idCreador.data[0]['creadores_idcreador']
+            recaudado=supabase.table('backend_creadores').select('recaudado').eq('idcreador',idCreador).execute()
+            recaudadoActual = recaudado.data[0]['recaudado'] if recaudado.data else 0
+            nuevas = recaudadoActual + 400
+            actualizar = supabase.table('backend_creadores')\
+                .update({'recaudado': nuevas})\
+                .eq('idcreador', idCreador)\
+                .execute()
+            return JsonResponse({'mensaje':'Suscripcion exitosa'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+                
 

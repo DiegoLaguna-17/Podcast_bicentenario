@@ -36,6 +36,7 @@ from django.http import JsonResponse
 import random
 import requests
 from django.views.decorators.csrf import csrf_exempt
+
 @csrf_exempt
 def login_usuario(request):
     if request.method != 'POST':
@@ -91,7 +92,6 @@ def login_usuario(request):
         return JsonResponse({'error': 'Error en el servidor'}, status=500)
 
 
-
 def enviar_codigo_whatsapp(telefono):
     if not telefono:
         return JsonResponse({"error": "Número no proporcionado"}, status=400)
@@ -117,7 +117,6 @@ def enviar_codigo_whatsapp(telefono):
         return codigo
     else:
         return JsonResponse({"error": "Error al enviar el mensaje", "detalles": response.json()}, status=500)
-
 
 
 def verificar_codigo(request):
@@ -178,6 +177,7 @@ def crear_calificacion(request):
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
     
+
 def obtener_calificacion(request):
     if request.method=='GET':
         try:
@@ -191,10 +191,6 @@ def obtener_calificacion(request):
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
-
-
-
-
 
 
 @token_required
@@ -334,9 +330,7 @@ def obtenerComentarios(request):
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
-
-        
-
+    
 
 def subir_comentarios(request):
     if request.method=='POST':
@@ -362,9 +356,6 @@ def subir_comentarios(request):
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
-
-
-
 
 
 # Configuración de Supabase (ajusta con tus claves reales)
@@ -496,11 +487,6 @@ def sumar_visualizacion(request):
             return JsonResponse({'error': 'error al actualizar visualizaciones'}, status=500)
             
 
-
-
-
-
-
 from django.http import JsonResponse
 from django.utils import timezone
 import traceback
@@ -607,10 +593,6 @@ def subir_episodio(request):
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 
-
-
-
-
 @token_required
 def podcasts_por_creador(request):
     if request.method == 'POST':
@@ -627,12 +609,6 @@ def podcasts_por_creador(request):
         except Exception as e:
             print(f"Error en obtener podcasts: {str(e)}")
             return JsonResponse({'error': 'Error en el servidor'}, status=500)
-
-
-
-
-
-
 
 
 def crear_podcast(request):
@@ -890,13 +866,6 @@ def registro_creador(request):
         except Exception as e:
             # Captura cualquier error inesperado y devuelve un mensaje genérico
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
-
-    
-    
-
-
-
-
 
 
 def registro_usuario(request):
@@ -1179,13 +1148,13 @@ def borrarPodcast(request):
             episodioslistas=supabase.table('episodioslista').delete().in_('episodios_idepisodio',idepisodios).execute()
             if hasattr(episodioslistas, 'error') and  episodioslistas.error:
                 return JsonResponse({'error': 'Error al borrar episodio de lista de reproduccion'}, status=400)     
-            episodios=supabase.table('backend_episodios').delete().eq('podcast_idpodcast',idpodcast)
+            episodios=supabase.table('backend_episodios').delete().eq('podcast_idpodcast',idpodcast).execute()
             if hasattr(episodios, 'error') and  episodios.error:
                 return JsonResponse({'error': 'Error al borrar episodios'}, status=400) 
             suscripcion=supabase.table('suscripcion').delete().eq('podcast_idpodcast',idpodcast).execute()
             if hasattr(suscripcion, 'error') and suscripcion.error:
                 return JsonResponse({'error': 'Error al borrar suscripcion'}, status=400)
-            podcast=supabase.table('backend_podcast').delete().eq('idpodcast',idpodcast)
+            podcast=supabase.table('backend_podcast').delete().eq('idpodcast',idpodcast).execute()
             if hasattr(podcast, 'error') and podcast.error:
                 return JsonResponse({'error': 'Error al borrar podcast'}, status=400)
             return JsonResponse({'mensaje':'podcast eliminado'})
@@ -1285,7 +1254,7 @@ def agregarSuscripcion(request):
             idCreador=idCreador.data[0]['creadores_idcreador']
             recaudado=supabase.table('backend_creadores').select('recaudado').eq('idcreador',idCreador).execute()
             recaudadoActual = recaudado.data[0]['recaudado'] if recaudado.data else 0
-            nuevas = recaudadoActual + 400
+            nuevas = recaudadoActual + 100
             actualizar = supabase.table('backend_creadores')\
                 .update({'recaudado': nuevas})\
                 .eq('idcreador', idCreador)\
@@ -1296,4 +1265,147 @@ def agregarSuscripcion(request):
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
                 
+#actualiza un usuario segun su id, cambia los campos usuario y telefono
+def actualizarUsuario(request):
+    if request.method == 'POST':
+        try:
+            idusuario = request.POST.get('idusuario')
+            usuario = request.POST.get('usuario')
+            telefono = request.POST.get('telefono')
 
+            if not idusuario or not usuario or not telefono:
+                return JsonResponse({'error': 'Datos faltantes'}, status=400)
+
+            data = {
+                'usuario': usuario,
+                'telefono': telefono
+            }
+
+            if 'fotoPerfil' in request.FILES:
+                fotoperfil = request.FILES['fotoPerfil']
+                try:
+                    # Subir a Supabase Storage
+                    foto_perfil_name = f'perfil_{usuario}_{uuid.uuid4().hex}.jpg'
+                    supabase.storage.from_('fotosusuarios').upload(
+                        path=foto_perfil_name,
+                        file=fotoperfil.read(),
+                    )
+                    fotoperfilstr = supabase.storage.from_('fotosusuarios').get_public_url(foto_perfil_name)
+                    data['fotoperfil'] = fotoperfilstr
+                except Exception as e:
+                    return JsonResponse({'error': f'Error al subir foto de perfil: {str(e)}'}, status=400)
+
+            
+
+            # Hacemos el update
+            actualizarUsuario = supabase.table('backend_usuario').update(data).eq('idusuario', idusuario).execute()
+            if hasattr(actualizarUsuario, 'error') and actualizarUsuario.error:
+                return JsonResponse({'error': 'Error al actualizar perfil'}, status=400)
+
+            return JsonResponse({'mensaje': 'Perfil actualizado'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+#actualiza un creador segun su id, cambia los campos usuario,nombre, biografia,imagen de perfil, imagen donaciones y telefono
+def actualizarCreador(request):
+    if request.method=='POST':
+        try:
+            idcreador=request.POST.get('idcreador')
+            usuario=request.POST.get('usuario')
+            nombre=request.POST.get('nombre')
+            biografia=request.POST.get('biografia')
+            telefono=request.POST.get('telefono')
+            if not idcreador or not usuario or not nombre or not biografia or not telefono:
+                return JsonResponse({'error':'Datos faltantes'},status=400)
+            fotoperfil = None
+            if 'fotoperfil' in request.FILES:
+                fotoperfil = request.FILES['fotoperfil']
+                try:
+                    # Subir a Supabase Storage
+                    foto_perfil_name = f'perfil_{usuario}_{uuid.uuid4().hex}.jpg'
+                    supabase.storage.from_('fotperfiles').upload(
+                        path=foto_perfil_name,
+                        file=fotoperfil.read(),
+                    )
+                    fotoperfil = supabase.storage.from_('fotperfiles').get_public_url(foto_perfil_name)
+                except Exception as e:
+                    return JsonResponse({'error': f'Error al subir foto de perfil: {str(e)}'}, status=400)
+                
+            imgdonaciones = None
+            if 'imgdonaciones' in request.FILES:
+                imgdonaciones = request.FILES['imgdonaciones']
+                try:
+                    # Subir a Supabase Storage
+                    img_qr_name = f'donaciones_{usuario}_{uuid.uuid4().hex}.png'
+                    supabase.storage.from_('fotoqr').upload(
+                        path=img_qr_name,
+                        file=imgdonaciones.read(),
+                    )
+                    imgdonaciones = supabase.storage.from_('fotoqr').get_public_url(img_qr_name)
+                except Exception as e:
+                    return JsonResponse({'error': f'Error al subir QR de donaciones: {str(e)}'}, status=400)
+            data = {
+                "usuario": usuario,
+                "nombre": nombre,
+                "biografia": biografia,
+                "fotoperfil": fotoperfil,
+                "imgdonaciones": imgdonaciones,
+                "telefono":telefono
+            }
+            actualizarCreador=supabase.table('backend_creadores').update(data).eq('idcreador',idcreador).execute()
+            if hasattr(actualizarCreador,'error')and actualizarCreador.error:
+                return JsonResponse({'error':'error al actualizar perfil del creador'},status=400)
+            return JsonResponse({'mensaje':'Creador actualizado'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+#actualiza un podcast segun su id, cambia los campos titulo y descripcion
+def actualizarPodcast(request):
+    if request.method=='POST':
+        try:
+            idPodcast=request.POST.get('idpodcast')
+            titulo=request.POST.get('titulo')
+            descripcion=request.POST.get('descripcion')
+            if not idPodcast or not titulo or not descripcion:
+                return JsonResponse({'error':'Datos faltantes'},status=400)
+            data={
+                'titulo':titulo,
+                'descripcion':descripcion
+            }
+            actualizarPodcast=supabase.table('backend_podcast').update(data).eq('idpodcast',idPodcast).execute()
+            if hasattr(actualizarPodcast,'error')and actualizarPodcast.error:
+                return JsonResponse({'error':'Error al actualizar podcast'})
+            return JsonResponse({'mensaje':'Podcast actualizado'})
+        
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+#actualiza un episodio segun su id, cambia los campos titulo, descripcion y participantes
+def actualizarEpisodio(request):
+    if request.method=='POST':
+        try:
+            idEpisodio=request.POST.get('idepisodio')
+            titulo=request.POST.get('titulo')
+            descripcion=request.POST.get('descripcion')
+            participantes=request.POST.get('participantes')
+            if not idEpisodio or not titulo or not descripcion or not participantes:
+                return JsonResponse({'Error':'Datos faltantes'},status=400)
+            data={
+                'titulo':titulo,
+                'descripcion':descripcion,
+                'participantes':participantes
+            }
+            actualizarEpisodio=supabase.table('backend_episodios').update(data).eq('idepisodio',idEpisodio).execute()
+            if hasattr(actualizarEpisodio,'error') and actualizarEpisodio.error:
+                return JsonResponse({'Error':'Error al actualizar episodio'})
+            return JsonResponse({'mensaje':'Episodio actualizado'})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+                

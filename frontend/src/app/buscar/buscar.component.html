@@ -55,43 +55,18 @@
       <div class="cargando">Cargando...</div>          
     </div>
 }
-<div>
+<div style="width: 200vh;padding-left: 2vh;">
       @if(podcasts.length!=0){
-        <div style="width: 100%;">
-              <h1>Podcasts</h1>
-          <div style="width: 100%;display: flex;flex-wrap: wrap;justify-content: space-between;gap: 1rem;">
-          @for (podcast of podcasts; track podcast.idpodcast) {
-          <app-podcast-card [podcast]="podcast"></app-podcast-card>
-          }
-          </div>
-        </div>
-        <br><br>
+        <app-podcast-list [podcasts]="podcasts"></app-podcast-list>
       }
 
       @if(episodios.length!=0){
-        <div style="width: 100%;">
-          <h1>Episodios</h1>
-          
-        
-        <div style="width: 100%;display: flex;flex-wrap: wrap;justify-content: space-between;gap: 1rem;">
-          @for(episodio of episodios;track episodio.idepisodio){
-              <app-card-episodios [episodio]="episodio"></app-card-episodios>
-          }
-          </div>
-        </div>
-        <br>
+        <app-list-episodios [episodios]="episodios"></app-list-episodios>
           
       }
 
       @if(creadores.length!=0){
-        <div style="width: 100%;" >
-          <h1>Creadores</h1>
-          <div style="width: 100%;display: flex;flex-wrap: wrap;justify-content: space-between;gap: 1rem;">
-          @for(creador of creadores;track creador.idcreador){
-              <app-card-creadores [creador]="creador"></app-card-creadores>
-          }
-          </div>
-          </div>
+        <app-list-creadores [creadores]="creadores"></app-list-creadores>
       }
       </div>
 @if(sinResultados){

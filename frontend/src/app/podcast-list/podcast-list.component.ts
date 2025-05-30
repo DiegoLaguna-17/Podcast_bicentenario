@@ -20,15 +20,15 @@ import { environment } from '../../environments/environment';
   templateUrl: './podcast-list.component.html',
   styleUrls: ['./podcast-list.component.css']
 })
-export class PodcastListComponent implements OnInit {
-  @Input() creadorId!: any; // Valor por defecto o recíbelo desde un padre
+export class PodcastListComponent  {
+  @Input() podcasts: any[] = []; // Valor por defecto o recíbelo desde un padre
   
-  podcasts: any[] = [];
+  
   isLoading = true;
   error: string | null = null;
   
   constructor(private  http: HttpClient) {}
-
+/*
   ngOnInit(): void {
     console.log(this.creadorId);
     this.loadPodcasts();
@@ -59,4 +59,5 @@ export class PodcastListComponent implements OnInit {
     });
     
   }
+    */
 }

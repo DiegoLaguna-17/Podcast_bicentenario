@@ -45,7 +45,15 @@ urlpatterns = [
     path('usuarios/donar/',views.donarCreador,name="donar_creador"),
     path('usuarios/obtenerSeguimientos/', views.obtenerSeguimientos, name='obtener_seguimientos'),##lista que sigue el usuario
     path('usuarios/suscribirse/',views.agregarSuscripcion,name="agregar_suscripcion"),
-    path('comentar/', views.subir_comentarios,name='subir_comentario'),
+    path('usuarios/comentar/', views.subir_comentarios,name='subir_comentario'),
+    path('usuarios/notificaciones/',views.episodioNotificaciones,name="episodios_notificacion"),
+
+    path('usuarios/recuperarContrasenia/',views.recuperarContrasenia,name="recuperar_contrasenia"),
+
+    path('usuarios/verificarCodigoContrasenia/',views.verificar_codigo_contrasenia,name="codigo_contrasenia"),
+    path('usuarios/cambiarContrasenia/',views.cambiarContrasenia,name="cambiar_contrasenia"),
+    path('usuarios/verificarSuscripcion/',views.verificarSuscripcion,name="verificar_suscripcion"),
+    path('usuarios/verificarSeguimiento/',views.verificarSeguimiento,name="verificar_seguimiento"),
     #crear lista de reproduccion
     
     ##ENDPOINTS PARA CREADOR
@@ -60,17 +68,13 @@ urlpatterns = [
     path('obtenerVistasCreador/',views.obtener_visualizaciones,name='vistas_creador'),
     path('obtenerMasVisto/',views.obtener_ep_mas_visto,name='episodio_mas_visto'),
     path('obtenerConteoSeguidores/',views.obtenerSeguidores,name='obtener_seguidores'),
-    
-    
-    
-    
-    
+
     
 #PARA TI
     path('episodios/',views.episodios,name='episodios_para_ti'),
 
     
-#BUCAR
+#BUSCAR
     path('buscar_general/', views.buscar_general, name='buscar_general'),
     path('buscar_anio/',views.buscar_anio,name='buscar_anio'),
     path('buscar_tematica/', views.buscar_tematica,name='buscar_tematica'),
@@ -78,6 +82,7 @@ urlpatterns = [
     path('actualizar_visualizaciones/',views.sumar_visualizacion,name='actualizar_visualizaciones'),
     path('obtenerCalificaciones/',views.obtener_calificacion,name='obtener_calificaciones'),
     path('obtener_comentarios/',views.obtenerComentarios,name='obtener_comentarios'),
+    path('transcribir/',views.transcribir_audio,name="transcribir_audio"),
 
     
    
@@ -89,13 +94,8 @@ urlpatterns = [
     path('borrarComentario/',views.borrarComentario,name='borrar_comentario'),
     path('usuarios/listar/', views.listar_usuarios, name='listar_usuarios'),##con Postman
     path('creadores/listar/',views.listar_creadores,name='listar_creadores'),
-    
-
-
-
-
-
-
-
+    path('subirPublicidad/',views.subirPublicidad,name="subir_publicidad"),
+    path('obtenerPublicidad/',views.obtenerPublicidad,name="obtener_publicidad")
+ 
 ]
  

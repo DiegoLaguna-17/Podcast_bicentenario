@@ -22,12 +22,12 @@ import { environment } from '../../environments/environment';
 })
 export class ListEpisodiosComponent {
 
-  episodios: any[] = [];
   isLoading = false;
   error: string | null = null;
-  
+  @Input ()episodios:any[]=[]
   constructor(private  http: HttpClient) {}
 
+/*
   ngOnInit(): void {
     this.isLoading=true;
     this.loadEpisodios();
@@ -42,7 +42,15 @@ export class ListEpisodiosComponent {
           'Authorization': `Bearer ${token}`,
         });
     this.error = null;
-     const endpoint = environment.apiUrl + '/episodios/';
+    var idUsuario=''
+    const usuarioStr = localStorage.getItem('usuario');
+    if (usuarioStr) {
+      const usuarioObj = JSON.parse(usuarioStr);
+      idUsuario = usuarioObj.id;  // aquí está el id
+      console.log('ID usuario:', idUsuario);
+      // Usar idUsuario para lo que necesites, ej. en el query param
+    }
+     const endpoint = environment.apiUrl + '/episodios/?idusuario='+idUsuario;
       this.http.get<{episodios: any[]}>(endpoint,{headers}).subscribe({
         next: (response) => {
           console.log(response);
@@ -57,8 +65,9 @@ export class ListEpisodiosComponent {
         }
       });
     
+      
   }
-
+*/
   
 
 }

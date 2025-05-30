@@ -23,7 +23,6 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![Unlicense License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
@@ -34,19 +33,19 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Plataforma Podcast Bicentenario</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    Plataforma de podcast acerca de el bicentenario de Bolivia
     <br />
-    <a href="https://github.com/DiegoLaguna-17/Podcast_bicentenario"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/DiegoLaguna-17/Podcast_bicentenario"><strong>Revisa los documentos »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/DiegoLaguna-17/Podcast_bicentenario">View Demo</a>
+    <a href="https://github.com/DiegoLaguna-17/Podcast_bicentenario">Vistazo al proyecto</a>
     &middot;
-    <a href="https://github.com/DiegoLaguna-17/Podcast_bicentenario/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/DiegoLaguna-17/Podcast_bicentenario/issues/new?labels=bug&template=bug-report---.md">Reporta un error</a>
     &middot;
-    <a href="https://github.com/DiegoLaguna-17/Podcast_bicentenario/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/DiegoLaguna-17/Podcast_bicentenario/issues/new?labels=enhancement&template=feature-request---.md">Solicita cambios</a>
   </p>
 </div>
 
@@ -54,19 +53,19 @@
 
 <!-- TABLE OF CONTENTS -->
 <details>
-  <summary>Table of Contents</summary>
+  <summary>Tabla de contenidos</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#about-the-project">Acerca del proyecto</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#built-with">Desarrollado con</a></li>
       </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#prerequisites">Prerequisitos</a></li>
+        <li><a href="#installation">Instalación</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -81,7 +80,7 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## Acerca del proyecto
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
@@ -100,18 +99,16 @@ Use the `BLANK_README.md` to get started.
 
 
 
-### Built With
+### Desarrollado con
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+En esta sección se muestran las librerias, herramientas o frameworks que se han utilizado para el desarrollo del proyecto.
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
+* [![PostgreSQL][Postgresql.org]][PostgreSQL-url]
 * [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+* [![Django][Django.com]][Django-url]
+* [![Postman][Postman.com]][Postman-url]
+* [![Apache JMeter][ApacheJMeter.com]][ApacheJMeter-url]
+* [![Vosk][Vosk.com]][Vosk-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -220,7 +217,7 @@ Distributed under the Unlicense License. See `LICENSE.txt` for more information.
 
 
 <!-- CONTACT -->
-## Contact
+## Contactos
 
 Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
 
@@ -260,22 +257,18 @@ Use this space to list resources you find helpful and would like to give credit 
 [issues-url]: https://github.com/DiegoLaguna-17/Podcast_bicentenario/issues
 [license-shield]: https://img.shields.io/github/license/DiegoLaguna-17/Podcast_bicentenario.svg?style=for-the-badge
 [license-url]: https://github.com/DiegoLaguna-17/Podcast_bicentenario/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
 [Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
 [Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+[Bootstrap-url]: https://getbootstrap.com 
+[Django.com]: https://img.shields.io/badge/Django-blue?style=for-the-badge&logo=Django
+[Django-url]: https://www.djangoproject.com
+[Vosk.com]: https://img.shields.io/badge/Vosk-black?style=for-the-badge
+[Vosk-url]: https://alphacephei.com/vosk/
+[Postgresql.org]: https://img.shields.io/badge/PostgreSQL-purple?style=for-the-badge&logo=PostgreSQL&logoColor=white
+[Postgresql-url]: https://www.postgresql.org
+[Postman.com]: https://img.shields.io/badge/Postman-orange?style=for-the-badge&logo=Postman&logoColor=white
+[Postman-url]: https://www.postman.com
+[ApacheJMeter.com]: https://img.shields.io/badge/Apache_JMeter-red?style=for-the-badge&logo=Apache%20JMeter
+[ApacheJMeter-url]: https://jmeter.apache.org

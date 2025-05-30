@@ -3,9 +3,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { FormsModule } from '@angular/forms';
-import { CardEpisodiosComponent } from '../card-episodios/card-episodios.component';
-import { CardCreadoresComponent } from '../card-creadores/card-creadores.component';
-import { PodcastCardComponent } from '../podcast-card/podcast-card.component';
+import { PodcastListComponent } from '../podcast-list/podcast-list.component';
+import { ListCreadoresComponent } from '../list-creadores/list-creadores.component';
+import { ListEpisodiosComponent } from '../list-episodios/list-episodios.component';
 import { CommonModule } from '@angular/common';
 interface PodcastData {
   id: number;
@@ -22,7 +22,7 @@ interface PodcastData {
 
 @Component({
   selector: 'app-buscar',
-  imports: [RouterLink, RouterLinkActive,FormsModule,CardEpisodiosComponent,PodcastCardComponent,CardCreadoresComponent,CommonModule],
+  imports: [RouterLink, RouterLinkActive,FormsModule,ListEpisodiosComponent,ListCreadoresComponent, PodcastListComponent,CommonModule],
   templateUrl: './buscar.component.html',
   styleUrl: './buscar.component.css'
 })

@@ -1,12 +1,10 @@
   .podcast-card {
-    height: 50vh;
-    display: flex;
-    flex-direction: column;
+    height: 60vh;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 12px;
     overflow: hidden;
     background: var(--blanco);
-    width: 60vh;
+    
     
   }
 

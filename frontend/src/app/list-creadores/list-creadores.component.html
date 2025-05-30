@@ -1,0 +1,20 @@
+
+  <div class="prin">
+    <div class="container">
+      <div class="header">
+        <h1 class="title">Creadores</h1>
+        
+      </div>
+       @if(creadores.length!=0){
+        <div style="width: 100%;" >
+          <div style="width: 100%;display: flex;flex-wrap: wrap;justify-content: space-between;gap: 1rem;">
+          @for(creador of creadores;track creador.idcreador){
+              <app-card-creadores [creador]="creador"></app-card-creadores>
+          }
+          </div>
+          </div>
+      }
+          
+    </div>
+  </div>
+

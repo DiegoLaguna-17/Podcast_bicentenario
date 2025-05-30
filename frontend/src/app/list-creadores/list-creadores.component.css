@@ -1,0 +1,145 @@
+.prin {
+  background-color: var(--verde-fuerte);
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Header con botón */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--blanco);
+  text-shadow: 2px 2px 6px var(--dorado-claro);
+}
+
+.refresh-btn {
+  background-color: var(--dorado);
+  color: var(--verde-fuerte);
+  padding: 10px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.refresh-btn:hover {
+  background-color: var(--dorado-claro);
+}
+
+.refresh-btn:disabled {
+  background-color: var(--verde);
+  color: var(--blanco);
+  cursor: not-allowed;
+  font-weight: normal;
+}
+
+/* Error container */
+.error-container {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: var(--blanco);
+  border: 1px solid red;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.error-container mat-icon {
+  font-size: 40px;
+  color: red;
+}
+
+/* Estado vacío */
+.empty-state {
+  text-align: center;
+  color: var(--blanco);
+  padding: 40px 20px;
+  border: 1px dashed var(--blanco);
+  border-radius: 12px;
+}
+
+.empty-icon {
+  font-size: 60px;
+  color: var(--dorado);
+  margin-bottom: 10px;
+}
+
+/* Grid de tarjetas */
+.podcast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .title {
+    font-size: 28px;
+  }
+
+  .refresh-btn {
+    font-size: 14px;
+    padding: 8px 20px;
+  }
+
+  .podcast-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+@import url('//fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap');
+
+body{ 
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+}
+#cargar{ 
+  background-color: --verde-fuerte; 
+  display: grid;
+  place-content: center;
+  height: 100vh;
+  color: #000;
+}
+.cargando{ 
+  position: relative; 
+  color: #FFF;
+  margin-top: 2em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase
+}
+
+.rueda {
+  border: 10px solid rgba(255, 255, 255, .3);
+  border-radius: 50%;
+  border-left-color: transparent;
+  width: 80px;
+  height: 80px;
+  animation: giro 1s linear infinite;
+}
+
+@keyframes giro {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

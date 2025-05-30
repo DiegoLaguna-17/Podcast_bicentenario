@@ -1,19 +1,15 @@
 <div class="prin">
   <div class="container">
     <div class="header">
-      <h1 class="title">Podcasts del Creador</h1>
-      <button mat-raised-button class="refresh-btn" (click)="loadPodcasts()" [disabled]="isLoading">
-        Actualizar
-      </button>
+      <h1 class="title">Podcasts</h1>
+       
     </div>
     
     @if (error) {
       <div class="error-container">
         <mat-icon>error_outline</mat-icon>
         <p>{{ error }}</p>
-        <button mat-raised-button color="primary" (click)="loadPodcasts()">
-          Reintentar
-        </button>
+        
       </div>
     } @else {
       @if (podcasts.length === 0) {

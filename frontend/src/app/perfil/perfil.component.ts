@@ -18,6 +18,11 @@ export class PerfilComponent {
   id: any;
   rol: any;
   datosCargados: boolean = false;
+  podcasts:any[]=[]
+
+  rolUsuario:any
+  isLoading = true;
+  error: string | null = null;
 
   constructor(private http: HttpClient, private router: Router) {
     const datosend = JSON.parse(localStorage.getItem('usuario') || '{}');
@@ -54,6 +59,7 @@ export class PerfilComponent {
         this.datosper = response;
         this.id = this.datosper.id;
         this.rol = this.datosper.rol;
+        
         console.log(this.datosper.fotoperfil);
         console.log('id del perfil: ' + this.id + ' ' + this.rol);
         this.datosCargados = true;
@@ -63,6 +69,51 @@ export class PerfilComponent {
         this.errorRespuesta = 'Error al cargar el perfil.';
       }
     });
+
+    const usuarioStr = localStorage.getItem('usuario');
+    if (usuarioStr) {
+      const usuarioObj = JSON.parse(usuarioStr);
+      this.rolUsuario = usuarioObj.rol;  // aquí está el id
+      // Usar idUsuario para lo que necesites, ej. en el query param
+    }
+    if(this.rolUsuario=='Creador'){
+      this.loadPodcasts();
+    }
+  }
+  
+
+  loadPodcasts(): void {
+    const token = localStorage.getItem('access_token');
+  
+        
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`,
+        });
+    this.isLoading = true;
+    this.error = null;
+    const formData =new FormData();
+
+    var idUsuario=''
+    const usuarioStr = localStorage.getItem('usuario');
+    if (usuarioStr) {
+      const usuarioObj = JSON.parse(usuarioStr);
+      idUsuario = usuarioObj.id;  // aquí está el id
+      console.log('ID usuario:', idUsuario);
+      // Usar idUsuario para lo que necesites, ej. en el query param
+    }
+    formData.append('id',idUsuario);
+    const endpoint = environment.apiUrl+'/creador/podcasts/';
+    this.http.post<{podcasts: any[]}>(endpoint,formData,{headers}).subscribe({
+      next: (response) => {
+         this.podcasts = response.podcasts || [];
+         console.log(this.podcasts);
+      },
+      error: (error) => {
+        console.error('Error en el perfil:', error);
+      }
+        
+    });
+    
   }
   cerrarSesion(){
     this.router.navigate(['/login']);

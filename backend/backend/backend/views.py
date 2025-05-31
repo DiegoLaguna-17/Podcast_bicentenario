@@ -1726,3 +1726,27 @@ def episodioNotificaciones(request):
                 return JsonResponse({'notificaciones':registros})
         except Exception as e:
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
+
+
+def episodioDia(request):
+    if request.method=='GET':
+        try:
+            hace_24_horas = datetime.datetime.utcnow() - timedelta(hours=24)
+            fecha_corte = hace_24_horas.isoformat()
+            episodioDia=supabase.table('backend_episodios').select('*').gte('fechapublicacion', fecha_corte)\
+            .order('visualizaciones', desc=True)\
+            .limit(1)\
+            .execute()
+            if not episodioDia.data:
+                episodioDia=supabase.table('backend_episodios').select('*')\
+            .order('visualizaciones', desc=True)\
+            .limit(1)\
+            .execute()
+            if hasattr(episodioDia,'error')and episodioDia.error:
+                return JsonResponse({'error':'Error al obtener episodio del dia'})
+            return JsonResponse({'Episodio del dia':episodioDia.data})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
+

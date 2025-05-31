@@ -47,6 +47,7 @@ urlpatterns = [
     path('usuarios/suscribirse/',views.agregarSuscripcion,name="agregar_suscripcion"),
     path('usuarios/comentar/', views.subir_comentarios,name='subir_comentario'),
     path('usuarios/notificaciones/',views.episodioNotificaciones,name="episodios_notificacion"),
+    path('usuarios/episodioDia/',views.episodioDia,name="episodio_dia"),
 
     path('usuarios/recuperarContrasenia/',views.recuperarContrasenia,name="recuperar_contrasenia"),
 

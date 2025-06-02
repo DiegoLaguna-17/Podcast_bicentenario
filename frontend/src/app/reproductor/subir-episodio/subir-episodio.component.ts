@@ -149,10 +149,9 @@ obtenerFechaLocal(): string {
         const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
         this.datosend=usuario.id;
         console.log('llego a subir ep '+this.datosend);
-        const formData=new FormData();
-        formData.append('id',this.datosend);
-        const endpoint = environment.apiUrl+'/creador/podcasts/';
-        this.http.post<{podcasts: any[]}>(endpoint, formData,{headers}).subscribe({
+        
+        const endpoint = environment.apiUrl+'/creador/podcasts/?idcreador='+this.datosend;
+        this.http.get<{podcasts: any[]}>(endpoint, {headers}).subscribe({
         next: (response) => {
            this.podcasts = response.podcasts || [];
            console.log('Podcasts cargados:', this.podcasts);

@@ -6,7 +6,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
-
+import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-card-episodios',
@@ -23,11 +24,20 @@ import { RouterLink } from '@angular/router';
 })
 export class CardEpisodiosComponent {
 @Input ()episodio:any
-  constructor(private router: Router) {// { id: 1, nombre: "Ejemplo" }
+  suscrito:any
+  rol:any
+  idoyente:any
+  premium:any
+  podcast:any
+  constructor(private router: Router,private http: HttpClient,) {// { id: 1, nombre: "Ejemplo" }
     }
   abrirReproductor(episodio: any){
-    this.router.navigate(['/reproductor'],{
-      state: {datos:episodio}
-    });
+    
+      this.router.navigate(['/reproductor'],{
+          state: {datos:episodio}
+        });
+    
+    
   }
+  
 }

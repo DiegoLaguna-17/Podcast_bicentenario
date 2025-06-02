@@ -10,6 +10,11 @@ import { MenuPrincipalComponent } from './menu-principal/menu-principal.componen
 import { SubirEpisodioComponent } from './reproductor/subir-episodio/subir-episodio.component';
 import { VerificarComponent } from './verificar/verificar.component';
 import { ReproductorComponent }from './reproductor/reproductor.component';
+import { PaginaPodcastComponent } from './pagina-podcast/pagina-podcast.component';
+import { PaginaCreadorComponent } from './pagina-creador/pagina-creador.component';
+import { RecuperarContraseniaComponent } from './recuperar-contrasenia/recuperar-contrasenia.component';
+import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.component';
+
 export const routes: Routes = [
   { path: '', component: InicioComponent },
   { path: 'login', component: LoginComponent },
@@ -22,5 +27,9 @@ export const routes: Routes = [
   { path: 'siguiendo', component: SiguiendoComponent},
   { path: 'perfil', component: PerfilComponent},
   { path: 'subir-episodio', component: SubirEpisodioComponent},
-  { path: 'reproductor', component:ReproductorComponent}
+  { path: 'reproductor', component:ReproductorComponent},
+  {path:'podcast', component:PaginaPodcastComponent},
+  {path:'creador',component:PaginaCreadorComponent},
+  {path:'contrasenia',component:RecuperarContraseniaComponent},
+  {path:'gestion-usuarios',component:GestionUsuariosComponent}
 ];

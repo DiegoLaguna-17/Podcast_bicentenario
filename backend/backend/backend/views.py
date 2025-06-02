@@ -162,6 +162,8 @@ def crear_calificacion(request):
             idepisodio=request.POST.get('idepisodio')
             puntuacion=request.POST.get('puntuacion')
             resenia=request.POST.get('resenia')
+            if not idusuario or not idepisodio or not puntuacion or not resenia:
+                return JsonResponse({'error':'datos faltantes'})
             data = {
                 'usuarios_idusuario':idusuario,
                 'episodios_idepisodio':idepisodio,
@@ -182,11 +184,11 @@ def obtener_calificacion(request):
     if request.method=='GET':
         try:
             episodio=request.GET.get('episodios_idepisodio')
-            response=supabase.table('calificacion').select('*').eq('episodios_idepisodio',episodio).execute()
+            response=supabase.table('calificacion').select('*','usuarios_idusuario(usuario)').eq('episodios_idepisodio',episodio).execute()
             if hasattr(response, 'error') and response.error:
                 return JsonResponse({'error': 'Error al obtener reseñas'}, status=400)
 
-            return JsonResponse({'Reseñas': response.data}, status=200, safe=False)
+            return JsonResponse({'resenias': response.data}, status=200, safe=False)
         except Exception as e:
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
     else:
@@ -226,7 +228,7 @@ def episodios(request):
             ids_podcasts = [e['idpodcast'] for e in podcastsParaTi.data]
 
             episodiosParaTi = supabase.table('backend_episodios') \
-                .select('*') \
+                .select('*','podcast_idpodcast(*, creadores_idcreador(idcreador,nombre))') \
                 .in_('podcast_idpodcast', ids_podcasts) \
                 .eq('visible', True) \
                 .order('fechapublicacion', desc=True) \
@@ -341,9 +343,10 @@ def obtenerComentarios(request):
     if request.method=='GET':
         try:
             idEpisodio=request.GET.get('episodios_idepisodio')
-            response=supabase.table('backend_comentarios').select('*').eq('episodios_idepisodio',idEpisodio).execute()
+            response = supabase.table('backend_comentarios').select('*, usuarios_idusuario(usuario)').eq('episodios_idepisodio', idEpisodio).execute()
             if hasattr(response, 'error') and response.error:
                 return JsonResponse({'error': 'Error al consultar Supabase'}, status=400)
+            
 
             return JsonResponse({'comentarios': response.data}, status=200, safe=False)
         except Exception as e:
@@ -402,8 +405,8 @@ def buscar_general(request):
         podcasts = {p['idpodcast']: p for p in (podcasts1.data + podcasts2.data)}.values()
 
         # Buscar en episodios (por título y descripción)
-        episodios1 = supabase.table('backend_episodios').select("*").ilike('titulo', f'%{query}%').execute()
-        episodios2 = supabase.table('backend_episodios').select("*").ilike('descripcion', f'%{query}%').execute()
+        episodios1 = supabase.table('backend_episodios').select("*",'podcast_idpodcast(titulo, creadores_idcreador(nombre))').ilike('titulo', f'%{query}%').execute()
+        episodios2 = supabase.table('backend_episodios').select("*",'podcast_idpodcast(titulo, creadores_idcreador(nombre))').ilike('descripcion', f'%{query}%').execute()
         episodios = {e['idepisodio']: e for e in (episodios1.data + episodios2.data)}.values()
 
         return JsonResponse({
@@ -428,7 +431,7 @@ def buscar_anio (request):
         fecha_inicio = f"{anio}-01-01"
         fecha_fin = f"{int(anio)+1}-01-01"
         try:
-            episodios = supabase.table('backend_episodios') .select("*").gte('fechapublicacion', fecha_inicio).lt('fechapublicacion', fecha_fin).execute()
+            episodios = supabase.table('backend_episodios') .select("*",'podcast_idpodcast(titulo, creadores_idcreador(nombre))').gte('fechapublicacion', fecha_inicio).lt('fechapublicacion', fecha_fin).execute()
             podcasts=supabase.table('backend_podcast') .select("*").gte('fecha', fecha_inicio).lt('fecha', fecha_fin).execute()
             creadores=supabase.table('backend_creadores') .select("*").gte('fechaingreso', fecha_inicio).lt('fechaingreso', fecha_fin).execute()
             return JsonResponse({
@@ -458,7 +461,7 @@ def buscar_tematica(request):
             idpodcasts = [p['idpodcast'] for p in idsP.data]
             # Episodios con info de podcast (incluye categoría), filtrados por categoría del podcast
             episodios = supabase.table('backend_episodios')\
-                .select('*')\
+                .select('*','podcast_idpodcast(titulo, creadores_idcreador(nombre))')\
                 .in_('podcast_idpodcast', idpodcasts)\
                 .execute()
 
@@ -615,9 +618,9 @@ def subir_episodio(request):
 
 @token_required
 def podcasts_por_creador(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         try:
-            id_creador = request.POST.get('id')
+            id_creador = request.GET.get('idcreador')
             response = supabase.table('backend_podcast')\
                                .select('*')\
                                .eq('creadores_idcreador', id_creador)\
@@ -697,13 +700,12 @@ def obtenerSeguimientos(request):
 def seguirCreador(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
-            
-            # Verificar que los campos requeridos estén presentes
-            if 'usuarios_idusuario' not in data or 'creadores_idcreador' not in data:
+            usuarios_idusuario = request.POST.get('usuarios_idusuario')
+            creadores_idcreador = request.POST.get('creadores_idcreador')
+
+            if not usuarios_idusuario or not creadores_idcreador:
                 return JsonResponse({'error': 'Faltan campos requeridos'}, status=400)
-            
-            # Insertar directamente (ya que managed=False)
+
             from django.db import connection
             with connection.cursor() as cursor:
                 cursor.execute(
@@ -713,21 +715,19 @@ def seguirCreador(request):
                     VALUES (%s, %s)
                     RETURNING creadores_idcreador
                     """,
-                    [data['usuarios_idusuario'], data['creadores_idcreador']]
+                    [usuarios_idusuario, creadores_idcreador]
                 )
                 new_id = cursor.fetchone()[0]
-                # Corregido el typo en 'readores_idcreador' a 'creadores_idcreador'
                 return JsonResponse({
-                    'usuarios_idusuario': data['usuarios_idusuario'], 
-                    'creadores_idcreador': data['creadores_idcreador']
+                    'usuarios_idusuario': usuarios_idusuario,
+                    'creadores_idcreador': creadores_idcreador
                 }, status=201)
                 
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'JSON inválido'}, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-    
+
     return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 
 def dejarSeguirCreador(request):
     if request.method == 'POST':
@@ -1734,19 +1734,41 @@ def episodioDia(request):
         try:
             hace_24_horas = datetime.datetime.utcnow() - timedelta(hours=24)
             fecha_corte = hace_24_horas.isoformat()
-            episodioDia=supabase.table('backend_episodios').select('*').gte('fechapublicacion', fecha_corte)\
+            episodioDia=supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))').gte('fechapublicacion', fecha_corte)\
             .order('visualizaciones', desc=True)\
             .limit(1)\
             .execute()
             if not episodioDia.data:
-                episodioDia=supabase.table('backend_episodios').select('*')\
+                episodioDia=supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))')\
             .order('visualizaciones', desc=True)\
             .limit(1)\
             .execute()
             if hasattr(episodioDia,'error')and episodioDia.error:
                 return JsonResponse({'error':'Error al obtener episodio del dia'})
-            return JsonResponse({'Episodio del dia':episodioDia.data})
+            return JsonResponse({'episodio':episodioDia.data[0]})
         except Exception as e:
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
 
+def episodios_podcast(request):
+    if request.method=='GET':
+        try:
+            idpodcast=request.GET.get('idpodcast')
+            episodios=supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))').eq('podcast_idpodcast',idpodcast).execute()
+            if hasattr(episodios,'error') and episodios.error:
+                return JsonResponse({'error':'error al obtener episodios del podcast'})
+            return JsonResponse({'episodios':episodios.data})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
+def verificarPremium(request):
+    if request.method=='GET':
+        try:
+            idpodcast=request.GET.get('idpodcast')
+            response=supabase.table('backend_podcast').select('*').eq('idpodcast',idpodcast).execute()
+            if hasattr(response,'error') and response.error:
+                return JsonResponse({'error':'error al verificar premium'})
+            return JsonResponse({'premium':response.data})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+        
 

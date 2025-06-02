@@ -2,21 +2,9 @@
   <div class="container">
     <div class="header">
       <h1 class="title">Comentarios</h1>
-      <button mat-raised-button class="refresh-btn" (click)="loadComentarios()" [disabled]="isLoading">
-        Actualizar
-      </button>
+      
     </div>
-    
-    @if(isLoading === false) {
-      @if (error) {
-        <div class="error-container">
-          <mat-icon>error_outline</mat-icon>
-          <p>{{ error }}</p>
-          <button mat-raised-button color="primary" (click)="loadComentarios()">
-            Reintentar
-          </button>
-        </div>
-      } @else {
+
         @if (comentarios.length === 0) {
           <div class="empty-state">
             <mat-icon class="empty-icon">comment</mat-icon>
@@ -30,14 +18,7 @@
             }
           </div>
         }
-      }
-    } @else {
-      <div id="cargar">
-        <div class="cargar-loader">
-          <div class="rueda"></div>
-        </div>
-        <div class="cargando">Cargando comentarios...</div>
-      </div>
-    }
+      
+    
   </div>
 </div>

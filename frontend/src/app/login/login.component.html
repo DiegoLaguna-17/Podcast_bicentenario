@@ -52,7 +52,7 @@
             <div *ngIf="rolCtrl.errors?.['required']">El rol es requerido.</div>
           </div>
         </div>
-
+        <a (click)="recuperarContrasenia()" style="color:white">¿Olviste tu contraseña?</a>
         <!-- Botón de enviar -->
         <button type="submit" class="login-btn" [disabled]="loginForm.invalid">
           <span>Iniciar sesión</span>

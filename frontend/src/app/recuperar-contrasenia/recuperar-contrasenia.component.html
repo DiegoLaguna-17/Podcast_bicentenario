@@ -1,0 +1,27 @@
+<div style="margin: 0 auto;background-color: aqua;">
+    <p>Ingresa tu correo electronico</p>
+    <input [(ngModel)]="correo"type="text" placeholder="Correo Electronico">
+    <h3>Rol:</h3>
+    <select [(ngModel)]="rolSeleccionado" name="rol" id="rol">
+        <option *ngFor="let rol of roles" [value]="rol">{{ rol }}</option>
+    </select>
+    <button (click)="verificarCuenta()">Enviar</button>
+
+</div>
+
+<div style="margin: 0 auto;background-color: aqua;"*ngIf="modalCodigo">
+    <p>Ingresa el codigo que te enviamos</p>
+    <input [(ngModel)]="codigo"type="text" placeholder="Codigo">
+    <button (click)="verificarCodigo()" >Verificar</button>
+
+</div>
+<div style="margin: 0 auto;background-color: aqua;"*ngIf="modalContrasenia">
+    <p>Ingresa el tu nueva contrasenia</p>
+    <input [(ngModel)]="Contrasenia1"type="password" placeholder="Contrasenia">
+    <p>Ingresa de nueva contrasenia</p>
+    <input [(ngModel)]="Contrasenia2"type="password" placeholder="Contrasenia">
+    <p *ngIf="!contraseniasCoinciden()">Las contrasenias no coinciden</p>
+    <button [disabled]="!contraseniasCoinciden()" (click)="cambiarContrasenia()" >Cambiar</button>
+
+</div>
+

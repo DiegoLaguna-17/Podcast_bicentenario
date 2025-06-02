@@ -92,4 +92,7 @@ rolverificar:any
       }
     });
   }
+  recuperarContrasenia() {
+  this.router.navigate(['/contrasenia']);
+}
 }

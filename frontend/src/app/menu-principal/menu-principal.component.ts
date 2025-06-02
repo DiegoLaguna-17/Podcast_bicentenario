@@ -6,13 +6,13 @@ import { NgIf } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-
+import { CardEpisodiosComponent } from '../card-episodios/card-episodios.component';
 
 
 @Component({
   standalone: true,
   selector: 'app-menu-principal',
-  imports: [RouterLink,NgIf, CommonModule],
+  imports: [RouterLink,NgIf, CommonModule,CardEpisodiosComponent],
   templateUrl: './menu-principal.component.html',
   styleUrl: './menu-principal.component.css'
 })
@@ -24,13 +24,19 @@ export class MenuPrincipalComponent {
   episodioVisto:any
   seguidores:any
   errorRespuesta:any
+  episodio:any
+  publi1:any
+  publi2:any
     constructor(private router: Router,private dataService: DataService,private http: HttpClient,) {
     this.usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     console.log('llego a menu: '+this.usuario.id+" "+this.usuario.rol); // { id: 1, nombre: "Ejemplo" }
-
+    this.obtenerEpisodioDia();
+    this.obtenerPublicidad()
     if(this.usuario.rol=='Creador'){
       this.dashBoardCreador()
+
     }
+    
   }
 
   dashBoardCreador(){
@@ -96,6 +102,43 @@ export class MenuPrincipalComponent {
     this.router.navigate(['/subir-episodio'], {
           state: { datos: this.usuario.id } // Envías un objeto completo
         });
+  }
+
+  obtenerEpisodioDia(){
+  const endpoint = environment.apiUrl + '/usuarios/episodioDia/';
+          this.http.get<{episodio:any}>(endpoint).subscribe({
+  next: (response: any) => {
+    this.episodio = response.episodio;
+    console.log('episodio dia', response.episodio);
+  },
+  error: (error) => {
+    console.error('Error al obtener episodio del dia:', error);
+    if (error.error) {
+      console.error('Detalle error:', error.error);
+    }
+    this.errorRespuesta = 'Error al obtener episodio del dia.';
+  }
+});
+
+  }
+
+  obtenerPublicidad(){
+     const endpoint = environment.apiUrl + '/obtenerPublicidad/';
+          this.http.get(endpoint).subscribe({
+      next: (response: any) => {
+        this.publi1 = response.publicidades[0]
+        this.publi2 = response.publicidades[1]
+        console.log('publis', this.publi1+" y "+this.publi2);
+      },
+      error: (error) => {
+        console.error('Error al obtener publicidad:', error);
+        if (error.error) {
+          console.error('Detalle error:', error.error);
+        }
+        this.errorRespuesta = 'Error al obtener publicidad.';
+      }
+    });
+
   }
   
 }

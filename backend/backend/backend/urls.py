@@ -38,7 +38,7 @@ urlpatterns = [
     path('usuarios/dejarSeguir/',views.dejarSeguirCreador,name='dejar_seguir'),
     path('usuarios/actualizarUsuario/',views.actualizarUsuario,name="actualizar_usuario"),
     #path('creadores/mostrar/', views.mostrar_creadores, name='mostrar_creadores'),
-    path('subirCalificacion/',views.crear_calificacion,name='subir-Calificacion'),
+    path('usuarios/subirCalificacion/',views.crear_calificacion,name='subir-Calificacion'),
     path('usuarios/crearLista/',views.crearListaReproduccion,name='crear_lista'),
     path('usuarios/agregarEpisodioLista/',views.agregarEpisodioLista,name='agregar_apisodio'),
     path('usuarios/quitarEpisodioLista/',views.quitarEpisodio,name='quitar_ep_lista'),
@@ -50,11 +50,12 @@ urlpatterns = [
     path('usuarios/episodioDia/',views.episodioDia,name="episodio_dia"),
 
     path('usuarios/recuperarContrasenia/',views.recuperarContrasenia,name="recuperar_contrasenia"),
-
     path('usuarios/verificarCodigoContrasenia/',views.verificar_codigo_contrasenia,name="codigo_contrasenia"),
     path('usuarios/cambiarContrasenia/',views.cambiarContrasenia,name="cambiar_contrasenia"),
     path('usuarios/verificarSuscripcion/',views.verificarSuscripcion,name="verificar_suscripcion"),
     path('usuarios/verificarSeguimiento/',views.verificarSeguimiento,name="verificar_seguimiento"),
+    path('podcast/episodios/',views.episodios_podcast,name="episodios podcast"),
+    path('episodios/verificarPremium/',views.verificarPremium,name="verificar_premium"),
     #crear lista de reproduccion
     
     ##ENDPOINTS PARA CREADOR
@@ -65,6 +66,7 @@ urlpatterns = [
     path('actualizarCreador/',views.actualizarCreador,name="actualizar_creador"),
     path('actualizarPodcast/',views.actualizarPodcast,name="actualizar_podcast"),
     path('actualizarEpisodio/',views.actualizarEpisodio,name="actualizar_episodio"),
+
     #endpoint de dashboard creador
     path('obtenerVistasCreador/',views.obtener_visualizaciones,name='vistas_creador'),
     path('obtenerMasVisto/',views.obtener_ep_mas_visto,name='episodio_mas_visto'),

@@ -29,16 +29,11 @@
             <img [src]="creador.fotoperfil" alt="{{ creador.nombre }} profile picture" class="profile-image">
           </div>
 
-        <div class="creator-details">
-          <h4 class="creator-username">{{ creador.nombre }}</h4>
-        
-          <div class="themes-area" *ngIf="creador.tematicas?.length">
-            <h5>Temáticas</h5>
-            <div class="themes-list">
-              <span class="theme-tag" *ngFor="let tema of creador.tematicas">{{ tema }}</span>
-            </div>
+          <div class="creator-details">
+            <h4 class="creator-username">{{ creador.nombre }}</h4>
+          
+            <button (click)="abrirCreador(creador)">Buscar</button>
           </div>
-        </div>
       </div>
     </div>
 

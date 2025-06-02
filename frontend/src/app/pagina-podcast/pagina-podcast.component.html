@@ -1,0 +1,41 @@
+
+  <div class="podcast-header">
+    <div class="general">
+        <button (click)="accionBotonSuscribirse()">{{suscripcion}}</button>
+      <h3 class="podcast-title">{{ podcast.titulo }}</h3>
+      <span class="podcast-category">{{ podcast.categoria }}</span>
+    </div>
+    <div class="extra">
+      <mat-chip class="premium-chip" *ngIf="podcast.premium">
+        Premium
+      </mat-chip>
+      <h2 class="podcast-description">
+      {{ podcast.descripcion  }}
+      </h2>
+    </div>
+    
+  </div>
+
+  <div class="podcast-content">
+    <app-list-episodios [episodios]="episodios"></app-list-episodios>
+    
+   
+  </div>
+  <!-- Botón que abre el modal -->
+
+
+<!-- Modal -->
+<div class="modal" *ngIf="mostrarModal">
+  <div class="modal-contenido">
+    <span class="cerrar" (click)="mostrarModal = false">&times;</span>
+    <h2>Método de pago</h2>
+
+    <input type="text" placeholder="Numero de tarjeta" class="entrada">
+    <input type="text" placeholder="Codigo de seguridad" class="entrada">
+    <button (click)="suscribirse()">
+        pagar
+    </button>
+
+  </div>
+</div>
+

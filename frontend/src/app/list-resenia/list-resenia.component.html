@@ -1,0 +1,24 @@
+
+  <div class="prin">
+    <div class="container">
+      <div class="header">
+        <h1 class="title">Reseñas</h1>
+        
+      </div>
+      
+            @if (resenias.length === 0) {
+              <div class="empty-state">
+                <mat-icon class="empty-icon">Reseñas</mat-icon>
+                <h3>No se encontraron resenias</h3>
+              </div>
+            } @else {
+              <div class="podcast-grid">
+                @for (resenia of resenias; track resenia.id) {
+                  <app-card-resenia [resenia]="resenia"></app-card-resenia>
+                }
+              </div>
+            }
+        
+    </div>
+  </div>
+

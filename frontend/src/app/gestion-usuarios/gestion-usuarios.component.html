@@ -1,0 +1,57 @@
+<h1>Gestion de usuarios</h1>
+
+<!-- Mostrar error si existe -->
+<div *ngIf="errorRespuesta" class="error">
+  {{ errorRespuesta }}
+</div>
+
+<!-- Mostrar lista de usuarios si hay elementos -->
+<ng-container *ngIf="usuarios.length > 0; else sinUsuarios">
+    <div *ngFor="let usuario of usuarios">
+        <div style="background-color: aqua; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+        <!-- Sección de texto -->
+            <div>
+                <h1>{{usuario.usuario}}</h1>
+                <h2>{{usuario.rol}}</h2>
+                <h3>{{usuario.correo}}</h3>
+                <h3>{{usuario.fecha}}</h3>
+            </div>
+
+        <!-- Sección de botones -->
+            <div>
+                <button style="background-color: cadetblue; margin-right: 5px;" (click)="editar(usuario)" >Editar</button>
+                <button style="background-color: red;">Eliminar</button>
+            </div>
+        </div>
+
+        <br>
+            <!-- Puedes mostrar más datos si quieres -->
+             
+        
+
+    </div>
+    <div class="modal" *ngIf="mostrarModal">
+        <div class="modal-contenido">
+            <span class="cerrar" (click)="cerrarModal()">&times;</span>
+            <h2>Actualizar</h2>
+            <h3>Usuario</h3>
+            <input type="text"  class="entrada" [(ngModel)]="usuarioEditar">
+            <h3>Telefono</h3>
+            <input type="text"  class="entrada" [(ngModel)]="telefonoEditar">
+
+            <img [src]="imagen" alt=""style="width: 100px;height:100px"><br>
+            <form  enctype="multipart/form-data">
+                <input type="file" (change)="onFileSelected($event)" />
+            </form>
+            <button >
+                Actualizar usuario
+            </button>
+
+        </div>
+        </div>
+</ng-container>
+
+<!-- Plantilla alternativa si no hay usuarios -->
+<ng-template #sinUsuarios>
+  <p>No hay usuarios registrados.</p>
+</ng-template>

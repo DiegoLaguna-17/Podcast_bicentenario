@@ -1,0 +1,23 @@
+<div class="podcast-header">
+    <img src="{{creador.fotoperfil}}" alt="foto perfil" class="profile-image">
+    <img src="{{creador.imgdonaciones}}" alt=""class="pago-image">
+    <div class="general">
+        <button  style="width: 10vh;height: 5vh;" (click)="accionBotonSeguido()">{{seguidos}}</button>
+      <h3 class="podcast-title">{{creador.nombre }}</h3>
+      <span class="podcast-category">{{ creador.correo }}</span>
+     
+      <p class="podcast-description">
+      {{ creador.biografia  }}
+
+    </p>
+      
+    </div>
+    
+    
+  </div>
+
+  <div class="podcast-content">
+    
+    <app-podcast-list [podcasts]="podcasts"></app-podcast-list>
+    
+  </div>

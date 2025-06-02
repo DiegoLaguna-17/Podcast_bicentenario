@@ -58,6 +58,11 @@ export class SiguiendoComponent {
       
 
   }
+   abrirCreador(creador: any){
+    this.router.navigate(['/creador'],{
+      state: {datos:creador}
+    });
+  }
  
 
 }

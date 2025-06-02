@@ -2,8 +2,9 @@
   <div class="comentario-header">
     <div class="user-info">
       <mat-icon class="user-icon">account_circle</mat-icon>
+      <span class="username">{{ comentario.usuarios_idusuario.usuario }}</span>
       <div class="user-details">
-        <span class="username">{{ comentario.usuario }}</span>
+        
         <span class="date">{{ comentario.fecha | date: 'medium' }}</span>
       </div>
     </div>

@@ -1,0 +1,21 @@
+<mat-card class="comentario-card">
+  <div class="comentario-header">
+    <div class="user-info">
+      <mat-icon class="user-icon">account_circle</mat-icon>
+      <span class="username">{{ resenia.usuarios_idusuario.usuario }}</span>
+      <div class="user-details">
+        
+        <span class="date">{{ resenia.fecha | date: 'medium' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="comentario-content">
+    <p class="comentario-text">{{ resenia.resenia }}</p>
+    <span *ngFor="let star of [1,2,3,4,5]" 
+        [style.color]="resenia.puntuacion >= star ? 'gold' : 'gray'"
+        style="font-size: 1.5rem;">
+    ★
+  </span>
+  </div>
+</mat-card>

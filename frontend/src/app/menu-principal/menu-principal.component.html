@@ -1,4 +1,16 @@
 <!-- Oyente -->
+<div style="display: flex">
+  <div style="width: 25%;">
+    <img src="{{publi1.imagen}}" alt="publicidad1" width="250vh">
+  </div>
+  <div style="background-color: greenyellow;width: 50%;height: 0vh;margin: 0 auto;" *ngIf="episodio">
+      <app-card-episodios [episodio]="episodio"></app-card-episodios>
+  </div>
+  <div style="width: 25%;">
+      <img src="{{publi2.imagen}}" alt="publicidad1" width="250vh">
+  </div>
+</div>
+
 <div class="contenedor" *ngIf="usuario.rol === 'Oyente'">
   <div class="menu">
     <button routerLink="/para-ti">Para Ti</button>
@@ -44,9 +56,11 @@
 <!-- Administrador -->
 <div class="contenedor" *ngIf="usuario.rol === 'Administrador'">
   <div class="menu">
-    <button routerLink="/admin/usuarios">Gestionar Usuarios</button>
+    <button routerLink="/gestion-usuarios">Gestionar Usuarios</button>
     <button routerLink="/admin/podcasts">Revisar Podcasts</button>
     <button routerLink="/admin/reportes">Ver Reportes</button>
     <button (click)="enviarPerfil()">Perfil</button>
   </div>
 </div>
+
+

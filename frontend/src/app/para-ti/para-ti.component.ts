@@ -38,11 +38,12 @@ export class ParaTiComponent {
 
   loadEpisodios(): void {
     const token = localStorage.getItem('access_token');
-  
+    
         
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`,
         });
+        
     this.error = null;
     var idUsuario=''
     const usuarioStr = localStorage.getItem('usuario');
@@ -52,6 +53,7 @@ export class ParaTiComponent {
       console.log('ID usuario:', idUsuario);
       // Usar idUsuario para lo que necesites, ej. en el query param
     }
+    console.log('token',token);
      const endpoint = environment.apiUrl + '/episodios/?idusuario='+idUsuario;
       this.http.get<{episodios: any[]}>(endpoint,{headers}).subscribe({
         next: (response) => {

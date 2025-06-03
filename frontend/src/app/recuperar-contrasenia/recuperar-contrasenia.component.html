@@ -1,27 +1,52 @@
-<div style="margin: 0 auto;background-color: aqua;">
-    <p>Ingresa tu correo electronico</p>
-    <input [(ngModel)]="correo"type="text" placeholder="Correo Electronico">
-    <h3>Rol:</h3>
-    <select [(ngModel)]="rolSeleccionado" name="rol" id="rol">
-        <option *ngFor="let rol of roles" [value]="rol">{{ rol }}</option>
-    </select>
-    <button (click)="verificarCuenta()">Enviar</button>
+<div class="password-recovery-page">
+  <div class="recovery-container">
+    <div class="recovery-card">
+      <div class="recovery-header">
+        <p>Ingresa tu Correo Eléctronico:</p>
+      </div>
+      <div class="input-container">
+        <input [(ngModel)]="correo" type="text" placeholder="Correo Eléctronico">
+      </div>
+      <div class="recovery-header">
+        <h3>Rol:</h3>
+      </div>
+      <div class="input-container">
+        <select [(ngModel)]="rolSeleccionado" name="rol" id="rol">
+          <option *ngFor="let rol of roles" [value]="rol">{{ rol }}</option>
+        </select>
+      </div>
+      <button class="recovery-btn" (click)="verificarCuenta()">Enviar</button>
+    </div>
+  </div>
 
+  <div class="recovery-container" *ngIf="modalCodigo">
+    <div class="recovery-card">
+      <div class="recovery-header">
+        <p>Ingresa el código enviado a tu teléfono:</p>
+      </div>
+      <div class="input-container">
+        <input [(ngModel)]="codigo" type="text" placeholder="Código">
+      </div>
+      <button class="recovery-btn" (click)="verificarCodigo()">Verificar</button>
+    </div>
+  </div>
+
+  <div class="recovery-container" *ngIf="modalContrasenia">
+    <div class="recovery-card">
+      <div class="recovery-header">
+        <p>Ingresa tu nueva contraseña</p>
+      </div>
+      <div class="input-container">
+        <input [(ngModel)]="Contrasenia1" type="password" placeholder="Contraseña">
+      </div>
+      <div class="recovery-header">
+        <p>Ingresa de nuevo la contraseña</p>
+      </div>
+      <div class="input-container">
+        <input [(ngModel)]="Contrasenia2" type="password" placeholder="Contraseña">
+      </div>
+      <p class="error-message" *ngIf="!contraseniasCoinciden()">Las contraseñas no coinciden</p>
+      <button class="recovery-btn" [disabled]="!contraseniasCoinciden()" (click)="cambiarContrasenia()">Cambiar</button>
+    </div>
+  </div>
 </div>
-
-<div style="margin: 0 auto;background-color: aqua;"*ngIf="modalCodigo">
-    <p>Ingresa el codigo que te enviamos</p>
-    <input [(ngModel)]="codigo"type="text" placeholder="Codigo">
-    <button (click)="verificarCodigo()" >Verificar</button>
-
-</div>
-<div style="margin: 0 auto;background-color: aqua;"*ngIf="modalContrasenia">
-    <p>Ingresa el tu nueva contrasenia</p>
-    <input [(ngModel)]="Contrasenia1"type="password" placeholder="Contrasenia">
-    <p>Ingresa de nueva contrasenia</p>
-    <input [(ngModel)]="Contrasenia2"type="password" placeholder="Contrasenia">
-    <p *ngIf="!contraseniasCoinciden()">Las contrasenias no coinciden</p>
-    <button [disabled]="!contraseniasCoinciden()" (click)="cambiarContrasenia()" >Cambiar</button>
-
-</div>
-

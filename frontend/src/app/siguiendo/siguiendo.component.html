@@ -1,42 +1,44 @@
-
-<div class="following-page-wrapper">
-
-    <h1> SIGUIENDO</h1>
-
-    <div class="search-bar-container">
-      <input type="text" placeholder="Buscar...">
-      <button class="search-button"><i class="fas fa-search"></i>🔍</button>
+<div class="following-container">
+  <div class="following-header">
+    <h1 class="following-title">SIGUIENDO</h1>
+    
+    <div class="search-container">
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar creadores o temáticas..." class="search-input">
+        <button class="search-btn">
+          <span class="search-icon">🔍</span>
+        </button>
+      </div>
     </div>
+  </div>
+  <aside class="filter-sidebar">
+      <h3 class="filter-title">Filtrar por</h3>
+      <div class="filter-options">
+        <label class="filter-option">
+          <input type="radio" id="filter-creador" name="filter-option" value="creador" class="filter-radio">
+          <span class="filter-label">Creador</span>
+        </label>
+        <label class="filter-option">
+          <input type="radio" id="filter-tematica" name="filter-option" value="tematica" class="filter-radio">
+          <span class="filter-label">Temática</span>
+        </label>
+      </div>
+    </aside>
+  <div class="following-layout">
+    
 
-    <div class="following-content">
-      <div class="sidebar">
-        <h3>Opciones</h3>
-        <div class="sidebar-options-group">
-          <div class="sidebar-option">
-            <input type="radio" id="filter-creador" name="filter-option" value="creador">
-            <label for="filter-creador">Creador</label>
-          </div>
-          <div class="sidebar-option">
-            <input type="radio" id="filter-tematica" name="filter-option" value="tematica">
-            <label for="filter-tematica">Temática</label>
-          </div>
+    <main class="creators-grid">
+      <div class="creator-card" *ngFor="let creador of creadores">
+        <div class="creator-avatar">
+          <img [src]="creador.fotoperfil" alt="{{ creador.nombre }}" class="creator-img">
+        </div>
+        <div class="creator-info">
+          <h3 class="creator-name">{{ creador.nombre }}</h3>
+          <button class="view-creator-btn" (click)="abrirCreador(creador)">
+            Ver perfil
+          </button>
         </div>
       </div>
-
-    <div class="creators-list">
-        <div class="creator-item" *ngFor="let creador of creadores">
-          <div class="creator-image-container">
-            <img [src]="creador.fotoperfil" alt="{{ creador.nombre }} profile picture" class="profile-image">
-          </div>
-
-          <div class="creator-details">
-            <h4 class="creator-username">{{ creador.nombre }}</h4>
-          
-            <button (click)="abrirCreador(creador)">Buscar</button>
-          </div>
-      </div>
-    </div>
-
+    </main>
   </div>
-
-  
+</div>

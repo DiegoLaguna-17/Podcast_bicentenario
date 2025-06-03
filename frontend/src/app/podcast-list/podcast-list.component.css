@@ -1,11 +1,20 @@
 .prin {
-  background-color: var(--verde-fuerte);
+  background: linear-gradient(135deg, 
+              rgba(26, 58, 26, 0.9) 0%, 
+              rgba(45, 90, 45, 0.85) 30%, 
+              rgba(212, 175, 55, 0.8) 100%);
+  padding: 40px;
+  min-height: 100vh;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  background: var(--verde-fuerte);
+  border-radius: 20px;
+  border: 2px solid var(--color-accent);
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .header {
@@ -18,12 +27,26 @@
 }
 
 .title {
-  font-size: 40px;
-  font-weight: 600;
-  color: var(--blanco);
-  text-shadow: 2px 2px 4px var(--plomo);
-  text-align: center;
-  margin-left: 35%;
+  color: var(--color-accent);
+  font-family: 'Playfair Display', serif;
+  font-size: 50px;
+  margin-bottom: var(--space-md);
+  position: relative;
+  display: inline-block;
+  margin-left: 43%;
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 25%;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+             transparent, 
+             var(--color-accent), 
+             transparent);
 }
 
 .refresh-btn {

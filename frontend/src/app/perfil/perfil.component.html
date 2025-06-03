@@ -1,16 +1,15 @@
 <div *ngIf="datosper.rol == 'Creador'; else noDatos" class="profile-container">
-  <div class="profile-card">
+  <div class="profile-card creator-view">
     <div class="profile-header">
       <h2>Datos recibidos:</h2>
+      <button class="cierre" (click)="cerrarSesion()">Cerrar Sesión</button>
     </div>
-    <div >
-      <button class="cierre" (click)="cerrarSesion()">Cerrar Sesion</button>
-    </div>
+    
     <div class="profile-content">
       <div class="profile-image-container">
-        <img src="{{datosper.fotoPerfil}}" alt="foto perfil" class="profile-image">
-        <button class="update-photo-button" >Actualizar foto de perfil</button>
-        <img src="{{datosper.donaciones}}" alt="donacion" class="donation-image" *ngIf="datosper.donaciones">
+        <img src="{{datosper.fotoPerfil}}" alt="Foto de perfil" class="profile-image">
+        <button class="update-photo-button">Actualizar foto de perfil</button>
+        <img src="{{datosper.donaciones}}" alt="Donación" class="donation-image" *ngIf="datosper.donaciones">
       </div>
 
       <div class="profile-details">
@@ -18,7 +17,7 @@
         <p><strong>Usuario:</strong> {{ datosper.usuario }}</p>
         <p><strong>Nombre:</strong> {{datosper.nombre}}</p>
         <p><strong>Correo:</strong> {{datosper.correo}}</p>
-        <p><strong>Rol:</strong> {{datosper.rol}}</p>
+        <p><strong>Rol:</strong> <span class="role-badge">{{datosper.rol}}</span></p>
 
         <div class="biography" *ngIf="datosper.biografia">
           <h3>Biografía</h3>
@@ -26,19 +25,16 @@
         </div>
       </div>
     </div>
-    <app-podcast-list [podcasts]="podcasts"> hola</app-podcast-list>
+    
+    <app-podcast-list [podcasts]="podcasts"></app-podcast-list>
   </div>
 </div>
 
 <ng-template #noDatos>
-  <div class="profile-container">
-    <div class="profile-card no-data-template">
+  <div class="profile-container listener-view">
+    <div class="profile-card">
       <h2>Perfil de Usuario</h2>
-<!--
-      <div class="profile-image-container">
-        <img [src]="datosper.fotoPerfil" alt="Profile photo" class="profile-image">
-        <button class="update-photo-button" >Actualizar foto de perfil</button>
-      </div>-->
+      <button class="cierre" (click)="cerrarSesion()">Cerrar Sesión</button>
 
       <div class="attributes-container">
         <div class="attribute-item">
@@ -51,13 +47,14 @@
         </div>
         <div class="attribute-item">
           <span class="attribute-label">Rol:</span>
-          <span class="attribute-value">{{ datosper.rol }}</span>
+          <span class="attribute-value role-badge">{{ datosper.rol }}</span>
         </div>
         <div class="attribute-item">
           <span class="attribute-label">Fecha de registro:</span>
           <span class="attribute-value">{{ datosper.fecha }}</span>
         </div>
       </div>
+      
     </div>
   </div>
 </ng-template>

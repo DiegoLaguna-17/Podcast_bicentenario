@@ -1,66 +1,65 @@
-<!-- Oyente -->
-<div style="display: flex">
-  <div style="width: 25%;">
-    <img src="{{publi1.imagen}}" alt="publicidad1" width="250vh">
-  </div>
-  <div style="background-color: greenyellow;width: 50%;height: 0vh;margin: 0 auto;" *ngIf="episodio">
+<!-- Layout principal -->
+<div class="main-layout">
+  <!-- Sección de publicidad y episodio -->
+  <div class="ad-episode-container">
+    <div class="ad-container">
+      <img class="ad-image" src="{{publi1.imagen}}" alt="Publicidad">
+    </div>
+    
+    <div class="episode-container" *ngIf="episodio">
       <app-card-episodios [episodio]="episodio"></app-card-episodios>
+    </div>
+    
+    <div class="ad-container">
+      <img class="ad-image" src="{{publi2.imagen}}" alt="Publicidad">
+    </div>
   </div>
-  <div style="width: 25%;">
-      <img src="{{publi2.imagen}}" alt="publicidad1" width="250vh">
+
+  <!-- Panel de Oyente -->
+  <div class="dashboard" *ngIf="usuario.rol === 'Oyente'">
+    <div class="menu">
+      <button class="menu-button" routerLink="/para-ti">Para Ti</button>
+      <button class="menu-button" routerLink="/buscar">Buscar</button>
+      <button class="menu-button" (click)="enviarSiguiendo()">Siguiendo</button>
+      <button class="menu-button" (click)="enviarPerfil()">Perfil</button>
+    </div>
+  </div>
+
+  <!-- Panel de Creador -->
+  <div class="creator-dashboard" *ngIf="usuario.rol==='Creador'">
+    <div class="stats-container">
+      <div class="stat-card">
+        <h3>Total de vistas</h3>
+        <p class="stat-value">{{vistasTotales}}</p>
+      </div>
+      
+      <div class="stat-card">
+        <h3>Episodio más visto</h3>
+        <p class="stat-title">{{episodioVisto.titulo}}</p>
+        <p class="stat-subvalue">Vistas: {{episodioVisto.visualizaciones}}</p>
+      </div>
+      
+      <div class="stat-card">
+        <h3>Seguidores</h3>
+        <p class="stat-value">{{seguidores}}</p>
+      </div>
+    </div>
+
+    <div class="menu">
+      <button class="menu-button" routerLink="/buscar">Buscar</button>
+      <button class="menu-button" routerLink="/crear-podcast">Crear Podcast</button>
+      <button class="menu-button" (click)="subirEpisodio()">Subir Episodio</button>
+      <button class="menu-button" (click)="enviarPerfil()">Perfil</button>
+    </div>
+  </div>
+
+  <!-- Panel de Administrador -->
+  <div class="dashboard" *ngIf="usuario.rol === 'Administrador'">
+    <div class="menu">
+      <button class="menu-button" routerLink="/gestion-usuarios">Gestionar Usuarios</button>
+      <button class="menu-button" routerLink="/admin/podcasts">Revisar Podcasts</button>
+      <button class="menu-button" routerLink="/admin/reportes">Ver Reportes</button>
+      <button class="menu-button" (click)="enviarPerfil()">Perfil</button>
+    </div>
   </div>
 </div>
-
-<div class="contenedor" *ngIf="usuario.rol === 'Oyente'">
-  <div class="menu">
-    <button routerLink="/para-ti">Para Ti</button>
-    <button routerLink="/buscar">Buscar</button>
-    <button (click)="enviarSiguiendo()">Siguiendo</button>
-    <button (click)="enviarPerfil()">Perfil</button>
-  </div>
-</div>
-
-<!-- Creador -->
- <div *ngIf="usuario.rol==='Creador'">
-  <div style="height: 200px;width: 200px;background-color: beige;">
-    <h1>
-      Total de vistas: 
-    </h1><br>
-    <p>{{vistasTotales}}</p>
-  </div>
-  <br>
-   <div style="height: 200px;width: 200px;background-color: beige;">
-    <h1>
-      Episodio mas visto: 
-    </h1><br>
-    <p>{{episodioVisto.titulo}}</p><br><p>Vistas: {{episodioVisto.visualizaciones}}</p>
-  </div>
-
-  <br>
-   <div style="height: 200px;width: 200px;background-color: beige;">
-    <h1>
-     Cantidad de seguidores: 
-    </h1><br>
-    <p> {{seguidores}}</p>
-  </div>
- </div>
-<div class="contenedor" *ngIf="usuario.rol === 'Creador'">
-  <div class="menu">
-    <button routerLink="/buscar">Buscar</button>
-    <button routerLink="/crear-podcast">Crear Podcast</button>
-    <button (click)="subirEpisodio()">Subir Episodio</button>
-    <button (click)="enviarPerfil()">Perfil</button>
-  </div>
-</div>
-
-<!-- Administrador -->
-<div class="contenedor" *ngIf="usuario.rol === 'Administrador'">
-  <div class="menu">
-    <button routerLink="/gestion-usuarios">Gestionar Usuarios</button>
-    <button routerLink="/admin/podcasts">Revisar Podcasts</button>
-    <button routerLink="/admin/reportes">Ver Reportes</button>
-    <button (click)="enviarPerfil()">Perfil</button>
-  </div>
-</div>
-
-

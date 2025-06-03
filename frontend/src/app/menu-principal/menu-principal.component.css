@@ -1,153 +1,200 @@
-.contenedor {
-  position: relative;
+/* Estilos generales */
+.main-layout {
   min-height: 100vh;
-  padding-bottom: 70px;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-dark);
+  color: var(--color-text-primary);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Menú fijo abajo */
+/* Contenedor de publicidad y episodio */
+.ad-episode-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg);
+  background: linear-gradient(135deg, 
+                rgba(26, 58, 26, 0.9) 0%, 
+                rgba(45, 90, 45, 0.85) 30%, 
+                rgba(212, 175, 55, 0.8) 100%);
+  border-bottom: 2px solid var(--color-accent);
+  padding-top: 5%;
+}
+
+.ad-container {
+  flex: 0 0 25%;
+  display: flex;
+  justify-content: center;
+}
+
+.ad-image {
+  width: 250px;
+  height: auto;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.ad-image:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+.episode-container {
+  flex: 0 0 50%;
+  padding: var(--space-md);
+}
+
+/* Dashboard de creador */
+.creator-dashboard {
+  padding: var(--space-xl);
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.stat-card {
+  background-color: var(--color-primary);
+  padding: var(--space-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+  text-align: center;
+  border: 1px solid var(--color-accent);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--color-accent);
+  margin: var(--space-sm) 0;
+}
+
+.stat-title {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.stat-subvalue {
+  font-size: 1rem;
+  color: var(--color-accent-light);
+}
+
+/* Menú de navegación */
 .menu {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 10vh;
-  background-color: var(--verde);
-  box-shadow: 0 -2px 8px var(--verde-claro);
+  height: 70px;
+  background-color: var(--color-primary-dark);
+  box-shadow: var(--shadow-lg);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-top: 4px solid var(--blanco);
+  border-top: 2px solid var(--color-accent);
   z-index: 1000;
-  padding: 1vh 0.1vh;
-  flex-wrap: wrap;
-}
-
-/* Botones del menú */
-
-button {
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-    padding: var(--space-md) var(--space-xl);
-    border: none;
-    border-radius: var(--border-radius-lg);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    box-shadow: var(--shadow-sm);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 20px 80px;
-}
-
-button {
-    background: transparent;
-    color: var(--color-light);
-    border: 2px solid var(--color-accent);
-}
-
-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.3), 
-                transparent);
-    transition: all 0.7s ease;
-    z-index: -1;
-}
-
-button:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-}
-
-button:hover::before {
-    left: 100%;
-}
-
-button:hover {
-    background: rgba(212, 175, 55, 0.2);
-}
-
-button:active {
-    transform: translateY(2px);
-    transition: all 0.1s ease;
-}
- 
-/* Responsividad */
-
-/* Tablets (≤ 768px) */
-@media (max-width: 768px) {
-  .menu {
-    height: auto;
-    padding: 1vh;
-  }
-
-  .menu button {
-    font-size: 2.2vh;
-    flex: 1 1 45%;
-    max-width: 45%;
-    margin: 1vh 0;
-  }
-}
-
-/* Móviles pequeños (≤ 480px) */
-@media (max-width: 480px) {
-  .menu button {
-    font-size: 2vh;
-    flex: 1 1 90%;
-    max-width: 90%;
-    margin: 1vh auto;
-    padding: 2vh 5vw;
-  }
-}
-.creador-header {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 0 var(--space-md);
 }
 
 .menu-button {
-  background: #3f51b5;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  background: transparent;
+  color: var(--color-light);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-sm) 6%;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 120px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.dropdown-menu {
+.menu-button::before {
+  content: '';
   position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  z-index: 100;
-  min-width: 200px;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+              transparent, 
+              rgba(212, 175, 55, 0.3), 
+              transparent);
+  transition: all 0.7s ease;
 }
 
-.dropdown-menu a {
-  display: block;
-  padding: 10px 15px;
-  text-decoration: none;
-  color: #333;
-  cursor: pointer;
+.menu-button:hover {
+  background: rgba(212, 175, 55, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.dropdown-menu a:hover {
-  background-color: #f5f5f5;
+.menu-button:hover::before {
+  left: 100%;
+}
+
+.menu-button:active {
+  transform: translateY(1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ad-episode-container {
+    flex-direction: column;
+    padding: var(--space-md);
+  }
+  
+  .ad-container, .episode-container {
+    width: 100%;
+    margin-bottom: var(--space-md);
+  }
+  
+  .stats-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .menu {
+    height: auto;
+    flex-wrap: wrap;
+    padding: var(--space-sm);
+  }
+  
+  .menu-button {
+    margin: var(--space-sm);
+    flex: 1 1 40%;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .menu-button {
+    flex: 1 1 100%;
+    margin: var(--space-sm) 0;
+  }
+  
+  .stat-card {
+    min-width: 100%;
+  }
 }

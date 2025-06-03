@@ -1,0 +1,112 @@
+.comentario-card {
+  background: rgba(219, 255, 216, 0.8);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(46, 125, 50, 0.3);
+  transition: all 0.3s ease;
+  color: black;
+}
+
+.comentario-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 255, 13, 0.927);
+}
+
+.comentario-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 255, 13, 0.927);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.user-icon {
+  font-size: 2.2rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  color: #2fb336;
+}
+
+.username {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #2fb336;
+  margin-right: auto;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 0.3rem;
+}
+
+.date {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-left: 3rem;
+}
+
+.comentario-content {
+  padding: 0.5rem 0;
+}
+
+.comentario-text {
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.9);
+  padding-left: 1rem;
+  border-left: 2px solid rgba(0, 255, 13, 0.927);
+  margin-left: 1.2rem;
+}
+
+.comentario-content span {
+  color: #4caf50;
+}
+
+.comentario-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .comentario-card {
+    padding: 1.2rem;
+  }
+  
+  .username {
+    font-size: 1rem;
+  }
+  
+  .comentario-text {
+    font-size: 0.95rem;
+  }
+  
+  .user-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+}

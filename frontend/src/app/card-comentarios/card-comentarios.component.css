@@ -1,0 +1,183 @@
+/* Estilos para la tarjeta de comentarios - Versión Moderna */
+.comentario-card {
+  background: rgba(213, 252, 248, 0.911);
+  border-radius: 12px;
+  padding: 1.8rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 150, 136, 0.15);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  color: #333;
+  position: relative;
+  overflow: hidden;
+}
+
+.comentario-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 150, 136, 0.15);
+  border-color: rgba(0, 150, 136, 0.3);
+}
+
+.comentario-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #009688, #4DB6AC);
+}
+
+.comentario-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgb(3, 255, 230);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.user-icon {
+  font-size: 2.4rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  color: #009688;
+  transition: transform 0.3s ease;
+}
+
+.user-icon:hover {
+  transform: scale(1.1);
+}
+
+.username {
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: #00796B;
+  margin-right: auto;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.date {
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.55);
+  margin-left: 3.4rem;
+  font-style: italic;
+}
+
+.comentario-content {
+  padding: 0.6rem 0;
+}
+
+.comentario-text {
+  margin: 0 0 0.5rem 0;
+  line-height: 1.7;
+  color: rgba(0, 0, 0, 0.85);
+  padding-left: 1.2rem;
+  margin-left: 1.4rem;
+  font-size: 1.05rem;
+  position: relative;
+}
+
+.comentario-text::before {
+  content: '"';
+  position: absolute;
+  left: 0;
+  top: -0.2rem;
+  font-size: 2.5rem;
+  color: rgb(0, 255, 229);
+  font-family: serif;
+  line-height: 1;
+}
+
+.comentario-text::after {
+  content: '"';
+  position: relative;
+  right: 0;
+  top: -0.2rem;
+  font-size: 2.5rem;
+  color: rgb(0, 255, 229);
+  font-family: serif;
+  line-height: 1;
+}
+
+/* Animaciones */
+.comentario-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efecto de onda al hacer hover */
+.comentario-card:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(0, 150, 136, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  from {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .comentario-card {
+    padding: 1.4rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .username {
+    font-size: 1.05rem;
+  }
+  
+  .comentario-text {
+    font-size: 1rem;
+    margin-left: 1rem;
+  }
+  
+  .user-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .date {
+    margin-left: 3rem;
+  }
+}

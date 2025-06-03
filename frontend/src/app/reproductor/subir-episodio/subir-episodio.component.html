@@ -1,138 +1,140 @@
+<div class="container">
+  <div class="video-upload-container">
+    <h2>Subir Episodio</h2>
+    <form (ngSubmit)="onSubmit(videoForm)" id="formulario_episodio" #videoForm="ngForm">
+      
+      <!-- Vista previa del audio -->
+      <div class="episodio">
+        <div class="video-preview" *ngIf="audioUrl">
+          <audio controls>
+            <source [src]="audioUrl" type="audio/mpeg" />
+            <source [src]="audioUrl" type="audio/aac" />
+            Tu navegador no soporta la reproducción de audio.
+          </audio>
+        </div>
 
-<div class="video-upload-container">
-  <h2>Subir Episodio</h2>
-  <form (ngSubmit)="onSubmit(videoForm)" id="formulario_episodio" #videoForm="ngForm">
-    
-    <!-- Vista previa del audio -->
-    <div class="episodio">
-      <div class="video-preview" *ngIf="audioUrl">
-        <audio controls>
-          <source [src]="audioUrl" type="audio/mpeg" />
-          <source [src]="audioUrl" type="audio/aac" />
-          Tu navegador no soporta la reproducción de audio.
-        </audio>
+        <!-- Subida de archivo -->
+        <div class="form-group">
+          <label for="audioFile">Seleccionar Audio:</label>
+          <input 
+            type="file" 
+            id="audioFile" 
+            name="audioFile" 
+            accept="audio/mp3,aac" 
+            (change)="onFileSelected($event)" 
+            required 
+          />
+        </div>
       </div>
 
-      <!-- Subida de archivo -->
-      <div class="form-group">
-        <label for="audioFile">Seleccionar Audio:</label>
+      <!-- Título y Premium -->
+      <div class="form-group datos">
+        <label for="title">Título del Episodio:</label>
         <input 
-          type="file" 
-          id="audioFile" 
-          name="audioFile" 
-          accept="audio/mp3,aac" 
-          (change)="onFileSelected($event)" 
+          type="text" 
+          id="title" 
+          name="title" 
+          [(ngModel)]="episode.title" 
           required 
         />
-      </div>
-    </div>
 
-    <!-- Título y Premium -->
-    <div class="form-group datos">
-      <label for="title">Título del Episodio:</label>
-      <input 
-        type="text" 
-        id="title" 
-        name="title" 
-        [(ngModel)]="episode.title" 
-        required 
-      />
-
-      
-
-      <!-- Selección de podcast -->
-      <label for="podcast_id">Podcast:</label>
-      <select 
-        name="podcast_id" 
-        [(ngModel)]="episode.podcast_id" 
-        required
-      >
-        <option value="" disabled>Selecciona un podcast</option>
-        <option *ngFor="let p of podcasts" [value]="p.idpodcast" style="color: black;">
-          {{ p.titulo }}
-        </option>
-      </select>
-    </div>
-
-    <!-- Descripción y Participantes -->
-    <div>
-      <label for="descripcion">Descripción:</label>
-      <textarea 
-        name="descripcion" 
-        [(ngModel)]="episode.descripcion" 
-        rows="4" 
-        cols="40" 
-        style="resize: none;"
-      ></textarea>
-
-      <label for="participantes">Participantes:</label>
-      <textarea 
-        name="participantes" 
-        [(ngModel)]="episode.participantes" 
-        rows="4" 
-        cols="40" 
-        style="resize: none;"
-      ></textarea>
-    </div>
-
-    <!-- Fecha -->
-    <div>
-      <label for="fecha">Fecha:</label><br />
-      <input 
-  type="datetime-local" 
-  name="fecha" 
-  id="fecha" 
-  [(ngModel)]="episode.fecha" 
-  [min]="minDate"
-  required 
-/><br /><br />
-    </div>
-
-    <!-- Botón enviar -->
-    <div class="enviar">
-      <button 
-        type="submit" 
         
-        [disabled]="!videoForm.valid || !audioFile"
-        class="subirEpi"
-      >
-        Subir Episodio
-      </button>
-    </div>
-  </form>
+
+        <!-- Selección de podcast -->
+        <label for="podcast_id">Podcast:</label>
+        <select 
+          name="podcast_id" 
+          [(ngModel)]="episode.podcast_id" 
+          required
+        >
+          <option value="" disabled>Selecciona un podcast</option>
+          <option *ngFor="let p of podcasts" [value]="p.idpodcast" style="color: black;">
+            {{ p.titulo }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Descripción y Participantes -->
+      <div>
+        <label for="descripcion">Descripción:</label>
+        <textarea 
+          name="descripcion" 
+          [(ngModel)]="episode.descripcion" 
+          rows="4" 
+          cols="40" 
+          style="resize: none;"
+        ></textarea>
+
+        <label for="participantes">Participantes:</label>
+        <textarea 
+          name="participantes" 
+          [(ngModel)]="episode.participantes" 
+          rows="4" 
+          cols="40" 
+          style="resize: none;"
+        ></textarea>
+      </div>
+
+      <!-- Fecha -->
+      <div>
+        <label for="fecha">Fecha:</label><br />
+        <input 
+    type="datetime-local" 
+    name="fecha" 
+    id="fecha" 
+    [(ngModel)]="episode.fecha" 
+    [min]="minDate"
+    required 
+  /><br /><br />
+      </div>
+
+      <!-- Botón enviar -->
+      <div class="enviar">
+        <button 
+          type="submit" 
+          
+          [disabled]="!videoForm.valid || !audioFile"
+          class="subirEpi"
+        >
+          Subir Episodio
+        </button>
+      </div>
+    </form>
 
 
-      <script>
-        const fechaInput = document.getElementById('fecha');
-        const formulario = document.getElementById('formulario_episodio');
-      
-        function obtenerFechaLocal() {
-          const now = new Date();
-          now.setSeconds(0, 0); // Quitar segundos y milisegundos
-      
-          const year = now.getFullYear();
-          const month = String(now.getMonth() + 1).padStart(2, '0');
-          const day = String(now.getDate()).padStart(2, '0');
-          const hour = String(now.getHours()).padStart(2, '0');
-          const minute = String(now.getMinutes()).padStart(2, '0');
-      
-          return `${year}-${month}-${day}T${hour}:${minute}`;
-        }
-      
-        // Establecer valor mínimo al cargar
-        fechaInput.min = obtenerFechaLocal();
-      
-        // Validación antes de enviar
-        formulario.addEventListener('submit', function(event) {
-          const ahora = new Date();
-          ahora.setSeconds(0, 0);
-          const seleccionada = new Date(fechaInput.value);
-      
-          if (seleccionada < ahora) {
-            event.preventDefault();
-            alert("La fecha y hora deben ser actuales o futuras.");
+        <script>
+          const fechaInput = document.getElementById('fecha');
+          const formulario = document.getElementById('formulario_episodio');
+        
+          function obtenerFechaLocal() {
+            const now = new Date();
+            now.setSeconds(0, 0); // Quitar segundos y milisegundos
+        
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hour = String(now.getHours()).padStart(2, '0');
+            const minute = String(now.getMinutes()).padStart(2, '0');
+        
+            return `${year}-${month}-${day}T${hour}:${minute}`;
           }
-        });
-      </script>
-    
+        
+          // Establecer valor mínimo al cargar
+          fechaInput.min = obtenerFechaLocal();
+        
+          // Validación antes de enviar
+          formulario.addEventListener('submit', function(event) {
+            const ahora = new Date();
+            ahora.setSeconds(0, 0);
+            const seleccionada = new Date(fechaInput.value);
+        
+            if (seleccionada < ahora) {
+              event.preventDefault();
+              alert("La fecha y hora deben ser actuales o futuras.");
+            }
+          });
+        </script>
+      
+  </div>
 </div>
+

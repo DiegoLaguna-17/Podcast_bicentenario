@@ -14,6 +14,7 @@ import { PaginaPodcastComponent } from './pagina-podcast/pagina-podcast.componen
 import { PaginaCreadorComponent } from './pagina-creador/pagina-creador.component';
 import { RecuperarContraseniaComponent } from './recuperar-contrasenia/recuperar-contrasenia.component';
 import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.component';
+import { SubirPodcastComponent } from './subir-podcast/subir-podcast.component';
 
 export const routes: Routes = [
   { path: '', component: InicioComponent },
@@ -31,5 +32,6 @@ export const routes: Routes = [
   {path:'podcast', component:PaginaPodcastComponent},
   {path:'creador',component:PaginaCreadorComponent},
   {path:'contrasenia',component:RecuperarContraseniaComponent},
-  {path:'gestion-usuarios',component:GestionUsuariosComponent}
+  {path:'gestion-usuarios',component:GestionUsuariosComponent},
+  { path: 'subir-podcast', component:SubirPodcastComponent}
 ];

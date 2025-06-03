@@ -1,0 +1,58 @@
+<div class="login-page">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h2>Subir Podcast</h2>
+      </div>
+
+      <!-- Formulario de subir podcast -->
+      <form class="login-form">
+        <!-- Campo: Título -->
+        <div class="form-group">
+          <label for="titulo">Título:</label>
+          <div class="input-container">
+            <i class="fas fa-heading"></i>
+            <input type="text" id="titulo" name="titulo" ngModel required maxlength="100" >
+          </div>
+        </div>
+
+        <!-- Campo: Descripción -->
+        <div class="form-group">
+          <label for="descripcion">Descripción:</label>
+          <div class="input-container">
+            <i class="fas fa-align-left"></i>
+            <input type="text" id="descripcion" name="descripcion" ngModel required maxlength="255">
+          </div>
+        </div>
+
+        <!-- Campo: Categoría -->
+        <div class="form-group">
+          <label for="categoria">Categoría:</label>
+          <div class="input-container">
+            <i class="fas fa-tags"></i>
+            <input type="text" id="categoria" name="categoria" ngModel required maxlength="255">
+          </div>
+        </div>
+
+        <!-- Campo: Premium -->
+        <div class="form-group">
+          <label for="primium">¿Es premium?</label>
+          <div class="select-container">
+            <i class="fas fa-crown"></i>
+            <select id="primium" name="primium" ngModel required >
+              <option value="" disabled selected>Seleccione una opción</option>
+              <option value="true">Sí</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Botón de enviar -->
+        <button type="submit" class="login-btn" >
+          <span>Subir Podcast</span>
+          <i class="fas fa-upload"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

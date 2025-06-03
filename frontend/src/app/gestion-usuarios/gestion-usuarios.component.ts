@@ -21,15 +21,18 @@ export class GestionUsuariosComponent {
   telefonoEditar:string=''
   imagen:any
   imagenSeleccionada:any
+  cargando:boolean=false;
   constructor(private router: Router,private http: HttpClient,) {
       this.listarUsuarios();
     }
   listarUsuarios(){
+    this.cargando=true;
     const endpoint=environment.apiUrl+'/usuarios/listar/';
     this.http.get<{usuarios:any}>(endpoint).subscribe({
       next:(response)=>{
         this.usuarios=response.usuarios
         console.log(this.usuarios)
+        this.cargando=false;
       },
       error:(error)=>{
          console.error('Error en gestion de usuarios:', error);

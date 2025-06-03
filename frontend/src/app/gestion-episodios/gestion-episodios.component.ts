@@ -15,8 +15,8 @@ import { FormsModule } from '@angular/forms';
 export class GestionEpisodiosComponent {
   idpodcast:any
   episodios:any[]=[]
-    errorRespuesta:any
-  
+  errorRespuesta:any
+  cargando:boolean=false
   mostrarModal:boolean=false
   idEditar:any
   tituloPodcast:string=''
@@ -36,11 +36,13 @@ export class GestionEpisodiosComponent {
 }
 
 cargarEpisodios(){
+  this.cargando=true;
   const enpoint= environment.apiUrl+'/podcast/episodios/?idpodcast='+this.idpodcast;
   this.http.get<{episodios:any}>(enpoint).subscribe({
     next:(response)=>{
       console.log(response.episodios)
       this.episodios=response.episodios
+      this.cargando=false;
     },
     error:(error)=>{
       console.error('Error en gestion de usuarios:', error);

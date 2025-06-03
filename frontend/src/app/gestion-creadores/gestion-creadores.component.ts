@@ -24,15 +24,18 @@ export class GestionCreadoresComponent {
   imagenSeleccionada:any
   donaciones:any
   imagenDon:any
+  cargando:boolean=false;
   constructor(private router: Router,private http: HttpClient,) {
       this.listarCreadores();
     }
   listarCreadores(){
+    this.cargando=true;
     const endpoint=environment.apiUrl+'/creadores/listar/';
     this.http.get<{creadores:any}>(endpoint).subscribe({
       next:(response)=>{
         this.creadores=response.creadores
         console.log(this.creadores)
+        this.cargando=false;
       },
       error:(error)=>{
          console.error('Error en gestion de creadores:', error);

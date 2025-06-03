@@ -1,65 +1,184 @@
-
-.modal {
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.titulo {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
 }
 
-.modal-contenido {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-  box-shadow: 0 0 10px #000;
+.error {
+  color: red;
+  background-color: #ffe5e5;
+  border: 1px solid red;
+  padding: 10px;
+  margin: 10px auto;
+  width: fit-content;
+  border-radius: 8px;
   text-align: center;
 }
 
+.card-episodio {
+  background-color: #e0f7fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin: 15px 0;
+  flex-wrap: wrap;
+  min-height: 25vh;
+  gap: 10px;
+}
 
+.info-episodio {
+  flex-grow: 1;
+  min-width: 200px;
+}
+
+.acciones-episodio {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn.comentarios {
+  background-color: #adff2f;
+  color: #333;
+}
+
+.btn.comentarios:hover {
+  background-color: #9acd32;
+}
+
+.btn.editar {
+  background-color: #5f9ea0;
+  color: white;
+}
+
+.btn.editar:hover {
+  background-color: #4b7a7b;
+}
+
+.btn.eliminar {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn.eliminar:hover {
+  background-color: #d32f2f;
+}
+
+.btn.actualizar {
+  background-color: #4caf50;
+  color: white;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.btn.actualizar:hover {
+  background-color: #388e3c;
+}
+
+.modal,
 .modal2 {
   position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100vw; /* ancho completo */
-  height: 100vh; /* alto completo */
-  background-color: rgba(0,0,0,0.5);
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(3px);
+  z-index: 1000;
 }
 
+.modal-contenido,
 .modal2-contenido {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 80vw;
-  max-height: 80vh; /* Limita la altura visible del modal */
-  overflow-y: auto; /* Habilita el scroll vertical si se desborda */
-  box-shadow: 0 0 10px #000;
-  text-align: center;
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  position: relative;
+  animation: scaleIn 0.3s ease-out;
 }
 
 .cerrar {
-  float: right;
-  font-size: 28px;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
   font-weight: bold;
   cursor: pointer;
-  margin-bottom: 10px;
-  display: block;
-  text-align: right;
+  color: #666;
 }
 
-.entrada {
-  display: block;
-  width: 90%;
-  margin: 10px auto;
-  padding: 8px;
+.entrada,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.card-comentario {
+  background-color: #e0f7fa;
+  padding: 15px;
+  border-radius: 12px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card-comentario h2,
+.card-comentario h3 {
+  margin: 5px 0;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  font-style: italic;
+  color: #777;
+  margin-top: 30px;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.loader {
+  border: 8px solid #f3f3f3; /* color de fondo del círculo */
+  border-top: 8px solid #2196f3; /* color de la parte que gira */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto; /* centrar */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

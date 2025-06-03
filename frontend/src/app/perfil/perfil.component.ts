@@ -80,7 +80,9 @@ export class PerfilComponent {
       this.loadPodcasts();
     }
   }
-  
+  subirPubli(){
+    this.router.navigate(['/subir-publicidad']);
+  }
 
   loadPodcasts(): void {
     const token = localStorage.getItem('access_token');

@@ -35,6 +35,7 @@
     <div class="profile-card">
       <h2>Perfil de Usuario</h2>
       <button class="cierre" (click)="cerrarSesion()">Cerrar Sesión</button>
+      <a *ngIf="datosper.rol=='Administrador'" (click)="subirPubli()">Subir publicidad</a>
 
       <div class="attributes-container">
         <div class="attribute-item">

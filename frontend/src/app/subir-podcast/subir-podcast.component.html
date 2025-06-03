@@ -6,13 +6,13 @@
       </div>
 
       <!-- Formulario de subir podcast -->
-      <form class="login-form">
+      <form class="login-form" (ngSubmit)="subirPodcast()">
         <!-- Campo: Título -->
         <div class="form-group">
           <label for="titulo">Título:</label>
           <div class="input-container">
             <i class="fas fa-heading"></i>
-            <input type="text" id="titulo" name="titulo" ngModel required maxlength="100" >
+            <input type="text" id="titulo" name="titulo" [(ngModel)]="podcast.titulo"  required maxlength="100" >
           </div>
         </div>
 
@@ -21,7 +21,7 @@
           <label for="descripcion">Descripción:</label>
           <div class="input-container">
             <i class="fas fa-align-left"></i>
-            <input type="text" id="descripcion" name="descripcion" ngModel required maxlength="255">
+            <input type="text" id="descripcion" name="descripcion" [(ngModel)]="podcast.descripcion" required maxlength="255">
           </div>
         </div>
 
@@ -30,7 +30,7 @@
           <label for="categoria">Categoría:</label>
           <div class="input-container">
             <i class="fas fa-tags"></i>
-            <input type="text" id="categoria" name="categoria" ngModel required maxlength="255">
+            <input type="text" id="categoria" name="categoria" [(ngModel)]="podcast.categoria" required maxlength="255">
           </div>
         </div>
 
@@ -39,7 +39,7 @@
           <label for="primium">¿Es premium?</label>
           <div class="select-container">
             <i class="fas fa-crown"></i>
-            <select id="primium" name="primium" ngModel required >
+            <select id="primium" name="primium" [(ngModel)]="podcast.primium" required >
               <option value="" disabled selected>Seleccione una opción</option>
               <option value="true">Sí</option>
               <option value="false">No</option>

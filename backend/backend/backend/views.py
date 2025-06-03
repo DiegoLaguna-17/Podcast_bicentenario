@@ -1673,6 +1673,9 @@ def subirPublicidad(request):
                 registro=supabase.table('publicidad').insert(data).execute()
                 return JsonResponse({'mensaje':'publicidad subida'})
             except Exception as e:
+                print(request.POST)
+                print(request.FILES)
+                print("ERROR SUPABASE:", str(e))
                 return JsonResponse({'error': f'Error al subir foto de perfil: {str(e)}'}, status=400)
 
 import random

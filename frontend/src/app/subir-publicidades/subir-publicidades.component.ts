@@ -10,46 +10,63 @@ import { FormsModule } from '@angular/forms';
   imports:[CommonModule,FormsModule]
 })
 export class SubirPublicidadesComponent {
+ publicidad = {
+    nombre: ''
+  };
+
+  selectedFile: File | null = null;
+  selectedFileName: string = '';
+  imagePreview: string | ArrayBuffer | null = null;
 
   constructor(private http: HttpClient) {}
-  publicidad = {
-    nombre: '',
-    imagen: null as File | null
-  };
-  selectedFileName:any
-  imagePreview:any
-  selectedFile:any
-  subirPublicidad(){
-    const enpoint=environment.apiUrl+'/subirPublicidad/';
-    const subir=new FormData()
-    subir.append('nombrePublicidad',this.publicidad.nombre)
-    subir.append('fotoPublicidad',this.selectedFile)
-    this.http.post(enpoint,subir).subscribe({
-      next:(response)=>{
-        alert('Publicidad subida')
-      },
-      error:(error)=>{
-        alert('error al subir publicidad')
-      }
-    });
-  }
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-      this.selectedFileName = file.name;
 
-      // Vista previa de la imagen
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.selectedFileName = this.selectedFile.name;
+
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagePreview = e.target.result;
+      reader.onload = () => {
+        this.imagePreview = reader.result;
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(this.selectedFile);
     }
   }
 
   formValid(): boolean {
-    return this.publicidad.nombre.trim() !== '' && this.selectedFile !== null;
+    return this.publicidad.nombre.trim() !== '' && !!this.selectedFile;
   }
-  
+
+  subirPublicidad(): void {
+    if (!this.formValid()) {
+      alert('Completa todos los campos');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('nombrePublicidad', this.publicidad.nombre);
+    if (this.selectedFile) {
+      formData.append('fotoPublicidad', this.selectedFile);
+    }
+    const endpoint=environment.apiUrl+'/subirPublicidad/'
+    this.http.post(endpoint, formData).subscribe({
+      next: (res) => {
+        console.log('Publicidad subida con éxito:', res);
+        alert('Publicidad subida correctamente');
+        this.resetFormulario();
+      },
+      error: (err) => {
+        console.error('Error al subir publicidad:', err);
+        alert('Hubo un error al subir la publicidad');
+      }
+    });
+  }
+
+  resetFormulario(): void {
+    this.publicidad.nombre = '';
+    this.selectedFile = null;
+    this.selectedFileName = '';
+    this.imagePreview = null;
+  }
 }

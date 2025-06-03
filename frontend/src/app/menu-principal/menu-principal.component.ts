@@ -27,6 +27,7 @@ export class MenuPrincipalComponent {
   episodio:any
   publi1:any
   publi2:any
+  notificaciones:any[]=[]
     constructor(private router: Router,private dataService: DataService,private http: HttpClient,) {
     this.usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     console.log('llego a menu: '+this.usuario.id+" "+this.usuario.rol); // { id: 1, nombre: "Ejemplo" }
@@ -38,7 +39,18 @@ export class MenuPrincipalComponent {
     }
     
   }
+  cargarNotificaciones(){
+    const endpoint=environment.apiUrl+'/usuarios/notificaciones/?idusuario='+this.usuario.id;
+    this.http.get<{notificaciones:any}>(endpoint).subscribe({
+      next:(response)=>{
+        this.notificaciones=response.notificaciones
 
+      },
+      error:(error)=>{
+        alert('error al obtener notificaciones'+error)
+      }
+    })
+  }
   dashBoardCreador(){
     console.log(this.usuario.id)
     this.obtenerVistasTotales()

@@ -3,7 +3,7 @@
     <img src="{{creador.fotoperfil}}" alt="foto perfil" class="profile-image">
     <div class="general">
       <h3 class="podcast-title">{{creador.nombre }}</h3>
-      <span class="podcast-category">{{ creador.correo }}</span>
+      <span class="podcast-category"><mat-icon>email</mat-icon>{{ creador.correo }}</span>
       
       
     </div>
@@ -18,7 +18,8 @@
     
     <div class="podcast-footer">
       <button (click)="abrirCreador(creador)" mat-raised-button >
-        Buscar
+        <mat-icon>visibility</mat-icon>
+        Ver Cuenta
       </button>
     </div>
   </div>

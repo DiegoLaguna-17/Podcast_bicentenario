@@ -2,7 +2,7 @@
   <div class="podcast-header">
     <div class="general">
       <h3 class="podcast-title">{{ podcast.titulo }}</h3>
-      <span class="podcast-category">{{ podcast.categoria }}</span>
+      <span class="podcast-category"><mat-icon>local_offer</mat-icon>{{ podcast.categoria }}</span>
     </div>
     <div class="extra">
       <mat-chip class="premium-chip" *ngIf="podcast.premium">
@@ -14,12 +14,14 @@
 
   <div class="podcast-content">
     <p class="podcast-description">
+      
       {{ podcast.descripcion  }}
     </p>
     
     <div class="podcast-footer">
       <button (click)="abrirPodcast(podcast)"mat-raised-button>
-        Buscar
+        <mat-icon>play_circle</mat-icon>
+        Ver Episodios
       </button>
     </div>
   </div>

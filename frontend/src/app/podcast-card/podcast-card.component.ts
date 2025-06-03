@@ -17,8 +17,7 @@ import { ListEpisodiosComponent } from '../list-episodios/list-episodios.compone
     MatCardModule,
     MatButtonModule,
     MatChipsModule,
-    MatIconModule,
-    RouterLink,
+    MatIconModule
   ],
   templateUrl: './podcast-card.component.html',
   styleUrls: ['./podcast-card.component.css']

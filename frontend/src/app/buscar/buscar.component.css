@@ -4,7 +4,10 @@
   grid-template-rows: auto 1fr auto;
   gap: 8px;
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--verde-fuerte), var(--verde), var(--dorado-fuerte), var(--dorado));
+  background: linear-gradient(135deg, 
+              rgba(26, 58, 26, 0.9) 0%, 
+              rgba(45, 90, 45, 0.85) 30%, 
+              rgba(212, 175, 55, 0.8) 100%);
   padding: 20px;
   font-family: 'Arial', sans-serif;
   color: white;
@@ -24,9 +27,10 @@
 }
 
 .menu-container {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--verde-fuerte);
   padding: 15px;
-  border-radius: 8px;
+  border-radius: 20px;
+  border: 4px double var(--color-accent);
 }
 
 .menu-header {
@@ -119,9 +123,10 @@
 .search-bar {
   display: flex;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #022005;
   border-radius: 8px;
   padding: 8px;
+  border: 1px solid var(--color-accent-light);
 }
 
 .search-bar input[type="text"] {

@@ -1,27 +1,35 @@
 <mat-card class="podcast-card">
   <div class="podcast-header">
     <div class="general">
-      <h3 class="podcast-title">{{ episodio.titulo }}</h3>
-      <span class="podcast-category">{{ episodio.podcast_idpodcast.creadores_idcreador.nombre }}</span>
-      <br>
-      <span class="podcast-category">{{episodio.podcast}}</span>
-      <br>
-        <span class="podcast-category">{{episodio.fechapublicacion  | date: 'yyyy-MM-dd'  }}</span>
-      <br>
-      <span class="podcast-category">{{episodio.visualizaciones}} visualizaciones</span>
+      <h3 class="podcast-title">
+        {{ episodio.titulo }}
+      </h3>
+      <div class="podcast-meta">
+        <div class="meta-line">
+          <mat-icon>person</mat-icon>
+          <span>{{ episodio.podcast_idpodcast.creadores_idcreador.nombre }}</span>
+        </div>
+        <div class="meta-line">
+          <mat-icon>calendar_today</mat-icon>
+          <span>{{episodio.fechapublicacion | date: 'yyyy-MM-dd'}}</span>
+        </div>
+        <div class="meta-line">
+          <mat-icon>visibility</mat-icon>
+          <span>{{episodio.visualizaciones}} visualizaciones</span>
+        </div>
+      </div>
     </div>
-    
-    
   </div>
 
   <div class="podcast-content">
     <p class="podcast-description">
-      {{ episodio.descripcion  }}
+      {{ episodio.descripcion }}
     </p>
     
     <div class="podcast-footer">
       <button mat-raised-button (click)="abrirReproductor(episodio)">
-        Buscar
+        <mat-icon>play_circle</mat-icon>
+        Reproducir
       </button>
     </div>
   </div>

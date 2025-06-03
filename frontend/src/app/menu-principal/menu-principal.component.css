@@ -59,6 +59,7 @@ background: linear-gradient(135deg,
   flex-wrap: wrap;
   gap: var(--space-lg);
   margin-bottom: var(--space-xl);
+  margin-bottom: 70px;
 }
 
 .stat-card {

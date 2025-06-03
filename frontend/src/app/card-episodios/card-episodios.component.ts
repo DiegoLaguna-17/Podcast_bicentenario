@@ -16,8 +16,7 @@ import { HttpClient } from '@angular/common/http';
     MatCardModule,
     MatButtonModule,
     MatChipsModule,
-    MatIconModule,
-    RouterLink,
+    MatIconModule
   ],
   templateUrl: './card-episodios.component.html',
   styleUrl: './card-episodios.component.css'

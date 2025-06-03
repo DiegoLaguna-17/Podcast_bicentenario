@@ -46,33 +46,42 @@
     
     
   </div>
-  <div style="background-color: wheat;">
-      <h2>Calificar</h2>
-      <div>
-        <textarea [(ngModel)]="reseniar" style="width: 70%; height: 80%; font-size: 24px;"placeholder="Agrega una reseña"></textarea>
-        <span 
-          *ngFor="let star of [1,2,3,4,5]" 
-          (click)="puntuacion = star"
-          [style.color]="puntuacion >= star ? 'gold' : 'gray'"
-          style="font-size: 2rem; cursor: pointer;">
-          ★
+  <!-- Sección de Reseñas -->
+  <div class="resenias-section">
+    <h2>Calificar este episodio</h2>
+    <div class="resenia-form">
+      <textarea class="resenia-textarea" [(ngModel)]="reseniar" placeholder="Escribe tu reseña sobre este episodio..."></textarea>
+      <div class="rating-container">
+        <span class="stars-container">
+          <span 
+            *ngFor="let star of [1,2,3,4,5]" 
+            (click)="puntuacion = star"
+            [class.active]="puntuacion >= star"
+            class="star">
+            ★
+          </span>
         </span>
-        <button (click)="reseniarEpisodio()" style="margin:0 auto; width: 25%; height: 80%;">Reseñar</button>
       </div>
-      <h2> Resenias</h2>
-      <app-list-resenia [resenias]="resenias"></app-list-resenia>
+      <button class="resenia-submit" (click)="reseniarEpisodio()">Publicar Reseña</button>
+    </div>
+    <h2>Reseñas</h2>
+    <app-list-resenia [resenias]="resenias"></app-list-resenia>
+  </div>
+
+  <!-- Sección de Comentar -->
+  <div *ngIf="rol!='Creador' || rol!='Administrador'">
+    <div class="comentar-section">
+      <h1>Deja tu comentario</h1>
+      <div class="comentario-form">
+        <div class="comentario-input-container">
+          <textarea class="comentario-textarea" [(ngModel)]="comentar" placeholder="Comparte tus pensamientos sobre este episodio..."></textarea>
+          <button class="comentario-submit" (click)="comentarEpisodio()">Comentar</button>
+        </div>
+      </div>
     </div>
 
-  <div>
-    <div *ngIf="rol!='Creador' || rol!='Administrador'"></div>
-      <h1>Comentar</h1>
-    <div style="width: 60%; height: 20vh; background-color: white; margin: 0 auto; display: flex; align-items: center; padding-left: 3vh;">
-      <textarea [(ngModel)]="comentar"   style="width: 70%; height: 80%; font-size: 24px;" placeholder="Comenta sobre el episodio"></textarea>
-      <button (click)="comentarEpisodio()" style="margin-left: 3vh; width: 25%; height: 80%;">Comentar</button>
-    </div>
-
-    
-    <div>
+    <!-- Lista de Comentarios -->
+    <div class="comentarios-list-container">
       <app-list-comentarios [comentarios]="comentarios"></app-list-comentarios>
     </div>
   </div>

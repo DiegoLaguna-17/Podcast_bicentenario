@@ -1,0 +1,242 @@
+/* Estilos para la página de recuperación de contraseña */
+.password-recovery-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, 
+              rgba(26, 58, 26, 0.9) 0%, 
+              rgba(45, 90, 45, 0.85) 30%, 
+              rgba(212, 175, 55, 0.8) 100%);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.password-recovery-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.05);
+  opacity: 0.05;
+  z-index: 0;
+}
+
+.recovery-container {
+  width: 100%;
+  max-width: 500px;
+  z-index: 1;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.recovery-card {
+  background: rgba(18, 18, 18, 0.8);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  border: 1px solid #d4af37;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  transition: all 0.4s ease;
+}
+
+.recovery-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.recovery-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.recovery-header p {
+  color: #d4af37;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.recovery-header h3 {
+  color: #d4af37;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.recovery-header h3::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 25%;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+             transparent, 
+             #d4af37, 
+             transparent);
+  animation: expandLine 1s ease-out;
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem; /* Margen interno para los inputs */
+}
+
+.input-container input, 
+.input-container select {
+  width: 95%;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #d4af37;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Estilos específicos para el select */
+.input-container select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4af37' width='18px' height='18px'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 12px;
+  padding-right: 2.5rem; /* Espacio para el ícono */
+}
+
+/* Estilos para las opciones del select */
+.input-container select option {
+  background-color: #1a3a1a;
+  color: white;
+  padding: 0.5rem;
+}
+
+.input-container input:focus, 
+.input-container select:focus {
+  outline: none;
+  border-color: #f8d675;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.input-container input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.recovery-btn {
+  background: #d4af37;
+  color: #1a3a1a;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  width: calc(100% - 1rem); /* Ajuste para compensar el padding */
+  margin: 1rem 0.5rem 0; /* Margen superior y laterales */
+  position: relative;
+  overflow: hidden;
+}
+
+.recovery-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+             transparent, 
+             rgba(255, 255, 255, 0.3), 
+             transparent);
+  transition: all 0.7s ease;
+}
+
+.recovery-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+.recovery-btn:hover::before {
+  left: 100%;
+}
+
+.recovery-btn:active {
+  transform: translateY(1px);
+}
+
+.recovery-btn:disabled {
+  background: rgba(212, 175, 55, 0.5);
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin: 0.5rem 0.5rem 0;
+  animation: shake 0.5s ease;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandLine {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 50%;
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-5px);
+  }
+  40%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .password-recovery-page {
+    padding: 1rem;
+  }
+  
+  .recovery-card {
+    padding: 1.5rem;
+  }
+  
+  .recovery-header h3 {
+    font-size: 1.3rem;
+  }
+}

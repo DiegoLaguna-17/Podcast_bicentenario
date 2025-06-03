@@ -1,64 +1,66 @@
-<h1 class="titulo">Gestión de Creadores</h1>
-<div class="loader" *ngIf="cargando"></div>
+<div class="container">  
+  <h1 class="titulo">Gestión de Creadores</h1>
+  <div class="loader" *ngIf="cargando"></div>
 
-<!-- Mostrar error si existe -->
-<div *ngIf="errorRespuesta" class="error">
-  {{ errorRespuesta }}
+  <!-- Mostrar error si existe -->
+  <div *ngIf="errorRespuesta" class="error">
+    {{ errorRespuesta }}
+  </div>
+
+  <!-- Mostrar lista de usuarios si hay elementos -->
+  <ng-container *ngIf="creadores.length > 0; else sinCreadores">
+    <div *ngFor="let creador of creadores" class="card-creador">
+      <!-- Imagen de perfil -->
+      <img [src]="creador.fotoperfil" alt="Foto de perfil" class="foto-creador" />
+
+      <!-- Info del creador -->
+      <div class="info-creador">
+        <h2>{{ creador.usuario }}</h2>
+        <p><strong>Nombre:</strong> {{ creador.nombre }}</p>
+        <p><strong>Correo:</strong> {{ creador.correo }}</p>
+        <p><strong>Ingreso:</strong> {{ creador.fechaingreso }}</p>
+      </div>
+
+      <!-- Botones -->
+      <div class="acciones">
+        <button class="btn editar" (click)="editar(creador)">Editar</button>
+        <button class="btn eliminar" (click)="eliminarCreador(creador)">Eliminar</button>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" *ngIf="mostrarModal">
+      <div class="modal-contenido">
+        <span class="cerrar" (click)="cerrarModal()">&times;</span>
+        <h2>Actualizar Usuario</h2>
+
+        <label>Usuario</label>
+        <input type="text" class="entrada" [(ngModel)]="usuarioEditar" />
+
+        <label>Nombre</label>
+        <input type="text" class="entrada" [(ngModel)]="nombreEditar" />
+
+        <label>Biografía</label>
+        <textarea class="entrada" [(ngModel)]="biografiaEditar"></textarea>
+
+        <label>Teléfono</label>
+        <input type="text" class="entrada" [(ngModel)]="telefonoEditar" />
+
+        <label>Imagen de perfil</label>
+        <img [src]="imagen" class="imagen-preview" />
+        <input type="file" (change)="onFileSelected($event)" />
+
+        <label>Imagen de donaciones</label>
+        <img [src]="donaciones" class="imagen-preview" />
+        <input type="file" (change)="onFileSelected2($event)" />
+
+        <button class="btn actualizar" (click)="actualizarCreador()">Actualizar Usuario</button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Sin creadores -->
+  <ng-template #sinCreadores>
+    <p class="mensaje-vacio">No hay usuarios registrados.</p>
+  </ng-template>
 </div>
-
-<!-- Mostrar lista de usuarios si hay elementos -->
-<ng-container *ngIf="creadores.length > 0; else sinCreadores">
-  <div *ngFor="let creador of creadores" class="card-creador">
-    <!-- Imagen de perfil -->
-    <img [src]="creador.fotoperfil" alt="Foto de perfil" class="foto-creador" />
-
-    <!-- Info del creador -->
-    <div class="info-creador">
-      <h2>{{ creador.usuario }}</h2>
-      <p><strong>Nombre:</strong> {{ creador.nombre }}</p>
-      <p><strong>Correo:</strong> {{ creador.correo }}</p>
-      <p><strong>Ingreso:</strong> {{ creador.fechaingreso }}</p>
-    </div>
-
-    <!-- Botones -->
-    <div class="acciones">
-      <button class="btn editar" (click)="editar(creador)">Editar</button>
-      <button class="btn eliminar" (click)="eliminarCreador(creador)">Eliminar</button>
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal" *ngIf="mostrarModal">
-    <div class="modal-contenido">
-      <span class="cerrar" (click)="cerrarModal()">&times;</span>
-      <h2>Actualizar Usuario</h2>
-
-      <label>Usuario</label>
-      <input type="text" class="entrada" [(ngModel)]="usuarioEditar" />
-
-      <label>Nombre</label>
-      <input type="text" class="entrada" [(ngModel)]="nombreEditar" />
-
-      <label>Biografía</label>
-      <textarea class="entrada" [(ngModel)]="biografiaEditar"></textarea>
-
-      <label>Teléfono</label>
-      <input type="text" class="entrada" [(ngModel)]="telefonoEditar" />
-
-      <label>Imagen de perfil</label>
-      <img [src]="imagen" class="imagen-preview" />
-      <input type="file" (change)="onFileSelected($event)" />
-
-      <label>Imagen de donaciones</label>
-      <img [src]="donaciones" class="imagen-preview" />
-      <input type="file" (change)="onFileSelected2($event)" />
-
-      <button class="btn actualizar" (click)="actualizarCreador()">Actualizar Usuario</button>
-    </div>
-  </div>
-</ng-container>
-
-<!-- Sin creadores -->
-<ng-template #sinCreadores>
-  <p class="mensaje-vacio">No hay usuarios registrados.</p>
-</ng-template>

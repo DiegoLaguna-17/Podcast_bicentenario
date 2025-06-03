@@ -14,6 +14,11 @@ import { PaginaPodcastComponent } from './pagina-podcast/pagina-podcast.componen
 import { PaginaCreadorComponent } from './pagina-creador/pagina-creador.component';
 import { RecuperarContraseniaComponent } from './recuperar-contrasenia/recuperar-contrasenia.component';
 import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.component';
+import { GestionCreadoresComponent } from './gestion-creadores/gestion-creadores.component';
+import { GestionPodcastsComponent } from './gestion-podcasts/gestion-podcasts.component';
+import { GestionEpisodiosComponent } from './gestion-episodios/gestion-episodios.component';
+import { SubirPublicidadesComponent } from './subir-publicidades/subir-publicidades.component';
+
 import { SubirPodcastComponent } from './subir-podcast/subir-podcast.component';
 
 export const routes: Routes = [
@@ -33,5 +38,10 @@ export const routes: Routes = [
   {path:'creador',component:PaginaCreadorComponent},
   {path:'contrasenia',component:RecuperarContraseniaComponent},
   {path:'gestion-usuarios',component:GestionUsuariosComponent},
-  { path: 'subir-podcast', component:SubirPodcastComponent}
+  { path: 'subir-podcast', component:SubirPodcastComponent},
+  { path: 'gestion-creadores',component:GestionCreadoresComponent},
+  { path: 'gestion-podcasts',component:GestionPodcastsComponent},
+  { path: 'gestion-episodios',component:GestionEpisodiosComponent},
+  { path: 'subir-publicidad',component:SubirPublicidadesComponent}
+
 ];

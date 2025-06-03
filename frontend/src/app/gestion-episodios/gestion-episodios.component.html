@@ -1,0 +1,68 @@
+<div class="container">  
+  <h1 class="titulo">Gestión de episodios de: {{tituloPodcast}}</h1>
+
+  <!-- Mostrar error si existe -->
+  <div *ngIf="errorRespuesta" class="error">
+    {{ errorRespuesta }}
+  </div>
+  <div class="loader" *ngIf="cargando"></div>
+
+  <!-- Mostrar lista de episodios si hay elementos -->
+  <ng-container *ngIf="episodios.length > 0; else sinEpisodios">
+    <div *ngFor="let episodio of episodios" class="card-episodio">
+      <!-- Sección de texto -->
+      <div class="info-episodio">
+        <h1>{{ episodio.titulo }}</h1>
+        <h2>{{ episodio.descripcion }}</h2>
+        <h2>{{ episodio.podcast_idpodcast.titulo }}</h2>
+        <h3>{{ episodio.fechapublicacion }}</h3>
+        <h3>{{ episodio.participantes }}</h3>
+        <h3>{{ episodio.podcast_idpodcast.creadores_idcreador.nombre }}</h3>
+      </div>
+
+      <!-- Sección de botones -->
+      <div class="acciones-episodio">
+        <button class="btn comentarios" (click)="gestionComentarios(episodio)">Gestionar comentarios</button>
+        <button class="btn editar" (click)="editar(episodio)">Editar</button>
+        <button class="btn eliminar" (click)="eliminarEpisodio(episodio)">Eliminar</button>
+      </div>
+    </div>
+
+    <!-- Modal para actualizar episodio -->
+    <div class="modal" *ngIf="mostrarModal">
+      <div class="modal-contenido">
+        <span class="cerrar" (click)="cerrarModal()">&times;</span>
+        <h2>Actualizar</h2>
+
+        <h3>Título</h3>
+        <input type="text" class="entrada" [(ngModel)]="tituloEditar" />
+
+        <h3>Descripción</h3>
+        <textarea [(ngModel)]="descripcionEditar" style="width: 40vh; height: 10vh;"></textarea>
+
+        <h3>Participantes</h3>
+        <textarea [(ngModel)]="participantesEditar" style="width: 40vh; height: 10vh;"></textarea>
+
+        <button class="btn actualizar" (click)="actualizarEpisodio()">Actualizar episodio</button>
+      </div>
+    </div>
+
+    <!-- Modal para gestionar comentarios -->
+    <div class="modal2" *ngIf="modalComentarios">
+      <div class="modal2-contenido">
+        <span class="cerrar" (click)="cerrarModalComentario()">&times;</span>
+        <div *ngFor="let comentario of comentarios" class="card-comentario">
+          <h2>Usuario: {{ comentario.usuarios_idusuario.usuario }}</h2><br>
+          <h3>Comentario: {{ comentario.contenido }}</h3>
+          <h3>Fecha: {{ comentario.fecha }}</h3>
+          <button class="btn eliminar" (click)="eliminarComentario(comentario)">Eliminar comentario</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Plantilla alternativa si no hay episodios -->
+  <ng-template #sinEpisodios>
+    <p class="mensaje-vacio">No hay episodios registrados.</p>
+  </ng-template>
+</div>

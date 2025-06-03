@@ -1,0 +1,47 @@
+<div class="container">  
+  <h1 class="titulo">Gestión de Podcasts</h1>
+
+  <!-- Mostrar error si existe -->
+  <div *ngIf="errorRespuesta" class="error">
+    {{ errorRespuesta }}
+  </div>
+
+  <!-- Mostrar lista de podcasts si hay elementos -->
+  <ng-container *ngIf="podcasts.length > 0; else sinPodcasts">
+    <div *ngFor="let podcast of podcasts" class="card-creador">
+      <div class="info-creador">
+        <h2>🎙️ {{ podcast.titulo }}</h2>
+        <p><strong>Descripción:</strong> {{ podcast.descripcion }}</p>
+        <p><strong>Categoría:</strong> {{ podcast.categoria }}</p>
+        <p><strong>Creador:</strong> {{ podcast.creadores_idcreador.nombre }}</p>
+      </div>
+
+      <div class="acciones">
+        <button class="btn actualizar" (click)="gestionarEpisodios(podcast)">Gestionar episodios</button>
+        <button class="btn editar" (click)="editar(podcast)">Editar</button>
+        <button class="btn eliminar" (click)="eliminarPodcast(podcast)">Eliminar</button>
+      </div>
+    </div>
+
+    <!-- Modal para editar podcast -->
+    <div class="modal" *ngIf="mostrarModal">
+      <div class="modal-contenido">
+        <span class="cerrar" (click)="cerrarModal()">&times;</span>
+        <h2>Editar Podcast</h2>
+
+        <label for="titulo">Título</label>
+        <input id="titulo" type="text" class="entrada" [(ngModel)]="tituloEditar" />
+
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" class="entrada" [(ngModel)]="descripcionEditar"></textarea>
+
+        <button class="btn actualizar" (click)="actualizarPodcast()">Actualizar Podcast</button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Si no hay podcasts -->
+  <ng-template #sinPodcasts>
+    <p class="mensaje-vacio">No hay podcasts registrados.</p>
+  </ng-template>
+</div>

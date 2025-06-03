@@ -1,57 +1,52 @@
-<h1>Gestion de usuarios</h1>
+<div class="container">
+ <h1 class="titulo">Gestión de Usuarios</h1>
+  <div class="loader" *ngIf="cargando"></div>
+  <!-- Mostrar error si existe -->
+  <div *ngIf="errorRespuesta" class="error">
+    {{ errorRespuesta }}
+  </div>
 
-<!-- Mostrar error si existe -->
-<div *ngIf="errorRespuesta" class="error">
-  {{ errorRespuesta }}
-</div>
+  <!-- Mostrar lista de usuarios si hay elementos -->
+  <ng-container *ngIf="usuarios.length > 0; else sinUsuarios">
+    <div *ngFor="let usuario of usuarios" class="tarjeta-usuario">
+      <img [src]="usuario.fotoperfil" alt="Foto de perfil" class="foto-usuario" />
 
-<!-- Mostrar lista de usuarios si hay elementos -->
-<ng-container *ngIf="usuarios.length > 0; else sinUsuarios">
-    <div *ngFor="let usuario of usuarios">
-        <div style="background-color: aqua; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
-        <!-- Sección de texto -->
-            <div>
-                <h1>{{usuario.usuario}}</h1>
-                <h2>{{usuario.rol}}</h2>
-                <h3>{{usuario.correo}}</h3>
-                <h3>{{usuario.fecha}}</h3>
-            </div>
+      <div class="info-usuario">
+        <h2>{{ usuario.usuario }}</h2>
+        <p><strong>Rol:</strong> {{ usuario.rol }}</p>
+        <p><strong>Correo:</strong> {{ usuario.correo }}</p>
+        <p><strong>Ingresó:</strong> {{ usuario.fecha_ingreso }}</p>
+      </div>
 
-        <!-- Sección de botones -->
-            <div>
-                <button style="background-color: cadetblue; margin-right: 5px;" (click)="editar(usuario)" >Editar</button>
-                <button style="background-color: red;">Eliminar</button>
-            </div>
-        </div>
-
-        <br>
-            <!-- Puedes mostrar más datos si quieres -->
-             
-        
-
+      <div class="botones-usuario">
+        <button class="btn editar" (click)="editar(usuario)">Editar</button>
+        <button class="btn eliminar" (click)="eliminarUsuario(usuario)">Eliminar</button>
+      </div>
     </div>
+
+    <!-- Modal -->
     <div class="modal" *ngIf="mostrarModal">
-        <div class="modal-contenido">
-            <span class="cerrar" (click)="cerrarModal()">&times;</span>
-            <h2>Actualizar</h2>
-            <h3>Usuario</h3>
-            <input type="text"  class="entrada" [(ngModel)]="usuarioEditar">
-            <h3>Telefono</h3>
-            <input type="text"  class="entrada" [(ngModel)]="telefonoEditar">
+      <div class="modal-contenido">
+        <span class="cerrar" (click)="cerrarModal()">&times;</span>
+        <h2>Actualizar Usuario</h2>
 
-            <img [src]="imagen" alt=""style="width: 100px;height:100px"><br>
-            <form  enctype="multipart/form-data">
-                <input type="file" (change)="onFileSelected($event)" />
-            </form>
-            <button >
-                Actualizar usuario
-            </button>
+        <label>Usuario</label>
+        <input type="text" class="entrada" [(ngModel)]="usuarioEditar" />
 
-        </div>
-        </div>
-</ng-container>
+        <label>Teléfono</label>
+        <input type="text" class="entrada" [(ngModel)]="telefonoEditar" />
 
-<!-- Plantilla alternativa si no hay usuarios -->
-<ng-template #sinUsuarios>
-  <p>No hay usuarios registrados.</p>
-</ng-template>
+        <img [src]="imagen" alt="Previsualización" class="imagen-preview" />
+
+        <input type="file" (change)="onFileSelected($event)" class="entrada2" />
+
+        <button class="btn actualizar" (click)="actualizarUsuario()">Actualizar Usuario</button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Plantilla alternativa si no hay usuarios -->
+  <ng-template #sinUsuarios>
+    <p class="mensaje-vacio">No hay usuarios registrados.</p>
+  </ng-template>
+</div>

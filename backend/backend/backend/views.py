@@ -1388,10 +1388,13 @@ def actualizarCreador(request):
                 "usuario": usuario,
                 "nombre": nombre,
                 "biografia": biografia,
-                "fotoperfil": fotoperfil,
-                "imgdonaciones": imgdonaciones,
                 "telefono":telefono
             }
+            if fotoperfil:
+                data["fotoperfil"] = fotoperfil
+
+            if imgdonaciones:
+                data["imgdonaciones"] = imgdonaciones
             actualizarCreador=supabase.table('backend_creadores').update(data).eq('idcreador',idcreador).execute()
             if hasattr(actualizarCreador,'error')and actualizarCreador.error:
                 return JsonResponse({'error':'error al actualizar perfil del creador'},status=400)
@@ -1670,6 +1673,9 @@ def subirPublicidad(request):
                 registro=supabase.table('publicidad').insert(data).execute()
                 return JsonResponse({'mensaje':'publicidad subida'})
             except Exception as e:
+                print(request.POST)
+                print(request.FILES)
+                print("ERROR SUPABASE:", str(e))
                 return JsonResponse({'error': f'Error al subir foto de perfil: {str(e)}'}, status=400)
 
 import random
@@ -1772,3 +1778,14 @@ def verificarPremium(request):
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
         
 
+
+def listarPodcasts(request):
+    if request.method=='GET':
+        try:
+            podcasts=supabase.table('backend_podcast').select('*','creadores_idcreador(nombre)').execute()
+
+            if hasattr(podcasts,'error') and podcasts.error:
+                return JsonResponse({'error':'error al obtener podcast admin'})
+            return JsonResponse({'podcasts':podcasts.data})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)

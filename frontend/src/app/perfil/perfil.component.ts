@@ -80,7 +80,9 @@ export class PerfilComponent {
       this.loadPodcasts();
     }
   }
-  
+  subirPubli(){
+    this.router.navigate(['/subir-publicidad']);
+  }
 
   loadPodcasts(): void {
     const token = localStorage.getItem('access_token');
@@ -91,7 +93,6 @@ export class PerfilComponent {
         });
     this.isLoading = true;
     this.error = null;
-    const formData =new FormData();
 
     var idUsuario=''
     const usuarioStr = localStorage.getItem('usuario');
@@ -101,12 +102,11 @@ export class PerfilComponent {
       console.log('ID usuario:', idUsuario);
       // Usar idUsuario para lo que necesites, ej. en el query param
     }
-    formData.append('id',idUsuario);
-    const endpoint = environment.apiUrl+'/creador/podcasts/';
-    this.http.post<{podcasts: any[]}>(endpoint,formData,{headers}).subscribe({
+    const endpoint = environment.apiUrl+'/creador/podcasts/?idcreador='+idUsuario;
+    this.http.get<{podcasts: any[]}>(endpoint,{headers}).subscribe({
       next: (response) => {
          this.podcasts = response.podcasts || [];
-         console.log(this.podcasts);
+         console.log('podcasts del creador: ',this.podcasts);
       },
       error: (error) => {
         console.error('Error en el perfil:', error);

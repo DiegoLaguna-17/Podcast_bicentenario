@@ -1,16 +1,19 @@
 <!-- Layout principal -->
 <div class="main-layout">
   <!-- Sección de publicidad y episodio -->
-  <div class="ad-episode-container">
+  <div class="ad-episode-container" *ngIf="usuario.rol=='Oyente'">
     <div class="ad-container">
+      <h1>{{publi1.nombrePublicidad}}</h1>
       <img class="ad-image" src="{{publi1.imagen}}" alt="Publicidad">
     </div>
     
     <div class="episode-container" *ngIf="episodio">
+      <h1>Episodio del día</h1>
       <app-card-episodios [episodio]="episodio"></app-card-episodios>
     </div>
     
     <div class="ad-container">
+      <h1>{{publi2.nombrePublicidad}}</h1>
       <img class="ad-image" src="{{publi2.imagen}}" alt="Publicidad">
     </div>
   </div>
@@ -27,6 +30,8 @@
 
   <!-- Panel de Creador -->
   <div class="creator-dashboard" *ngIf="usuario.rol==='Creador'">
+    <h1 style="margin-left: 77vh;">DashBoard informativo</h1>
+    <br><br>
     <div class="stats-container">
       <div class="stat-card">
         <h3>Total de vistas</h3>
@@ -57,8 +62,8 @@
   <div class="dashboard" *ngIf="usuario.rol === 'Administrador'">
     <div class="menu">
       <button class="menu-button" routerLink="/gestion-usuarios">Gestionar Usuarios</button>
-      <button class="menu-button" routerLink="/admin/podcasts">Revisar Podcasts</button>
-      <button class="menu-button" routerLink="/admin/reportes">Ver Reportes</button>
+      <button class="menu-button" routerLink="/gestion-creadores">Gestionar Creadores</button>
+      <button class="menu-button" routerLink="/gestion-podcasts">Gestionar Podcasts</button>
       <button class="menu-button" (click)="enviarPerfil()">Perfil</button>
     </div>
   </div>

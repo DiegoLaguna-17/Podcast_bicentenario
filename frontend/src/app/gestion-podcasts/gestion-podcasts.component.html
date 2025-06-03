@@ -1,0 +1,54 @@
+<h1>Gestion de Podcasts</h1>
+
+<!-- Mostrar error si existe -->
+<div *ngIf="errorRespuesta" class="error">
+  {{ errorRespuesta }}
+</div>
+
+<!-- Mostrar lista de usuarios si hay elementos -->
+<ng-container *ngIf="podcasts.length > 0; else sinPodcasts">
+    <div *ngFor="let podcast of podcasts">
+        <div style="background-color: aqua; display: flex; justify-content: space-between; align-items: center; padding: 10px;height: 20vh;">
+        <!-- Sección de texto -->
+            <div>
+                <h1>Podcast: {{podcast.titulo}}</h1>
+                <h2>Descripcion: {{podcast.descripcion}}</h2>
+                <h3>Categoria: {{podcast.categoria}}</h3>
+                <h3>Creador: {{podcast.creadores_idcreador.nombre}}</h3>
+            </div>
+
+        <!-- Sección de botones -->
+            <div>
+                <button style="margin-right: 2vh;background-color: greenyellow;" (click)="gestionarEpisodios(podcast)">Gestionar episodios</button>
+                <button style="background-color: cadetblue; margin-right: 2vh;"(click)="editar(podcast)" >Editar</button>
+                <button style="background-color: red;" (click)="eliminarPodcast(podcast)">Eliminar</button>
+            </div>
+        </div>
+
+        <br>
+            <!-- Puedes mostrar más datos si quieres -->
+             
+        
+
+    </div>
+    <div class="modal" *ngIf="mostrarModal">
+        <div class="modal-contenido">
+            <span class="cerrar" (click)="cerrarModal()">&times;</span>
+            <h2>Actualizar</h2>
+            <h3>Titulo</h3>
+            <input type="text"  class="entrada" [(ngModel)]="tituloEditar">
+            <h3>Descripcion</h3>
+            <textarea [(ngModel)]="descripcionEditar" style="width: 40vh;height:10vh;"></textarea><br>
+           
+            <button (click)="actualizarPodcast()">
+                Actualizar Podcast
+            </button>
+
+        </div>
+        </div>
+</ng-container>
+
+<!-- Plantilla alternativa si no hay usuarios -->
+<ng-template #sinPodcasts>
+  <p>No hay usuarios registrados.</p>
+</ng-template>

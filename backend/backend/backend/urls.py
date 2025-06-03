@@ -98,7 +98,8 @@ urlpatterns = [
     path('usuarios/listar/', views.listar_usuarios, name='listar_usuarios'),##con Postman
     path('creadores/listar/',views.listar_creadores,name='listar_creadores'),
     path('subirPublicidad/',views.subirPublicidad,name="subir_publicidad"),
-    path('obtenerPublicidad/',views.obtenerPublicidad,name="obtener_publicidad")
+    path('obtenerPublicidad/',views.obtenerPublicidad,name="obtener_publicidad"),
+    path('listarPodcasts/',views.listarPodcasts,name="listar_podcasts")
  
 ]
  

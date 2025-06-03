@@ -1,4 +1,4 @@
-<h1>Gestion de usuarios</h1>
+<h1>Gestion de Creadores</h1>
 
 <!-- Mostrar error si existe -->
 <div *ngIf="errorRespuesta" class="error">
@@ -6,23 +6,22 @@
 </div>
 
 <!-- Mostrar lista de usuarios si hay elementos -->
-<ng-container *ngIf="usuarios.length > 0; else sinUsuarios">
-    <div *ngFor="let usuario of usuarios">
+<ng-container *ngIf="creadores.length > 0; else sinCreadores">
+    <div *ngFor="let creador of creadores">
         <div style="background-color: aqua; display: flex; justify-content: space-between; align-items: center; padding: 10px;height: 20vh;">
         <!-- Sección de texto -->
-         <img [src]="usuario.fotoperfil" alt="fotoperfil" style="width:20vh;height: 80%;">
+         <img [src]="creador.fotoperfil" alt="fotoperfil" style="width:20vh;height: 80%;">
             <div>
-                
-                <h1>{{usuario.usuario}}</h1>
-                <h2>{{usuario.rol}}</h2>
-                <h3>{{usuario.correo}}</h3>
-                <h3>{{usuario.fecha}}</h3>
+                <h1>{{creador.usuario}}</h1>
+                <h2>{{creador.nombre}}</h2>
+                <h3>{{creador.correo}}</h3>
+                <h3>{{creador.fechaingreso}}</h3>
             </div>
 
         <!-- Sección de botones -->
             <div>
-                <button style="background-color: cadetblue; margin-right: 5px;" (click)="editar(usuario)" >Editar</button>
-                <button style="background-color: red;" (click)="eliminarUsuario(usuario)">Eliminar</button>
+                <button style="background-color: cadetblue; margin-right: 5px;"(click)="editar(creador)" >Editar</button>
+                <button style="background-color: red;" (click)="eliminarCreador(creador)">Eliminar</button>
             </div>
         </div>
 
@@ -38,14 +37,21 @@
             <h2>Actualizar</h2>
             <h3>Usuario</h3>
             <input type="text"  class="entrada" [(ngModel)]="usuarioEditar">
+            <h3>Nombre</h3>
+            <input type="text"  class="entrada" [(ngModel)]="nombreEditar">
+            <h3>Biografia</h3>
+            <textarea [(ngModel)]="biografiaEditar"></textarea>
             <h3>Telefono</h3>
             <input type="text"  class="entrada" [(ngModel)]="telefonoEditar">
-
             <img [src]="imagen" alt=""style="width: 100px;height:100px"><br>
             <form  enctype="multipart/form-data">
                 <input type="file" (change)="onFileSelected($event)" />
             </form>
-            <button (click)="actualizarUsuario()">
+            <img [src]="donaciones" alt=""style="width: 100px;height:100px"><br>
+            <form  enctype="multipart/form-data">
+                <input type="file" (change)="onFileSelected2($event)" />
+            </form>
+            <button (click)="actualizarCreador()">
                 Actualizar usuario
             </button>
 
@@ -54,6 +60,6 @@
 </ng-container>
 
 <!-- Plantilla alternativa si no hay usuarios -->
-<ng-template #sinUsuarios>
+<ng-template #sinCreadores>
   <p>No hay usuarios registrados.</p>
 </ng-template>

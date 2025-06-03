@@ -76,10 +76,42 @@ actualizarUsuario(){
     actualizar.append('idusuario',this.idEditar);
     actualizar.append('usuario',this.usuarioEditar);
     actualizar.append('telefono',this.telefonoEditar);
-    actualizar.append('fotoPerfil',this.imagenSeleccionada)
+    actualizar.append('fotoPerfil',this.imagenSeleccionada);
+    this.http.post(endpoint,actualizar).subscribe({
+      next:(response)=>{
+        alert('Usuario actualizado')
+        this.cerrarModal();
+      },
+      error:(error)=>{
+        console.error('Error al actualizar usuario:', error);
+        this.errorRespuesta = 'Error al actualizar perfil.';
+      }
+    });
 
   }else{
     this.cerrarModal();
+  }
+}
+
+eliminarUsuario(usuario:any){
+  const confirmar=window.confirm('Desea eliminar permanentemente al usuario '+usuario.usuario+'?')
+  if(confirmar){
+    const confirmar2=window.confirm('La siguiente accion no podra deshacerse. ¿Eliminar permanentemente a '+usuario.usuario+'?');
+    if(confirmar2){
+      const enpoint=environment.apiUrl+'/borrarUsuario/'
+      const eliminar=new FormData()
+      eliminar.append('idusuario',usuario.idusuario)
+      this.http.post(enpoint,eliminar).subscribe({
+        next:(response)=>{
+          alert('Usuario eliminado permanentemente')
+          this.listarUsuarios()
+        },
+        error:(error)=>{
+          console.error('Error al eliminar usuario:', error);
+          this.errorRespuesta = 'Error al eliminar perfil.';
+        }
+      });
+    }
   }
 }
 

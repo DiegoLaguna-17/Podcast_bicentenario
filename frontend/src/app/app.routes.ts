@@ -31,5 +31,5 @@ export const routes: Routes = [
   {path:'podcast', component:PaginaPodcastComponent},
   {path:'creador',component:PaginaCreadorComponent},
   {path:'contrasenia',component:RecuperarContraseniaComponent},
-  {path:'gestion-usuarios',component:GestionUsuariosComponent},
+  {path:'gestion-usuarios',component:GestionUsuariosComponent}
 ];

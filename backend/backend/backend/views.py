@@ -1721,7 +1721,7 @@ def episodioNotificaciones(request):
             idsPodcast = [e['idpodcast'] for e in podcasts.data]
             hace_24_horas = datetime.datetime.utcnow() - timedelta(hours=24)
             fecha_corte = hace_24_horas.isoformat()
-            episodiosNotificacion=supabase.table('backend_episodios').select('*').in_('podcast_idpodcast',idsPodcast)\
+            episodiosNotificacion=supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo,creadores_idcreador(nombre))').in_('podcast_idpodcast',idsPodcast)\
                 .gte('fechapublicacion', fecha_corte) \
                 .execute()
             if hasattr( episodiosNotificacion,'error')and episodiosNotificacion.error:

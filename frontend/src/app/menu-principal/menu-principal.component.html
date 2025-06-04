@@ -17,6 +17,20 @@
       <img class="ad-image" src="{{publi2.imagen}}" alt="Publicidad">
     </div>
   </div>
+<div *ngIf="usuario.rol=='Oyente'">
+  <div class="notificaciones" *ngIf="notis==false">
+    <div class="notificaciones-contenido">
+      <span class="cerrar" (click)="cerrarModal()">&times;</span>
+      <h2>Lo que te perdiste</h2>
+      <div *ngFor="let notificacion of notificaciones" class="card-comentario">
+        
+            <h2>Titulo: {{ notificacion.titulo }}</h2><br> 
+            <h2>Creador: {{notificacion.podcast_idpodcast.creadores_idcreador.nombre}}</h2>   
+            <h3></h3>  
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Panel de Oyente -->
   <div class="dashboard" *ngIf="usuario.rol === 'Oyente'">

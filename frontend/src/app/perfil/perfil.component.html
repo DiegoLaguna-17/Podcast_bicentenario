@@ -34,9 +34,11 @@
   <div class="profile-container listener-view">
     <div class="profile-card">
       <h2>Perfil de Usuario</h2>
-      <button class="cierre" (click)="cerrarSesion()">Cerrar Sesión</button>
-      <a *ngIf="datosper.rol=='Administrador'" (click)="subirPubli()">Subir publicidad</a>
-
+      <div class="profile-image-container">
+        <img src="{{datosper.fotoperfil}}" alt="Foto de perfil" class="profile-image">
+       
+      </div>
+      
       <div class="attributes-container">
         <div class="attribute-item">
           <span class="attribute-label">Usuario:</span>
@@ -55,7 +57,12 @@
           <span class="attribute-value">{{ datosper.fecha }}</span>
         </div>
       </div>
+      <br>
+      <div style="display: flex;">
+      <button class="cierre" (click)="cerrarSesion()">Cerrar Sesión</button>
       
+      <button class="cierre" (click)="subirPubli()" *ngIf="datosper.rol=='Administrador'">Subir publicidad</button>
+      </div>
     </div>
   </div>
 </ng-template>

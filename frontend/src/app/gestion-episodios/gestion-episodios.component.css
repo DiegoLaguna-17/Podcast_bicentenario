@@ -61,51 +61,74 @@
   gap: 10px;
 }
 
-.btn {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn.comentarios {
-  background-color: #adff2f;
-  color: #333;
-}
-
-.btn.comentarios:hover {
-  background-color: #9acd32;
+.btn.comentarios, .btn.editar, .btn.eliminar {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    padding: var(--space-md) var(--space-xl);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    box-shadow: var(--shadow-sm);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
 }
 
 .btn.editar {
-  background-color: #5f9ea0;
-  color: white;
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+}
+
+.btn.eliminar, .btn.comentarios {
+    background: transparent;
+    color: var(--color-light);
+    border: 2px solid var(--color-accent);
+    
+}
+
+.btn.editar::before, .btn.eliminar::before, .btn.comentarios::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+    transition: all 0.7s ease;
+    z-index: -1;
+}
+
+.btn.editar:hover, .btn.eliminar:hover, .btn.comentarios:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn.editar:hover::before, .btn.eliminar:hover::before, .btn.comentarios:hover::before {
+    left: 100%;
 }
 
 .btn.editar:hover {
-  background-color: #4b7a7b;
+    background: var(--color-accent-light);
+    color: var(--color-primary-dark);
 }
 
-.btn.eliminar {
-  background-color: #f44336;
-  color: white;
+.btn.eliminar:hover, .btn.comentarios:hover {
+    background: rgba(212, 175, 55, 0.2);
 }
 
-.btn.eliminar:hover {
-  background-color: #d32f2f;
-}
-
-.btn.actualizar {
-  background-color: #4caf50;
-  color: white;
-  width: 100%;
-  margin-top: 20px;
-}
-
-.btn.actualizar:hover {
-  background-color: #388e3c;
+.btn.editar:active, .btn.eliminar:active, .btn.comentarios:active {
+    transform: translateY(2px);
+    transition: all 0.1s ease;
 }
 
 .modal,

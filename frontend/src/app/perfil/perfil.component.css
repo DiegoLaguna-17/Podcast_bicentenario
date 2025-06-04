@@ -185,7 +185,8 @@ h2 {
   text-align: center;
   position: relative;
   overflow: hidden;
-  margin-left: 36%;
+  margin-left: 15%;
+  
 }
 
 .cierre::before {

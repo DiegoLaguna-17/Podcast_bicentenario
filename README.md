@@ -109,6 +109,7 @@ En esta sección se muestran las librerias, herramientas o frameworks que se han
 * [![Postman][Postman.com]][Postman-url]
 * [![Apache JMeter][ApacheJMeter.com]][ApacheJMeter-url]
 * [![Vosk][Vosk.com]][Vosk-url]
+* [![Swagger][Swagger.io]][Swagger-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -122,10 +123,20 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisitos
 
-This is an example of how to list things you need to use the software and how to install them.
+Es necesario para que el proyecto pueda funcionar ciertos requisitos para sus librerias y herramientas
+Es necesario python, npm, angular
+
 * npm
   ```sh
   npm install npm@latest -g
+  ```
+* python
+  ```sh
+  python-3.10.0.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
+  ```
+* angular
+  ```sh
+  npm install -g @angular/cli
   ```
 
 ### Instalación
@@ -247,3 +258,5 @@ Use this space to list resources you find helpful and would like to give credit 
 [Postman-url]: https://www.postman.com
 [ApacheJMeter.com]: https://img.shields.io/badge/Apache_JMeter-red?style=for-the-badge&logo=Apache%20JMeter
 [ApacheJMeter-url]: https://jmeter.apache.org
+[Swagger.io]: https://img.shields.io/badge/Swagger-%2385EA2D?style=for-the-badge&logo=Swagger&logoColor=white
+[Swagger-url]: https://swagger.io 

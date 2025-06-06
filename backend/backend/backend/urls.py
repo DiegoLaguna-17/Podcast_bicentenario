@@ -15,11 +15,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-
-
-from django.urls import path
+from django.urls import path, re_path
 from . import views
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Documentacion POdcast Bicentenario",
+      default_version='v1',
+      description="Documentación API con Swagger usando drf-yasg",
+      terms_of_service="https://www.tusitio.com/terms/",
+      contact=openapi.Contact(email="contacto@tusitio.com"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
+
 
 urlpatterns = [
 
@@ -39,9 +53,11 @@ urlpatterns = [
     path('usuarios/actualizarUsuario/',views.actualizarUsuario,name="actualizar_usuario"),
     #path('creadores/mostrar/', views.mostrar_creadores, name='mostrar_creadores'),
     path('usuarios/subirCalificacion/',views.crear_calificacion,name='subir-Calificacion'),
+    #
     path('usuarios/crearLista/',views.crearListaReproduccion,name='crear_lista'),
     path('usuarios/agregarEpisodioLista/',views.agregarEpisodioLista,name='agregar_apisodio'),
     path('usuarios/quitarEpisodioLista/',views.quitarEpisodio,name='quitar_ep_lista'),
+
     path('usuarios/donar/',views.donarCreador,name="donar_creador"),
     path('usuarios/obtenerSeguimientos/', views.obtenerSeguimientos, name='obtener_seguimientos'),##lista que sigue el usuario
     path('usuarios/suscribirse/',views.agregarSuscripcion,name="agregar_suscripcion"),
@@ -99,7 +115,13 @@ urlpatterns = [
     path('creadores/listar/',views.listar_creadores,name='listar_creadores'),
     path('subirPublicidad/',views.subirPublicidad,name="subir_publicidad"),
     path('obtenerPublicidad/',views.obtenerPublicidad,name="obtener_publicidad"),
-    path('listarPodcasts/',views.listarPodcasts,name="listar_podcasts")
+    path('listarPodcasts/',views.listarPodcasts,name="listar_podcasts"),
  
+
+ #documentacion swagger
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
 ]
  

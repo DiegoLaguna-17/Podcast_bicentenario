@@ -118,13 +118,12 @@ En esta sección se muestran las librerias, herramientas o frameworks que se han
 <!-- GETTING STARTED -->
 ## Para empezar
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Instrucciones para tener todo lo necesario para el correcto funcionamiento de el proyecto y la pagina
 
 ### Prerequisitos
 
-Es necesario para que el proyecto pueda funcionar ciertos requisitos para sus librerias y herramientas
-Es necesario python, npm, angular
+Es necesario para que el proyecto pueda funcionar ciertos requisitos para sus librerias y herramientas.
+Se debe tener instalado: python, npm, angular
 
 * npm
   ```sh
@@ -138,28 +137,25 @@ Es necesario python, npm, angular
   ```sh
   npm install -g @angular/cli
   ```
-
+* dependencias de backend
+  ```sh
+  pip install -r requirements.txt
+  ```
 ### Instalación
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+Esto es lo que se debe hacer para hacer que funcione y se ejecute el proyecto
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clonar el repositorio
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/DiegoLaguna-17/Podcast_bicentenario
    ```
-3. Install NPM packages
+2. Ejecutar el backend (Django)
    ```sh
-   npm install
+   python manage.py runserver
    ```
-4. Enter your API in `config.js`
+3. Ejecutar el frontend (Angular)
    ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-5. Change git remote url to avoid accidental pushes to base project
-   ```sh
-   git remote set-url origin github_username/repo_name
-   git remote -v # confirm the changes
+   ng serve --open
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -178,9 +174,9 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 
 <!-- ROADMAP -->
-## Roadmap
+## Desarrollo
 
-- [x] Add Changelog
+- [x] Investigación y definición de requisitos
 - [x] Add back to top links
 - [ ] Add Additional Templates w/ Examples
 - [ ] Add "components" document to easily copy & paste sections of the readme

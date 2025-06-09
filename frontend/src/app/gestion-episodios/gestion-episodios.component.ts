@@ -1,7 +1,7 @@
 import { Route,ActivatedRoute } from '@angular/router';
 import { Component,Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { NgIf } from '@angular/common';
@@ -27,7 +27,17 @@ export class GestionEpisodiosComponent {
   imagenSeleccionada:any
   modalComentarios:boolean=false;
   comentarios:any[]=[]
+  headers:any
   constructor(private route: ActivatedRoute,private http: HttpClient,) {
+    const token = localStorage.getItem('access_token');
+  
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
   this.route.queryParams.subscribe(params => {
     this.idpodcast=params['id'];
     this.tituloPodcast=params['titulo'];
@@ -37,8 +47,9 @@ export class GestionEpisodiosComponent {
 
 cargarEpisodios(){
   this.cargando=true;
+  const headers=this.headers
   const enpoint= environment.apiUrl+'/podcast/episodios/?idpodcast='+this.idpodcast;
-  this.http.get<{episodios:any}>(enpoint).subscribe({
+  this.http.get<{episodios:any}>(enpoint,{headers}).subscribe({
     next:(response)=>{
       console.log(response.episodios)
       this.episodios=response.episodios
@@ -56,8 +67,9 @@ gestionComentarios(episodio:any){
   this.cargarComentarios(episodio)
 }
 cargarComentarios(episodio:any){
+  const headers=this.headers
   const endpoint=environment.apiUrl+'/obtener_comentarios/?episodios_idepisodio='+episodio.idepisodio;
-  this.http.get<{comentarios:any}>(endpoint).subscribe({
+  this.http.get<{comentarios:any}>(endpoint,{headers}).subscribe({
     next:(response)=>{
       this.comentarios=response.comentarios
     },
@@ -77,12 +89,13 @@ cerrarModalComentario(){
     this.participantesEditar='';
 }
 eliminarComentario(comentario:any){
+  const headers=this.headers
     const confirmar=window.confirm('Desea eliminar permanentemente el comentario?')
     if(confirmar){
       const endpoint=environment.apiUrl+'/borrarComentario/';
       const eliminar=new FormData()
       eliminar.append('idcomentario',comentario.idcomentario)
-      this.http.post(endpoint,eliminar).subscribe({
+      this.http.post(endpoint,eliminar,{headers}).subscribe({
         next:(response)=>{
           alert('Comentario eliminado')
           this.cerrarModalComentario()
@@ -116,6 +129,7 @@ eliminarComentario(comentario:any){
   
 
 actualizarEpisodio(){
+  const headers=this.headers
   const confirmar=window.confirm('Actualizar el episodio '+this.tituloEditar+'?' );
   if(confirmar){
     const endpoint=environment.apiUrl+'/actualizarEpisodio/';
@@ -124,7 +138,7 @@ actualizarEpisodio(){
     actualizar.append('titulo',this.tituloEditar);
     actualizar.append('descripcion',this.descripcionEditar);
     actualizar.append('participantes',this.participantesEditar);
-    this.http.post(endpoint,actualizar).subscribe({
+    this.http.post(endpoint,actualizar,{headers}).subscribe({
       next:(response)=>{
         alert('Episodio actualizado')
         this.cerrarModal();
@@ -146,10 +160,11 @@ eliminarEpisodio(episodio:any){
   if(confirmar){
     const confirmar2=window.confirm('La siguiente accion no podra deshacerse. ¿Eliminar permanentemente  '+episodio.tituloEditar+'?');
     if(confirmar2){
+      const headers=this.headers
       const enpoint=environment.apiUrl+'/borrarEpisodio/'
       const eliminar=new FormData()
       eliminar.append('idepisodio',episodio.idepisodio)
-      this.http.post(enpoint,eliminar).subscribe({
+      this.http.post(enpoint,eliminar,{headers}).subscribe({
         next:(response)=>{
           alert('Episodio eliminado permanentemente')
           this.cargarEpisodios()

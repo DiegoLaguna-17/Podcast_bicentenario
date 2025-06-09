@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient , HttpHeaders} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,12 +13,23 @@ export class SubirPublicidadesComponent {
  publicidad = {
     nombre: ''
   };
-
+errorRespuesta:any
+headers:any
   selectedFile: File | null = null;
   selectedFileName: string = '';
   imagePreview: string | ArrayBuffer | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    const token = localStorage.getItem('access_token');
+  
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -49,8 +60,9 @@ export class SubirPublicidadesComponent {
     if (this.selectedFile) {
       formData.append('fotoPublicidad', this.selectedFile);
     }
+    const headers=this.headers
     const endpoint=environment.apiUrl+'/subirPublicidad/'
-    this.http.post(endpoint, formData).subscribe({
+    this.http.post(endpoint, formData,{headers}).subscribe({
       next: (res) => {
         console.log('Publicidad subida con éxito:', res);
         alert('Publicidad subida correctamente');

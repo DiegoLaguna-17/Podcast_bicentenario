@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient , HttpHeaders} from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -37,7 +37,19 @@ export class ReproductorComponent {
   reseniar:string=''
   seguidos:any
   siguiendo:any
+  errorRespuesta:any
+  headers:any
   constructor( private http: HttpClient, private router: Router) {
+    const token = localStorage.getItem('access_token');
+  
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
+
     this.episodio=this.router.getCurrentNavigation()?.extras.state?.['datos'];
     console.log('reproduciendo '+this.episodio.audio)
     const formData = new FormData();
@@ -45,8 +57,8 @@ export class ReproductorComponent {
         formData.append('idepisodio', this.episodio.idepisodio);
     
         const endpoint = environment.apiUrl + '/actualizar_visualizaciones/';
-    
-        this.http.post(endpoint, formData).subscribe({
+        const headers=this.headers
+        this.http.post(endpoint, formData,{headers}).subscribe({
           next: (response) => {
             
             console.log(response);
@@ -90,10 +102,11 @@ export class ReproductorComponent {
         });
   }
   obtenerComentarios(idvideo:any){
+    const headers=this.headers
     let endpoint=environment.apiUrl +'/obtener_comentarios/?episodios_idepisodio='+idvideo;
-     this.http.get<{comentarios: any[]}>(endpoint).subscribe({
+     this.http.get<{comentarios: any[]}>(endpoint,{headers}).subscribe({
           next: (response) => {
-            
+            this.comentar='';
             this.comentarios=response.comentarios;
           },
           error: (error) => {
@@ -106,10 +119,11 @@ export class ReproductorComponent {
   comentarEpisodio(){
     let endpoint=environment.apiUrl +'/usuarios/comentar/';
     const comentario=new FormData()
+    const headers=this.headers;
     comentario.append("idEpisodio",this.episodio.idepisodio);
     comentario.append("idOyente",this.idoyente);
     comentario.append("contenido",this.comentar)
-     this.http.post(endpoint,comentario).subscribe({
+     this.http.post(endpoint,comentario,{headers}).subscribe({
           next: (response) => {
            this.obtenerComentarios(this.episodio.idepisodio)
             
@@ -127,10 +141,11 @@ export class ReproductorComponent {
     calificacion.append('idepisodio',this.episodio.idepisodio);
     calificacion.append('puntuacion',this.puntuacion);
     calificacion.append('resenia',this.reseniar);
-    this.http.post(endpoint,calificacion).subscribe({
+    const headers=this.headers
+    this.http.post(endpoint,calificacion,{headers}).subscribe({
           next: (response) => {
            console.log('Reseña exitosa')
-            
+            this.obtenerResenias
           },
           error: (error) => {
             console.error('Error en calificar:', error);
@@ -139,12 +154,13 @@ export class ReproductorComponent {
 
   }
   obtenerResenias(){
+  const headers=this.headers
   let endpoint=environment.apiUrl +'/obtenerCalificaciones/?episodios_idepisodio='+this.episodio.idepisodio;
-  this.http.get<{resenias: any[]}>(endpoint).subscribe({
+  this.http.get<{resenias: any[]}>(endpoint,{headers}).subscribe({
           next: (response) => {
             
             this.resenias=response.resenias;
-            console.log('calificaciones ',this.resenias)
+            console.log('calificaciones ')
           },
           error: (error) => {
             console.error('Error en al obtener resenias:', error);

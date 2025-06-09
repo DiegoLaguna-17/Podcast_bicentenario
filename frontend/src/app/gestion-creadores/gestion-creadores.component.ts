@@ -1,6 +1,6 @@
 import { Component,Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { NgIf } from '@angular/common';
@@ -25,13 +25,24 @@ export class GestionCreadoresComponent {
   donaciones:any
   imagenDon:any
   cargando:boolean=false;
+  headers:any
   constructor(private router: Router,private http: HttpClient,) {
+    const token = localStorage.getItem('access_token');
+  
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
       this.listarCreadores();
     }
   listarCreadores(){
     this.cargando=true;
+    const headers=this.headers
     const endpoint=environment.apiUrl+'/creadores/listar/';
-    this.http.get<{creadores:any}>(endpoint).subscribe({
+    this.http.get<{creadores:any}>(endpoint,{headers}).subscribe({
       next:(response)=>{
         this.creadores=response.creadores
         console.log(this.creadores)
@@ -94,6 +105,7 @@ onFileSelected2(event: Event) {
 actualizarCreador(){
   const confirmar=window.confirm('Actualiza perfil de '+this.usuarioEditar+'?' );
   if(confirmar){
+    const headers=this.headers
     const endpoint=environment.apiUrl+'/actualizarCreador/';
     const actualizar=new FormData()
     actualizar.append('idcreador',this.idEditar);
@@ -108,7 +120,7 @@ actualizarCreador(){
     if (this.imagenDon) {
       actualizar.append('imgdonaciones', this.imagenDon);
     }
-    this.http.post(endpoint,actualizar).subscribe({
+    this.http.post(endpoint,actualizar,{headers}).subscribe({
       next:(response)=>{
         alert('Creador actualizado')
         this.cerrarModal();
@@ -130,10 +142,11 @@ eliminarCreador(creador:any){
   if(confirmar){
     const confirmar2=window.confirm('La siguiente accion no podra deshacerse. ¿Eliminar permanentemente a '+creador.usuairo+'?');
     if(confirmar2){
+      const headers=this.headers
       const enpoint=environment.apiUrl+'/borrarCreador/'
       const eliminar=new FormData()
       eliminar.append('idcreador',creador.idcreador)
-      this.http.post(enpoint,eliminar).subscribe({
+      this.http.post(enpoint,eliminar,{headers}).subscribe({
         next:(response)=>{
           alert('creador eliminado permanentemente')
           this.listarCreadores()

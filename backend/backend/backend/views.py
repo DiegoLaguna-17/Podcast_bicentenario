@@ -49,6 +49,12 @@ import traceback
 import os
 import uuid
 ##########################################################################################################################
+auth_param = openapi.Parameter(
+    name='Authorization',
+    in_=openapi.IN_HEADER,
+    description='Token JWT. Formato: Bearer <token>',
+    type=openapi.TYPE_STRING
+)
 @swagger_auto_schema(
     tags=['Login'],
     method='post',
@@ -155,9 +161,9 @@ def enviar_codigo_whatsapp(telefono):
         type=openapi.TYPE_OBJECT,
         required=['codigo', 'validador', 'id', 'rol'],
         properties={
-            'codigo': openapi.Schema(type=openapi.TYPE_STRING, description='Código ingresado por el usuario'),
-            'validador': openapi.Schema(type=openapi.TYPE_STRING, description='Código que fue enviado al usuario'),
-            'id': openapi.Schema(type=openapi.TYPE_INTEGER, description='ID del usuario'),
+            'codigo': openapi.Schema(type=openapi.TYPE_INTEGER, description='Código ingresado por el usuario'),
+            'validador': openapi.Schema(type=openapi.TYPE_INTEGER, description='Código que fue enviado al usuario'),
+            'id': openapi.Schema(type=openapi.TYPE_STRING, description='ID del usuario'),
             'rol': openapi.Schema(type=openapi.TYPE_STRING, description='Rol del usuario'),
         }
     ),
@@ -172,10 +178,10 @@ def enviar_codigo_whatsapp(telefono):
 @permission_classes([AllowAny])
 def verificar_codigo(request):
     if request.method == "POST":
-        codigo_ingresado = request.POST.get("codigo")
-        codigo_generado=request.POST.get("validador")
-        id_usuario=request.POST.get('id')
-        rol_usuario=request.POST.get('rol')
+        codigo_ingresado = request.data.get("codigo")
+        codigo_generado=request.data.get("validador")
+        id_usuario=request.data.get('id')
+        rol_usuario=request.data.get('rol')
         print("Código ingresado:", codigo_ingresado)
         if codigo_ingresado == codigo_generado :
             payload = {
@@ -197,6 +203,8 @@ def verificar_codigo(request):
             return HttpResponse("Código incorrecto.", status=401)
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
+######################################################################################################################
+######################################################################################################################
 ######################################################################################################################
 @swagger_auto_schema(
     tags=['Calificacion'],
@@ -223,6 +231,7 @@ def verificar_codigo(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def crear_calificacion(request):
     if request.method=='POST':
         try:
@@ -260,7 +269,8 @@ def crear_calificacion(request):
             type=openapi.TYPE_INTEGER,
             description='ID del episodio a consultar',
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(description="Reseñas obtenidas correctamente"),
@@ -273,6 +283,7 @@ def crear_calificacion(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def obtener_calificacion(request):
     if request.method=='GET':
         try:
@@ -298,7 +309,8 @@ def obtener_calificacion(request):
             type=openapi.TYPE_INTEGER,
             description='ID del usuario que consulta',
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(description="Episodios obtenidos exitosamente"),
@@ -363,7 +375,8 @@ def episodios(request):
             type=openapi.TYPE_INTEGER,
             description='ID del creador',
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(description="Perfil del creador obtenido exitosamente"),
@@ -407,9 +420,13 @@ def perfil_creador(request):
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 ##############################################################################################################################
+
+
+
 @swagger_auto_schema(
     tags=['Usuario'],
     method='post',
+    manual_parameters=[auth_param],
     operation_description="Obtiene el perfil del usuario según su rol.",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -432,11 +449,12 @@ def perfil_creador(request):
 @authentication_classes([])  # ❗ Desactiva autenticación
 @permission_classes([AllowAny])
 @token_required
+
 def perfil_usuario(request):
     if request.method == 'POST':
         try:
-            id = request.POST.get('id')
-            rol = request.POST.get('rol')
+            id = request.data.get('id')
+            rol = request.data.get('rol')
             if not id or not rol:
                 return JsonResponse({'error': 'Faltan datos requeridos'}, status=400)
             try:
@@ -488,7 +506,8 @@ def perfil_usuario(request):
             type=openapi.TYPE_INTEGER,
             description='ID del episodio',
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(description="Comentarios obtenidos correctamente"),
@@ -502,6 +521,7 @@ def perfil_usuario(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def obtenerComentarios(request):
     if request.method=='GET':
         try:
@@ -520,6 +540,7 @@ def obtenerComentarios(request):
 @swagger_auto_schema(
     tags=['Episodio'],
     method='post',
+    manual_parameters=[auth_param],
     operation_description="Subir un nuevo comentario a un episodio.",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -529,6 +550,7 @@ def obtenerComentarios(request):
             'idOyente': openapi.Schema(type=openapi.TYPE_INTEGER, description='ID del oyente (usuario)'),
             'contenido': openapi.Schema(type=openapi.TYPE_STRING, description='Contenido del comentario'),
         },
+        
     ),
     responses={
         201: openapi.Response(description="Comentario enviado correctamente"),
@@ -543,12 +565,13 @@ def obtenerComentarios(request):
 @api_view(['POST'])
 @authentication_classes([])  # ❗ Desactiva autenticación
 @permission_classes([AllowAny])
+@token_required
 def subir_comentarios(request):
     if request.method=='POST':
         try:
-            idEpisodio=request.POST.get('idEpisodio')
-            idOyente=request.POST.get('idOyente')
-            contenido=request.POST.get('contenido')
+            idEpisodio=request.data.get('idEpisodio')
+            idOyente=request.data.get('idOyente')
+            contenido=request.data.get('contenido')
             if not idEpisodio or not idOyente or not contenido:
                 return JsonResponse({'error':'No hay datos para el comentario'})
             comentario = {
@@ -576,7 +599,8 @@ def subir_comentarios(request):
             description="Término de búsqueda (nombre, título o descripción)",
             type=openapi.TYPE_STRING,
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(
@@ -606,6 +630,7 @@ def subir_comentarios(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def buscar_general(request):
     query = request.GET.get('q', '').strip()
     if not query:
@@ -644,7 +669,8 @@ def buscar_general(request):
             description="Año a buscar (formato: yyyy, por ejemplo: 2023)",
             type=openapi.TYPE_STRING,
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(
@@ -674,6 +700,7 @@ def buscar_general(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def buscar_anio (request):
     if request.method=='GET':
         anio=request.GET.get('q','').strip()
@@ -706,7 +733,8 @@ def buscar_anio (request):
             description="Temática o categoría del podcast (ej: tecnología, salud, educación)",
             type=openapi.TYPE_STRING,
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(
@@ -736,6 +764,7 @@ def buscar_anio (request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def buscar_tematica(request):
     if request.method=='GET':
         tematica=request.GET.get('q','').strip()
@@ -776,6 +805,7 @@ def buscar_tematica(request):
 @swagger_auto_schema(
     tags=['Episodio'],
     method='post',
+    manual_parameters=[auth_param],
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=['idepisodio'],
@@ -804,9 +834,10 @@ def buscar_tematica(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def sumar_visualizacion(request):
     if request.method=='POST':
-        idEpisodio=request.POST.get('idepisodio')
+        idEpisodio=request.data.get('idepisodio')
         print('episodio= ',idEpisodio)
         if not idEpisodio:
             return JsonResponse({
@@ -835,7 +866,7 @@ def sumar_visualizacion(request):
 @swagger_auto_schema(
     tags=['Episodio'],
     method='post',
-    manual_parameters=[],
+    manual_parameters=[auth_param],
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=['podcast', 'titulo', 'descripcion', 'fecha', 'audio'],
@@ -897,14 +928,14 @@ def subir_episodio(request):
             # Validar campos obligatorios
             required_fields = ['podcast', 'titulo', 'descripcion', 'fecha']
             for field in required_fields:
-                if field not in request.POST:
+                if field not in request.data:
                     return JsonResponse({'error': f'Falta el campo requerido: {field}'}, status=400)
             # Obtener y formatear datos
-            podcast = request.POST['podcast']
-            titulo = request.POST['titulo'].strip()
-            descripcion = request.POST['descripcion'].strip()
-            fecha_str = request.POST['fecha']
-            participantes = request.POST.get('participantes', '')
+            podcast = request.data['podcast']
+            titulo = request.data['titulo'].strip()
+            descripcion = request.data['descripcion'].strip()
+            fecha_str = request.data['fecha']
+            participantes = request.data.get('participantes', '')
             print(podcast)
             print(titulo)
             print(descripcion)
@@ -984,7 +1015,8 @@ def subir_episodio(request):
             description='ID del creador para filtrar podcasts',
             type=openapi.TYPE_STRING,
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(
@@ -1026,6 +1058,7 @@ def podcasts_por_creador(request):
 @swagger_auto_schema(
     tags=['Podcast'],
     method='post',
+    manual_parameters=[auth_param],
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=['creador', 'titulo', 'descripcion', 'categoria'],
@@ -1047,6 +1080,7 @@ def podcasts_por_creador(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def crear_podcast(request):
     if request.method=='POST':
         try:
@@ -1081,7 +1115,8 @@ def crear_podcast(request):
             description='ID del usuario para obtener sus seguimientos',
             type=openapi.TYPE_STRING,
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(
@@ -1111,7 +1146,7 @@ def crear_podcast(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
-@token_required
+@token_required#
 def obtenerSeguimientos(request):
     if request.method == 'GET':
         try:
@@ -1143,6 +1178,7 @@ def obtenerSeguimientos(request):
 @swagger_auto_schema(
     tags=['Usuario'],
     method='post',
+    manual_parameters=[auth_param],
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=['usuarios_idusuario', 'creadores_idcreador'],
@@ -1160,6 +1196,7 @@ def obtenerSeguimientos(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def seguirCreador(request):
     if request.method == 'POST':
         try:
@@ -1190,6 +1227,7 @@ def seguirCreador(request):
 @swagger_auto_schema(
     tags=['Usuario'],
     method='post',
+    manual_parameters=[auth_param],
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=['idusuario', 'idcreador'],
@@ -1209,6 +1247,7 @@ def seguirCreador(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def dejarSeguirCreador(request):
     if request.method == 'POST':
         try:
@@ -1296,7 +1335,6 @@ def mostrar_creadores(request):
 @swagger_auto_schema(
     tags=['Creador'],
     method='post',
-    manual_parameters=[],
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=['usuario', 'contrasenia', 'nombre', 'correo'],
@@ -1456,6 +1494,7 @@ def registro_usuario(request):
 @swagger_auto_schema(
     tags=['Usuario'],
     method='get',
+    manual_parameters=[auth_param],
     operation_description="Lista todos los usuarios registrados en la base de datos.",
     responses={
         200: openapi.Response(description='Lista de usuarios obtenida con éxito'),
@@ -1466,6 +1505,7 @@ def registro_usuario(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def listar_usuarios(request):
     """Vista para listar todos los usuarios (GET)."""
     conn = obtener_conexion()
@@ -1492,6 +1532,7 @@ def listar_usuarios(request):
 @swagger_auto_schema(
     tags=['Creador'],
     method='get',
+    manual_parameters=[auth_param],
     operation_description='Obtiene la lista de todos los creadores registrados en la plataforma.',
     responses={
         200: openapi.Response(
@@ -1520,6 +1561,7 @@ def listar_usuarios(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def listar_creadores(request):
     """Vista para listar todos los creadores (GET)."""
     conn = obtener_conexion()
@@ -1549,8 +1591,8 @@ def listar_creadores(request):
 @swagger_auto_schema(
     method='get',
     tags=['Creador'],
+    manual_parameters=[auth_param],
     operation_description='Obtiene la cantidad total de visualizaciones de todos los episodios del creador.',
-    manual_parameters=[],
     request_body=None,
     responses={
         200: openapi.Response(
@@ -1570,6 +1612,7 @@ def listar_creadores(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def obtener_visualizaciones(request):
     if request.method=='GET':
         try:
@@ -1600,7 +1643,8 @@ def obtener_visualizaciones(request):
             description="ID del creador",
             type=openapi.TYPE_STRING,
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(
@@ -1625,6 +1669,7 @@ def obtener_visualizaciones(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def obtener_ep_mas_visto(request):
     if request.method=='GET':
         try:
@@ -1652,6 +1697,7 @@ def obtener_ep_mas_visto(request):
             required=True,
             description='ID del creador del que se desea obtener el conteo de seguidores.'
         ),
+        auth_param
     ],
     responses={
         200: openapi.Response(
@@ -1671,6 +1717,7 @@ def obtener_ep_mas_visto(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def obtenerSeguidores(request):
     if request.method=='GET':
         try:
@@ -1693,6 +1740,7 @@ def obtenerSeguidores(request):
 @swagger_auto_schema(
     method='post',
     tags=['Usuario'],
+    manual_parameters=[auth_param],
     operation_description='Permite hacer una donación a un creador específico.',
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -1712,6 +1760,7 @@ def obtenerSeguidores(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def donarCreador(request):
     if request.method=='POST':
         try:
@@ -1738,6 +1787,7 @@ def donarCreador(request):
 @swagger_auto_schema(
     method='post',
     tags=['Lista Reproduccion'],
+    manual_parameters=[auth_param],
     operation_description='Crear una nueva lista de reproducción para un usuario.',
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -1757,6 +1807,7 @@ def donarCreador(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def crearListaReproduccion(request):
     if request.method=='POST':
         try:
@@ -1780,6 +1831,7 @@ def crearListaReproduccion(request):
 @swagger_auto_schema(
     method='post',
     tags=['Lista Reproduccion'],
+    manual_parameters=[auth_param],
     operation_description='Agregar un episodio a una lista de reproducción.',
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -1800,6 +1852,7 @@ def crearListaReproduccion(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def agregarEpisodioLista(request):
     if request.method=='POST':
         try:
@@ -1823,6 +1876,7 @@ def agregarEpisodioLista(request):
 @swagger_auto_schema(
     method='post',
     tags=['Lista Reproduccion'],
+    manual_parameters=[auth_param],
     operation_description='Eliminar un episodio de una lista de reproducción.',
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -1843,6 +1897,7 @@ def agregarEpisodioLista(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def quitarEpisodio(request):
     if request.method=='POST':
         try:
@@ -1863,6 +1918,7 @@ def quitarEpisodio(request):
 @swagger_auto_schema(
     method='post',
     tags=['Comentario'],
+    manual_parameters=[auth_param],
     operation_description='Eliminar un comentario por su ID.',
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -1882,6 +1938,7 @@ def quitarEpisodio(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def borrarComentario(request):
     if request.method=='POST':
         try:
@@ -1901,6 +1958,7 @@ def borrarComentario(request):
 @swagger_auto_schema(
     method='post',
     tags=['Episodio'],
+    manual_parameters=[auth_param],
     operation_description='Borra un episodio y todos sus datos relacionados (comentarios, calificaciones, listas, audio).',
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -1919,6 +1977,7 @@ def borrarComentario(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def borrarEpisodio(request):
     if request.method=='POST':
         try:
@@ -1957,6 +2016,7 @@ def obtener_ruta_relativa(url_completa):
 @swagger_auto_schema(
     method='post',
     tags=['Podcast'],
+    manual_parameters=[auth_param],
     operation_description='Elimina un podcast y todos los datos relacionados: episodios, comentarios, calificaciones, suscripciones y listas.',
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -1975,6 +2035,7 @@ def obtener_ruta_relativa(url_completa):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def borrarPodcast(request):
     if request.method=='POST':
         try:
@@ -2007,6 +2068,7 @@ def borrarPodcast(request):
    #########################################################################################################################
 @swagger_auto_schema(
     method='post',
+    manual_parameters=[auth_param],
     tags=['Creador'],
     operation_description='Elimina un creador y todos sus datos relacionados: podcasts, episodios, comentarios, calificaciones, listas, suscripciones y seguidos.',
     request_body=openapi.Schema(
@@ -2026,6 +2088,7 @@ def borrarPodcast(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def borrarCreador(request):
     if request.method=='POST':
         try:
@@ -2066,6 +2129,7 @@ def borrarCreador(request):
 #########################################################################################################################
 @swagger_auto_schema(
     tags=['Usuario'],
+    manual_parameters=[auth_param],
     method='post',
     operation_description="Elimina un usuario y todos sus datos relacionados (comentarios, calificaciones, listas de reproducción, etc.)",
     request_body=openapi.Schema(
@@ -2086,6 +2150,7 @@ def borrarCreador(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def borrarUsuario(request):
     if request.method=='POST':
         try:
@@ -2125,6 +2190,7 @@ def borrarUsuario(request):
 @swagger_auto_schema(
     tags=['Usuario'],
     method='post',
+    manual_parameters=[auth_param],
     operation_description="Agrega una suscripción de un usuario a un podcast y actualiza la recaudación del creador.",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -2145,6 +2211,7 @@ def borrarUsuario(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def agregarSuscripcion(request):
     if request.method=='POST':
         try:
@@ -2177,6 +2244,7 @@ def agregarSuscripcion(request):
 @swagger_auto_schema(
     tags=['Usuario'],
     method='post',
+    manual_parameters=[auth_param],
     operation_description="Actualiza el perfil del usuario, incluyendo usuario, teléfono y foto de perfil.",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -2199,6 +2267,7 @@ def agregarSuscripcion(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def actualizarUsuario(request):
     if request.method == 'POST':
         try:
@@ -2241,6 +2310,7 @@ def actualizarUsuario(request):
 @swagger_auto_schema(
     tags=['Creador'],
     method='post',
+    manual_parameters=[auth_param],
     operation_description="Actualiza el perfil del creador, incluyendo usuario, nombre, biografía, teléfono, foto de perfil y QR de donaciones.",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -2266,6 +2336,7 @@ def actualizarUsuario(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def actualizarCreador(request):
     if request.method=='POST':
         try:
@@ -2328,6 +2399,7 @@ def actualizarCreador(request):
 @swagger_auto_schema(
     tags=['Podcast'],
     method='post',
+    manual_parameters=[auth_param],
     operation_description="Actualiza el título y descripción de un podcast dado su ID.",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -2349,6 +2421,7 @@ def actualizarCreador(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def actualizarPodcast(request):
     if request.method=='POST':
         try:
@@ -2377,6 +2450,7 @@ def actualizarPodcast(request):
 #actualiza un episodio segun su id, cambia los campos titulo, descripcion y participantes
 @swagger_auto_schema(
     tags=['Episodio'],
+    manual_parameters=[auth_param],
     method='post',
     operation_description="Actualiza los datos de un episodio dado su ID.",
     request_body=openapi.Schema(
@@ -2400,6 +2474,7 @@ def actualizarPodcast(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def actualizarEpisodio(request):
     if request.method=='POST':
         try:
@@ -2759,6 +2834,7 @@ def verificarSeguimiento(request):
 @swagger_auto_schema(
     tags=["Publicidad"],
     method='post',
+    manual_parameters=[auth_param],
     operation_description="Sube una nueva imagen de publicidad al almacenamiento y registra sus datos.",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -2785,6 +2861,7 @@ def verificarSeguimiento(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def subirPublicidad(request):
     if request.method=='POST':
         fotopublicidad= None
@@ -2819,6 +2896,7 @@ from django.http import JsonResponse
 @swagger_auto_schema(
     tags=["Publicidad"],
     method='get',
+    manual_parameters=[auth_param],
     operation_description="Obtiene dos publicidades aleatorias de la base de datos.",
     responses={
         200: openapi.Response(
@@ -2849,6 +2927,7 @@ from django.http import JsonResponse
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def obtenerPublicidad(request):
     if request.method == 'GET':
         try:
@@ -2886,7 +2965,8 @@ from datetime import timedelta
             description="ID del usuario que consulta las notificaciones",
             type=openapi.TYPE_STRING,
             required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(
@@ -2917,6 +2997,7 @@ from datetime import timedelta
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def episodioNotificaciones(request):
     if request.method=='GET':
         try:
@@ -2944,6 +3025,7 @@ def episodioNotificaciones(request):
 @swagger_auto_schema(
     method='get',
     tags=["Recomendaciones"],
+    manual_parameters=[auth_param],
     operation_description=(
         "Obtiene el episodio más visto en las últimas 24 horas. "
         "Si no hay episodios recientes, retorna el episodio con más visualizaciones en general."
@@ -2987,6 +3069,7 @@ def episodioNotificaciones(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def episodioDia(request):
     if request.method=='GET':
         try:
@@ -3016,7 +3099,8 @@ def episodioDia(request):
         openapi.Parameter(
             'idpodcast', openapi.IN_QUERY, description="ID del podcast",
             type=openapi.TYPE_STRING, required=True
-        )
+        ),
+        auth_param
     ],
     responses={
         200: openapi.Response(
@@ -3061,6 +3145,7 @@ def episodioDia(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def episodios_podcast(request):
     if request.method=='GET':
         try:
@@ -3130,6 +3215,7 @@ def verificarPremium(request):
 @swagger_auto_schema(
     method='get',
     tags=["Podcast"],
+    manual_parameters=[auth_param],
     operation_description="Lista todos los podcasts junto con el nombre del creador.",
     responses={
         200: openapi.Response(
@@ -3167,6 +3253,7 @@ def verificarPremium(request):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def listarPodcasts(request):
     if request.method=='GET':
         try:

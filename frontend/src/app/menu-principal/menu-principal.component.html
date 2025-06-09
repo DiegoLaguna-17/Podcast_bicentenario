@@ -17,8 +17,8 @@
       <img class="ad-image" src="{{publi2.imagen}}" alt="Publicidad">
     </div>
   </div>
-<div *ngIf="usuario.rol=='Oyente'">
-  <div class="notificaciones" *ngIf="notis==false">
+<div *ngIf="usuario.rol=='Oyente'"> 
+  <div class="notificaciones" *ngIf="notis==false && notificaciones.length>0">
     <div class="notificaciones-contenido">
       <span class="cerrar" (click)="cerrarModal()">&times;</span>
       <h2>Lo que te perdiste</h2>

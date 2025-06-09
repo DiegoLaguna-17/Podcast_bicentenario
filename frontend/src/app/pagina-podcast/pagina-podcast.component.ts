@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient , HttpHeaders} from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -37,7 +37,18 @@ export class PaginaPodcastComponent {
  idoyente:any
  premium:any
  mostrarModal:boolean=false
+ errorRespuesta:any
+ headers:any
   constructor( private http: HttpClient, private router: Router) {
+    const token = localStorage.getItem('access_token');
+  
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
     this.podcast=this.router.getCurrentNavigation()?.extras.state?.['datos'];
     console.log(this.podcast)
     const usuarioStr = localStorage.getItem('usuario');
@@ -52,8 +63,9 @@ export class PaginaPodcastComponent {
 
   }
   obtenerEpisodios(){
+    const headers=this.headers
     let endpoint=environment.apiUrl+"/podcast/episodios/?idpodcast="+this.podcast.idpodcast;
-    this.http.get<{episodios: any[]}>(endpoint).subscribe({
+    this.http.get<{episodios: any[]}>(endpoint,{headers}).subscribe({
           next: (response) => {
             
             this.episodios=response.episodios;
@@ -88,14 +100,16 @@ export class PaginaPodcastComponent {
     }
   }
   suscribirse(){
+    const headers=this.headers
     if(!this.suscrito){
+    
       const confirmar=window.confirm('¿Confirmar suscripcion a '+this.podcast.titulo);
         if(confirmar){
           let endpoint=environment.apiUrl +'/usuarios/suscribirse/';
           const siSuscrito=new FormData()
           siSuscrito.append('idusuario',this.idoyente);
           siSuscrito.append('idpodcast',this.podcast.idpodcast);
-          this.http.post(endpoint,siSuscrito).subscribe({
+          this.http.post(endpoint,siSuscrito,{headers}).subscribe({
                 next: (response) => {
                 console.log('suscrito')
                   this.verificarSuscripcion()

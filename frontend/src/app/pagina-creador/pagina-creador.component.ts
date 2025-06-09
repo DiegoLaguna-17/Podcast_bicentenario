@@ -29,7 +29,17 @@ rol:any
   seguidos:any
   siguiendo:any
   podcasts:any[]=[]
+  headers:any
   constructor( private http: HttpClient, private router: Router) {
+    const token = localStorage.getItem('access_token');
+  
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
     this.creador=this.router.getCurrentNavigation()?.extras.state?.['datos'];
     console.log(this.creador)
     const usuarioStr = localStorage.getItem('usuario');
@@ -44,16 +54,8 @@ rol:any
   }
 
   obtenerPodcast(){
-    const token = localStorage.getItem('access_token');
-  
-    if (!token) {
-      this.errorRespuesta = 'No se encontró token de autenticación.';
-      return;
-    }
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-    });
-
+    
+    const headers = this.headers
     let endpoint=environment.apiUrl+"/creador/podcasts/?idcreador="+this.creador.idcreador;
     this.http.get<{podcasts: any[]}>(endpoint,{headers}).subscribe({
           next: (response) => {
@@ -67,6 +69,7 @@ rol:any
 
   }
   verificarSeguimiento(){
+    const headers = this.headers
     let endpoint=environment.apiUrl+'/usuarios/verificarSeguimiento/?idusuario='+this.idoyente+'&idCreador='+this.creador.idcreador;
     this.http.get<{siguiendo:any}>(endpoint).subscribe({
           next: (response) => {
@@ -85,6 +88,7 @@ rol:any
         });
   }
   accionBotonSeguido(){
+    const headers = this.headers
     if(this.siguiendo){
       const confirmar=window.confirm('¿Dejar de seguir a '+this.creador.nombre);
       if(confirmar){
@@ -92,7 +96,7 @@ rol:any
         const noSeguir=new FormData()
         noSeguir.append('idusuario',this.idoyente);
         noSeguir.append('idcreador',this.creador.idcreador);
-        this.http.post(endpoint,noSeguir).subscribe({
+        this.http.post(endpoint,noSeguir,{headers}).subscribe({
               next: (response) => {
               console.log('no siguiendo')
                 this.verificarSeguimiento()
@@ -107,7 +111,7 @@ rol:any
           const seguir=new FormData()
           seguir.append('usuarios_idusuario',this.idoyente);
           seguir.append('creadores_idcreador',this.creador.idcreador);
-          this.http.post(endpoint,seguir).subscribe({
+          this.http.post(endpoint,seguir,{headers}).subscribe({
                 next: (response) => {
                 console.log('Siguiendo')
                 this.verificarSeguimiento()

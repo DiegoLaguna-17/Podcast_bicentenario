@@ -29,18 +29,30 @@ export class MenuPrincipalComponent {
   publi2:any
   notificaciones:any[]=[]
   notis:boolean=false;
+  headers:any
     constructor(private router: Router,private dataService: DataService,private http: HttpClient,) {
+      const token = localStorage.getItem('access_token');
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
     this.usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     console.log('llego a menu: '+this.usuario.id+" "+this.usuario.rol); // { id: 1, nombre: "Ejemplo" }
-    this.obtenerEpisodioDia();
-    this.obtenerPublicidad()
+    if(this.usuario.rol=='Oyente'){
+      this.obtenerEpisodioDia();
+      this.obtenerPublicidad()
+    }
+
     if(this.usuario.rol=='Creador'){
       this.dashBoardCreador()
 
     }
     const valor = localStorage.getItem('notisvistas');
     this.notis = valor === 'true'; // esto te da el booleano verdadero
-    if(this.usuario.rol=='Oyente'&& !this.notis){
+    if(this.usuario.rol=='Oyente'&& !this.notis ){
       this.cargarNotificaciones();
       localStorage.setItem('notisvistas', JSON.stringify(true))
     }
@@ -51,16 +63,19 @@ export class MenuPrincipalComponent {
     this.notis=true;
   }
   cargarNotificaciones(){
+    const headers=this.headers
     const endpoint=environment.apiUrl+'/usuarios/notificaciones/?idusuario='+this.usuario.id;
-    this.http.get<{notificaciones:any}>(endpoint).subscribe({
+    this.http.get<{notificaciones:any}>(endpoint,{headers}).subscribe({
       next:(response)=>{
         this.notificaciones=response.notificaciones
-        console.log('Notificaciones: ',this.notificaciones)
-        let mensaje = 'Notificaciones recientes:\n\n';
-        this.notificaciones.forEach(n => {
-        mensaje += `🎧 ${n.titulo}\n📝 ${n.descripcion}\n📅 ${n.fechapublicacion}\n👀 ${n.visualizaciones} vistas\n\n`;
+        if(this.notificaciones.length>0){
+          console.log('Notificaciones: ',this.notificaciones)
+          let mensaje = 'Notificaciones recientes:\n\n';
+          this.notificaciones.forEach(n => {
+          mensaje += `🎧 ${n.titulo}\n📝 ${n.descripcion}\n📅 ${n.fechapublicacion}\n👀 ${n.visualizaciones} vistas\n\n`;
         //alert(mensaje)
-      });
+          });
+        }
       },
       error:(error)=>{
         alert('error al obtener notificaciones'+error)
@@ -74,8 +89,9 @@ export class MenuPrincipalComponent {
     this.obtenerConteoSeguidores()
   }
   obtenerConteoSeguidores(){
+    const headers=this.headers
     const endpoint = environment.apiUrl + '/obtenerConteoSeguidores/'+'?idcreador='+this.usuario.id;
-        this.http.get(endpoint).subscribe({
+        this.http.get(endpoint,{headers}).subscribe({
           next: (response:any) => {
             this.seguidores=response['Cantidad de seguidores']
           },
@@ -87,9 +103,9 @@ export class MenuPrincipalComponent {
   }
   obtenerEpisodioMasVisto(){
     const endpoint = environment.apiUrl + '/obtenerMasVisto/'+'?idcreador='+this.usuario.id;
-        
+    const headers=this.headers
     
-        this.http.get(endpoint).subscribe({
+        this.http.get(endpoint,{headers}).subscribe({
           next: (response:any) => {
           
             
@@ -102,8 +118,9 @@ export class MenuPrincipalComponent {
         });
   }
   obtenerVistasTotales(){
+    const headers=this.headers
     const endpoint = environment.apiUrl + '/obtenerVistasCreador/'+'?idcreador='+this.usuario.id;
-        this.http.get(endpoint).subscribe({
+        this.http.get(endpoint,{headers}).subscribe({
           next: (response:any) => {
           
             this.vistasTotales=response['Vistas del creador']
@@ -133,8 +150,9 @@ export class MenuPrincipalComponent {
   }
 
   obtenerEpisodioDia(){
+    const headers=this.headers
   const endpoint = environment.apiUrl + '/usuarios/episodioDia/';
-          this.http.get<{episodio:any}>(endpoint).subscribe({
+          this.http.get<{episodio:any}>(endpoint,{headers}).subscribe({
   next: (response: any) => {
     this.episodio = response.episodio;
     console.log('episodio dia', response.episodio);
@@ -151,8 +169,9 @@ export class MenuPrincipalComponent {
   }
 
   obtenerPublicidad(){
+    const headers=this.headers
      const endpoint = environment.apiUrl + '/obtenerPublicidad/';
-          this.http.get(endpoint).subscribe({
+          this.http.get(endpoint,{headers}).subscribe({
       next: (response: any) => {
         this.publi1 = response.publicidades[0]
         this.publi2 = response.publicidades[1]

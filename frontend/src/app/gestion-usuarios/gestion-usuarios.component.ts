@@ -1,6 +1,6 @@
 import { Component,Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { NgIf } from '@angular/common';
@@ -22,13 +22,25 @@ export class GestionUsuariosComponent {
   imagen:any
   imagenSeleccionada:any
   cargando:boolean=false;
+  headers:any
   constructor(private router: Router,private http: HttpClient,) {
+     const token = localStorage.getItem('access_token');
+  
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
       this.listarUsuarios();
+
     }
   listarUsuarios(){
     this.cargando=true;
+    const headers=this.headers
     const endpoint=environment.apiUrl+'/usuarios/listar/';
-    this.http.get<{usuarios:any}>(endpoint).subscribe({
+    this.http.get<{usuarios:any}>(endpoint,{headers}).subscribe({
       next:(response)=>{
         this.usuarios=response.usuarios
         console.log(this.usuarios)
@@ -74,13 +86,14 @@ export class GestionUsuariosComponent {
 actualizarUsuario(){
   const confirmar=window.confirm('Actualiza perfil de '+this.usuarioEditar+'?' );
   if(confirmar){
+    const headers=this.headers
     const endpoint=environment.apiUrl+'/usuarios/actualizarUsuario/';
     const actualizar=new FormData()
     actualizar.append('idusuario',this.idEditar);
     actualizar.append('usuario',this.usuarioEditar);
     actualizar.append('telefono',this.telefonoEditar);
     actualizar.append('fotoPerfil',this.imagenSeleccionada);
-    this.http.post(endpoint,actualizar).subscribe({
+    this.http.post(endpoint,actualizar,{headers}).subscribe({
       next:(response)=>{
         alert('Usuario actualizado')
         this.cerrarModal();
@@ -101,10 +114,11 @@ eliminarUsuario(usuario:any){
   if(confirmar){
     const confirmar2=window.confirm('La siguiente accion no podra deshacerse. ¿Eliminar permanentemente a '+usuario.usuario+'?');
     if(confirmar2){
+      const headers=this.headers
       const enpoint=environment.apiUrl+'/borrarUsuario/'
       const eliminar=new FormData()
       eliminar.append('idusuario',usuario.idusuario)
-      this.http.post(enpoint,eliminar).subscribe({
+      this.http.post(enpoint,eliminar,{headers}).subscribe({
         next:(response)=>{
           alert('Usuario eliminado permanentemente')
           this.listarUsuarios()

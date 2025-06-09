@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { PodcastListComponent } from '../podcast-list/podcast-list.component';
@@ -38,8 +38,18 @@ export class BuscarComponent implements OnInit {
   sinResultados:boolean=false;
   filtroActivo: string = 'Busqueda general';
   private apiUrl = '/'; // De aqui se jalan los podcasts
-
-  constructor(private http: HttpClient) { }
+  errorRespuesta:any
+  headers:any
+  constructor(private http: HttpClient) {
+    const token = localStorage.getItem('access_token');
+  
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    }); }
 
   ngOnInit(): void {
     this.fetchPodcasts();
@@ -65,9 +75,11 @@ export class BuscarComponent implements OnInit {
     this.episodios=[]
     const busqueda=this.textoBusqueda;
     this.sinResultados=false;
+    const headers=this.headers
     if(this.mostrarGeneral){
+
       const endpoint = environment.apiUrl + '/buscar_general/?q='+busqueda;
-            this.http.get<{episodios: any[],podcasts:any[],creadores:any[]}>(endpoint).subscribe({
+            this.http.get<{episodios: any[],podcasts:any[],creadores:any[]}>(endpoint,{headers}).subscribe({
               next: (response) => {
                 console.log(response);
                 this.cargando=false
@@ -92,7 +104,7 @@ export class BuscarComponent implements OnInit {
             });
     }else if(this.porTematica){
       const endpoint=environment.apiUrl + '/buscar_tematica/?q='+busqueda;
-      this.http.get<{episodios: any[],podcasts:any[],creadores:any[]}>(endpoint).subscribe({
+      this.http.get<{episodios: any[],podcasts:any[],creadores:any[]}>(endpoint,{headers}).subscribe({
               next: (response) => {
                 this.cargando=false
                 console.log(response);
@@ -115,7 +127,7 @@ export class BuscarComponent implements OnInit {
     }
     else if(this.porAnio && !isNaN(parseInt(this.textoBusqueda))){
       const endpoint=environment.apiUrl + '/buscar_anio/?q='+busqueda;
-      this.http.get<{episodios: any[],podcasts:any[],creadores:any[]}>(endpoint).subscribe({
+      this.http.get<{episodios: any[],podcasts:any[],creadores:any[]}>(endpoint,{headers}).subscribe({
               next: (response) => {
                 this.cargando=false
                 console.log(response);

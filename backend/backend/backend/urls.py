@@ -55,6 +55,7 @@ urlpatterns = [
     path('usuarios/subirCalificacion/',views.crear_calificacion,name='subir-Calificacion'),
     #
     path('usuarios/crearLista/',views.crearListaReproduccion,name='crear_lista'),
+    path('usuarios/borrarLista/',views.borrarLista,name='borrar_lista'),
     path('usuarios/agregarEpisodioLista/',views.agregarEpisodioLista,name='agregar_apisodio'),
     path('usuarios/quitarEpisodioLista/',views.quitarEpisodio,name='quitar_ep_lista'),
 
@@ -70,6 +71,9 @@ urlpatterns = [
     path('usuarios/cambiarContrasenia/',views.cambiarContrasenia,name="cambiar_contrasenia"),
     path('usuarios/verificarSuscripcion/',views.verificarSuscripcion,name="verificar_suscripcion"),
     path('usuarios/verificarSeguimiento/',views.verificarSeguimiento,name="verificar_seguimiento"),
+    path('usuarios/obtenerlistas/',views.obtener_Listas,name="obtener-listas"),
+    path('lista/obtenerepisodios/',views.obtener_ep_lista,name="episodios_lista"),
+
     path('podcast/episodios/',views.episodios_podcast,name="episodios podcast"),
     path('episodios/verificarPremium/',views.verificarPremium,name="verificar_premium"),
     #crear lista de reproduccion
@@ -122,6 +126,9 @@ urlpatterns = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
+    ##refresh del token
+    path('refresh/',views.refresh_token,name="refresh")
 
 ]
  

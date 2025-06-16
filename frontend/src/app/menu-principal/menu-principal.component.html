@@ -1,23 +1,40 @@
 <!-- Layout principal -->
 <div class="main-layout">
   <!-- Sección de publicidad y episodio -->
-  <div class="ad-episode-container" *ngIf="usuario.rol=='Oyente'">
-    <div class="ad-container">
-      <h1>{{publi1.nombrePublicidad}}</h1>
-      <img class="ad-image" src="{{publi1.imagen}}" alt="Publicidad">
+   
+    <div id="cargar" *ngIf="cargaOyente==true && usuario.rol=='Oyente'">
+      <div class="cargar-loader">
+        <div class="rueda"></div>
+      </div>
+      <div class="cargando">Cargando...</div>
+      
     </div>
+   
+  <div class="ad-episode-container" *ngIf="usuario.rol=='Oyente' && cargaOyente==false">
+     <div class="ad-container">
+    <div class="ad-card">
+      <h3 style="color: black;">Publicidad</h3>
+      <h2 class="ad-title">{{ publi1.nombrePublicidad }}</h2>
+      <img class="ad-image" [src]="publi1.imagen" alt="Publicidad">
+    </div>
+  </div>
     
     <div class="episode-container" *ngIf="episodio">
       <h1>Episodio del día</h1>
       <app-card-episodios [episodio]="episodio"></app-card-episodios>
     </div>
     
-    <div class="ad-container">
-      <h1>{{publi2.nombrePublicidad}}</h1>
-      <img class="ad-image" src="{{publi2.imagen}}" alt="Publicidad">
+     <div class="ad-container">
+      
+    <div class="ad-card">
+      <h3 style="color: black;">Publicidad</h3>
+      <h1 class="ad-title">{{ publi2.nombrePublicidad }}</h1>
+      <img class="ad-image" [src]="publi2.imagen" alt="Publicidad">
     </div>
   </div>
-<div *ngIf="usuario.rol=='Oyente'"> 
+  </div>
+  
+<div *ngIf="usuario.rol=='Oyente' "> 
   <div class="notificaciones" *ngIf="notis==false && notificaciones.length>0">
     <div class="notificaciones-contenido">
       <span class="cerrar" (click)="cerrarModal()">&times;</span>
@@ -38,32 +55,41 @@
       <button class="menu-button" routerLink="/para-ti">Para Ti</button>
       <button class="menu-button" routerLink="/buscar">Buscar</button>
       <button class="menu-button" (click)="enviarSiguiendo()">Siguiendo</button>
+      <button class="menu-button" routerLink="/biblioteca">Biblioteca</button>
       <button class="menu-button" (click)="enviarPerfil()">Perfil</button>
     </div>
   </div>
 
   <!-- Panel de Creador -->
-  <div class="creator-dashboard" *ngIf="usuario.rol==='Creador'">
-    <h1 style="margin-left: 77vh;">DashBoard informativo</h1>
-    <br><br>
-    <div class="stats-container">
-      <div class="stat-card">
-        <h3>Total de vistas</h3>
-        <p class="stat-value">{{vistasTotales}}</p>
+    <div id="cargar" *ngIf="cargaDash && usuario.rol=='Creador'">
+      <div class="cargar-loader">
+        <div class="rueda"></div>
       </div>
+      <div class="cargando">Cargando...</div>
       
-      <div class="stat-card">
-        <h3>Episodio más visto</h3>
-        <p class="stat-title">{{episodioVisto.titulo}}</p>
-        <p class="stat-subvalue">Vistas: {{episodioVisto.visualizaciones}}</p>
-      </div>
-      
-      <div class="stat-card">
-        <h3>Seguidores</h3>
-        <p class="stat-value">{{seguidores}}</p>
-      </div>
     </div>
-
+    <div class="creator-dashboard" *ngIf="usuario.rol==='Creador' && !cargaDash">
+      <h1 style="margin-left: 77vh;">DashBoard informativo</h1>
+      <br><br>
+      <div class="stats-container">
+        <div class="stat-card">
+          <h3>Total de vistas</h3>
+          <p class="stat-value">{{vistasTotales}}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Episodio más visto</h3>
+          <p class="stat-title">{{episodioVisto.titulo}}</p>
+          <p class="stat-subvalue">Vistas: {{episodioVisto.visualizaciones}}</p>
+        </div>
+        
+        <div class="stat-card">
+          <h3>Seguidores</h3>
+          <p class="stat-value">{{seguidores}}</p>
+        </div>
+      </div>
+  
+      
+  
     <div class="menu">
       <button class="menu-button" routerLink="/buscar">Buscar</button>
       <button class="menu-button" routerLink="/subir-podcast">Crear Podcast</button>

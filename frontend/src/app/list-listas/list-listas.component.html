@@ -1,0 +1,23 @@
+
+  <div class="prin">
+    <div class="container">
+      <div class="header">
+        
+      </div>
+      
+            @if (listas.length === 0) {
+              <div class="empty-state">
+                <mat-icon class="empty-icon">Listas</mat-icon>
+                <h3>No se encontraron listas de reproduccion</h3>
+              </div>
+            } @else {
+              <div class="podcast-grid">
+                @for (lista of listas; track lista.id) {
+                  <app-card-lista [lista]="lista"></app-card-lista>
+                }
+              </div>
+            }
+          
+    </div>
+  </div>
+

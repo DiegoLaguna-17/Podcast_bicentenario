@@ -39,10 +39,11 @@ rolverificar:any
 
     this.http.post(endpoint, form).subscribe({
       next: (response) => {
-        const res = response as { access: string,usuario: string};
+        const res = response as { access: string,refresh:string,usuario: string};
         
         this.usuario = res.usuario;
         localStorage.setItem('access_token', res.access);
+        localStorage.setItem('refresh_token', res.refresh);
         localStorage.setItem('usuario', JSON.stringify(res.usuario));
         this.router.navigate(['/menu-principal']);
         console.log(res.access)

@@ -25,6 +25,7 @@ export class PerfilComponent {
   error: string | null = null;
 
   constructor(private http: HttpClient, private router: Router) {
+    this.refreshToken()
     const datosend = JSON.parse(localStorage.getItem('usuario') || '{}');
 
     if (!datosend) {
@@ -117,5 +118,23 @@ export class PerfilComponent {
   }
   cerrarSesion(){
     this.router.navigate(['/login']);
+  }
+  refreshToken(){
+    const reftoken=localStorage.getItem('refresh_token');
+    
+    console.log('refresh '+reftoken)
+    const endpoint=environment.apiUrl+'/refresh/';
+    const form =new FormData()
+    if(reftoken)
+      form.append('refresh',reftoken);
+    this.http.post<{access:string}>(endpoint,form).subscribe({
+      next:(response)=>{
+        localStorage.setItem('access_token',response.access);
+      },
+      error:(error)=>{
+        console.error('Error al seguir creador:', error);
+
+      }
+    });
   }
 }

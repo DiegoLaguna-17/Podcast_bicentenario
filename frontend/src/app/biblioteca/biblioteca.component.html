@@ -1,0 +1,31 @@
+<div class="container"> 
+    <h1 style="color: white;">Mis listas</h1>
+    <button class="buttonAgregar" (click)="mostrarModal()">Agregar Lista</button>
+     <div class="modal" *ngIf="modal">
+      <div class="modal-contenido">
+        <span class="cerrar" (click)="cerrarModal()">&times;</span>
+        <h2>Crear Lista de reproduccion</h2>
+        <label>Titulo</label>
+        <input type="text" class="entrada" [(ngModel)]="titulo" />
+
+        
+
+        <br><br>
+
+        <button class="btn actualizar" (click)="crearLista()">Crear Lista</button>
+      </div>
+    </div>
+    @if(isLoading==true){
+        <div id="cargar">
+            <div class="cargar-loader">
+              <div class="rueda"></div>
+            </div>
+            <div class="cargando">Cargando...</div>
+            
+          </div>
+    }
+    @else{
+        <app-list-listas [listas]="listas"></app-list-listas>
+    }
+</div>
+

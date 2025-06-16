@@ -29,6 +29,7 @@ export class ReproductorComponent {
   episodio:any;
   comentarios:any[]=[]
   resenias:any[]=[]
+  listas:any[]=[]
   idoyente:any
   rol:any
   comentar:string=''
@@ -39,7 +40,11 @@ export class ReproductorComponent {
   siguiendo:any
   errorRespuesta:any
   headers:any
+  modal:boolean=false
+  listaSeleccionada:any
   constructor( private http: HttpClient, private router: Router) {
+    this.refreshToken()
+    this.obtenerListas()
     const token = localStorage.getItem('access_token');
   
     if (!token) {
@@ -224,5 +229,80 @@ export class ReproductorComponent {
 
     }
   }
-   
+
+
+  refreshToken(){
+    const reftoken=localStorage.getItem('refresh_token');
+    
+    console.log('refresh '+reftoken)
+    const endpoint=environment.apiUrl+'/refresh/';
+    const form =new FormData()
+    if(reftoken)
+      form.append('refresh',reftoken);
+    this.http.post<{access:string}>(endpoint,form).subscribe({
+      next:(response)=>{
+        localStorage.setItem('access_token',response.access);
+      },
+      error:(error)=>{
+        console.error('Error al seguir creador:', error);
+
+      }
+    });
+  }
+   mostrarModal(){
+    
+    if(this.listas.length!=0){
+      this.modal=true
+    }else{
+      alert('No tienes listas de reproduccion')
+    }
+    
+   }
+   cerrarModal(){
+    this.modal=false;
+   }
+   agregarLista(episodio:any){
+    const endpoint=environment.apiUrl+"/usuarios/agregarEpisodioLista/"
+    console.log(this.listaSeleccionada)
+    const headers=this.headers
+    const form=new FormData()
+    form.append('idepisodio',episodio.idepisodio)
+    form.append('idLista',this.listaSeleccionada)
+
+    this.http.post(endpoint,form,{headers}).subscribe({
+      next:(response)=>{
+        
+        alert('episodio agregado')
+        this.cerrarModal
+      },
+      error:(error)=>{
+        console.log('error al agregar episodio'+ error)
+      }
+    })
+
+   }
+
+
+   obtenerListas(){
+    const token = localStorage.getItem('access_token');
+  
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
+  const usuario= JSON.parse(localStorage.getItem('usuario') || '{}');
+      let endpoint=environment.apiUrl+"/usuarios/obtenerlistas/?idusuario="+usuario.id;
+      this.http.get<{listas: any[]}>(endpoint,{headers}).subscribe({
+            next: (response) => {
+              this.listas=response.listas;
+              
+            },
+            error: (error) => {
+              console.error('Error en al obtener comentarios:', error);
+            }
+          });
+   }
 }

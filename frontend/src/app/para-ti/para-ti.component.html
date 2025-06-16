@@ -1,1 +1,13 @@
-<app-list-episodios [episodios]="episodios"></app-list-episodios>
+<div class="prin">  
+    <h1 class="title">Para Ti</h1>
+  <div id="cargar" *ngIf="isLoading">
+        <div class="cargar-loader">
+        <div class="rueda"></div>
+        </div>
+        <div class="cargando">Cargando...</div>
+                
+    </div>
+    <div *ngIf="!isLoading">
+    <app-list-episodios [episodios]="episodios"></app-list-episodios>
+    </div>
+</div>

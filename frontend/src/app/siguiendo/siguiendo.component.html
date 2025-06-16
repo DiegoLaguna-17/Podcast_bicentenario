@@ -4,29 +4,19 @@
     
     <div class="search-container">
       <div class="search-bar">
-        <input type="text" placeholder="Buscar creadores o temáticas..." class="search-input">
-        <button class="search-btn">
-          <span class="search-icon">🔍</span>
-        </button>
+        <input type="text" placeholder="Buscar creadores o temáticas..." class="search-input" [(ngModel)]="termino"(ngModelChange)="buscar()">
+          
       </div>
     </div>
   </div>
-  <aside class="filter-sidebar">
-      <h3 class="filter-title">Filtrar por</h3>
-      <div class="filter-options">
-        <label class="filter-option">
-          <input type="radio" id="filter-creador" name="filter-option" value="creador" class="filter-radio">
-          <span class="filter-label">Creador</span>
-        </label>
-        <label class="filter-option">
-          <input type="radio" id="filter-tematica" name="filter-option" value="tematica" class="filter-radio">
-          <span class="filter-label">Temática</span>
-        </label>
-      </div>
-    </aside>
-  <div class="following-layout">
-    
-
+  <div id="cargar" *ngIf="cargando">
+    <div class="cargar-loader">
+      <div class="rueda"></div>
+    </div>
+    <div class="cargando">Cargando...</div>
+            
+  </div>
+  <div class="following-layout" *ngIf="!cargando">
     <main class="creators-grid">
       <div class="creator-card" *ngFor="let creador of creadores">
         <div class="creator-avatar">
@@ -41,4 +31,5 @@
       </div>
     </main>
   </div>
+
 </div>

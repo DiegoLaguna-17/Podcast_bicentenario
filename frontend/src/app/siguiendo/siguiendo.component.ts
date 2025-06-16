@@ -5,10 +5,11 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-siguiendo',
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './siguiendo.component.html',
   styleUrl: './siguiendo.component.css'
 })
@@ -17,8 +18,11 @@ export class SiguiendoComponent {
    usuario:any
    siguiendo: any[]=[]
    creadores: any[]=[]
+   termino:string=''
+   creadoresCompleto:any[]=[]
+   cargando:boolean=true
    constructor(private router: Router,private dataService: DataService,private http: HttpClient) {
-    
+    this.buscar()
     console.log('llego a siguiendo: '+this.idusuario); // { id: 1, nombre: "Ejemplo" }
     this.usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     this.idusuario = this.usuario.id;
@@ -40,7 +44,9 @@ export class SiguiendoComponent {
                 next: (response) => {
                   console.log('agregando a creaderos',response.creador);
                   this.creadores.push(...(response.creador || [])); 
+                  this.creadoresCompleto=this.creadores
                   console.log('siguiendo',this.creadores)
+                  this.cargando=false
                   
                 },
                 error: (error) => {
@@ -63,6 +69,16 @@ export class SiguiendoComponent {
       state: {datos:creador}
     });
   }
- 
+
+  buscar() {
+  const terminoLimpio = this.termino.trim().toLowerCase();
+  if (terminoLimpio === '') {
+    this.creadores = [...this.creadoresCompleto]; // Muestra todos
+  } else {
+    this.creadores = this.creadores.filter(creador =>
+      creador.nombre.toLowerCase().includes(terminoLimpio)
+    );
+  }
+}
 
 }

@@ -1,4 +1,16 @@
 /* Estilos mejorados manteniendo tu estructura */
+.contenedor{
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, 
+              rgba(26, 58, 26, 0.9) 0%, 
+              rgba(45, 90, 45, 0.85) 30%, 
+              rgba(212, 175, 55, 0.8) 100%);
+  padding: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
 .profile-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;

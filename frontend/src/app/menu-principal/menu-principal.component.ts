@@ -7,12 +7,16 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { CardEpisodiosComponent } from '../card-episodios/card-episodios.component';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
   selector: 'app-menu-principal',
-  imports: [RouterLink,NgIf, CommonModule,CardEpisodiosComponent],
+  imports: [RouterLink,NgIf, CommonModule,CardEpisodiosComponent, MatProgressSpinnerModule,
+    MatButtonModule,
+    MatIconModule,],
   templateUrl: './menu-principal.component.html',
   styleUrl: './menu-principal.component.css'
 })
@@ -30,6 +34,8 @@ export class MenuPrincipalComponent {
   notificaciones:any[]=[]
   notis:boolean=false;
   headers:any
+  cargaDash:boolean=true
+  cargaOyente:boolean=true
     constructor(private router: Router,private dataService: DataService,private http: HttpClient,) {
       const token = localStorage.getItem('access_token');
     if (!token) {
@@ -94,6 +100,7 @@ export class MenuPrincipalComponent {
         this.http.get(endpoint,{headers}).subscribe({
           next: (response:any) => {
             this.seguidores=response['Cantidad de seguidores']
+            this.cargaDash=false;
           },
           error: (error) => {
             console.error('Error en el perfil:', error);
@@ -176,6 +183,7 @@ export class MenuPrincipalComponent {
         this.publi1 = response.publicidades[0]
         this.publi2 = response.publicidades[1]
         console.log('publis', this.publi1+" y "+this.publi2);
+        this.cargaOyente=false
       },
       error: (error) => {
         console.error('Error al obtener publicidad:', error);

@@ -1,20 +1,21 @@
 import { Component } from '@angular/core';
 import { DataService } from '../DataService';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import {ListEpisodiosComponent} from '../list-episodios/list-episodios.component';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-para-ti',
-  imports: [ListEpisodiosComponent],
+  imports: [ListEpisodiosComponent,FormsModule, CommonModule],
   templateUrl: './para-ti.component.html',
   styleUrl: './para-ti.component.css'
 })
 
 export class ParaTiComponent {
  episodios: any[] = [];
-  isLoading = false;
+  isLoading = true;
   error: string | null = null;
 
   mensajeRespuesta: string | null = null;

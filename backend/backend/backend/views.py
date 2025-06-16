@@ -191,9 +191,17 @@ def verificar_codigo(request):
                 'iat': datetime.datetime.utcnow()
             }
             token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+            payload_refresh = {
+                'id': id_usuario,
+                'rol': rol_usuario,
+                'exp': datetime.datetime.utcnow()  + datetime.timedelta(days=7),
+                'iat': datetime.datetime.utcnow() 
+            }
+            refresh_token = jwt.encode(payload_refresh, settings.SECRET_KEY, algorithm='HS256')
             # Limpiar OTP después de usarlo
             return JsonResponse({
                 'access': token,
+                'refresh':refresh_token,
                 'usuario': {
                     'id': id_usuario,
                     'rol': rol_usuario
@@ -3262,5 +3270,91 @@ def listarPodcasts(request):
             if hasattr(podcasts,'error') and podcasts.error:
                 return JsonResponse({'error':'error al obtener podcast admin'})
             return JsonResponse({'podcasts':podcasts.data})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+        
+
+
+
+##################################################################33
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def obtener_Listas(request):
+    if request.method=='GET':
+        try:
+            idusuario=request.GET.get('idusuario')
+            listas=supabase.table('listareproduccion').select('*').eq('usuarios_idusuario',idusuario).execute()
+
+            if hasattr(listas,'error') and listas.error:
+                return JsonResponse({'error':'error al obtener listas de reproduccion'})
+            return JsonResponse({'listas':listas.data})
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+        
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def obtener_ep_lista(request):
+    if request.method=='GET':
+        try:
+            idlista=request.GET.get('idlista')
+            idsEpisodios=supabase.table('episodioslista').select('episodios_idepisodio').eq('listareproduccion_idlista',idlista).execute()
+            ids = [item['episodios_idepisodio'] for item in idsEpisodios.data]
+            episodios = supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))').in_('idepisodio', ids).execute()
+            if hasattr(episodios, 'error') and episodios.error:
+                return JsonResponse({'error': 'Error al obtener episodios'})
+            return JsonResponse({'episodios': episodios.data})
+            
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+ 
+##########################################################################################################       
+
+def borrarLista(request):
+    if request.method=='GET':
+        try:
+            idlista=request.GET.get('idLista')
+            episodios=supabase.table('episodioslista').delete().eq('listareproduccion_idlista',idlista).execute()
+            borrar=supabase.table('listareproduccion').delete().eq('idlista',idlista).execute()
+            if hasattr(borrar, 'error') and borrar.error:
+                return JsonResponse({'error': 'Error al borrar lista'})
+            return JsonResponse({'Mensaje': 'Lista borrada'})
+            
+        except Exception as e:
+            return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
+
+
+##########################################################################################################
+
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def refresh_token(request):
+    if request.method=='POST':
+        try:
+            refresh = request.data.get('refresh')
+            if not refresh:
+                return Response({'error': 'Refresh token faltante'}, status=400)
+            payload = jwt.decode(refresh, settings.SECRET_KEY, algorithms=['HS256'])
+
+            nuevo_payload = {
+                'id': payload.get('id'),
+                'rol': payload.get('rol'),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1),
+                'iat': datetime.datetime.utcnow()
+            }
+            nuevo_access_token = jwt.encode(nuevo_payload, settings.SECRET_KEY, algorithm='HS256')
+
+            return JsonResponse({'access': nuevo_access_token})
+
+        except jwt.ExpiredSignatureError:
+            return JsonResponse({'error': 'Refresh token expirado'}, status=401)
+        except jwt.InvalidTokenError:
+            return JsonResponse({'error': 'Refresh token inválido'}, status=401)
         except Exception as e:
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)

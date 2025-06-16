@@ -49,7 +49,8 @@ export class BuscarComponent implements OnInit {
     }
     this.headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
-    }); }
+    }); 
+  }
 
   ngOnInit(): void {
     this.fetchPodcasts();

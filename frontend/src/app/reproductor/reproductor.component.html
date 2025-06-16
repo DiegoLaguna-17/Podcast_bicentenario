@@ -1,5 +1,22 @@
 <div class="repro">
-  
+   <div class="modal" *ngIf="modal">
+      <div class="modal-contenido">
+        <span class="cerrar" (click)="cerrarModal()">&times;</span>
+        <h2>Editar Podcast</h2>
+
+        <label for="Lista">Lista</label>
+        <select [(ngModel)]="listaSeleccionada" >
+          <option [ngValue]="null">-- Selecciona una lista --</option>
+          <option *ngFor="let lista of listas" [ngValue]="lista.idlista">
+            {{ lista.titulo }}
+          </option>
+        </select>
+
+        <br><br>
+
+        <button class="btn actualizar" (click)="agregarLista(episodio)">Actualizar Podcast</button>
+      </div>
+    </div>
   <div class="episodio-container">
     <h1 class="episodio-titulo">🎧 Episodio: {{episodio.titulo}}</h1>
 
@@ -7,8 +24,8 @@
       <h2>Podcast: {{episodio.podcast_idpodcast.titulo}}</h2>
       <h2>Creador: {{episodio.podcast_idpodcast.creadores_idcreador.nombre}}</h2>
     </div>
-    <button (click)="accionBotonSeguido()"style="width: 10vh;height: 5vh;">{{seguidos}}</button>
-
+    <button (click)="accionBotonSeguido()"style="width: 15vh;height: 5vh;">{{seguidos}}</button>
+    <button (click)="mostrarModal()" style="width: 34vh;height: 5vh;">Agregar a lista de reproduccion</button>
     <p class="episodio-descripcion">{{episodio.descripcion}}</p>
 
     <div class="episodio-detalles">
@@ -43,7 +60,7 @@
       <h1>Transcripcion</h1>
       <p>{{transcripcion}}</p>
     </div>
-    
+   
     
   </div>
   <!-- Sección de Reseñas -->

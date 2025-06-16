@@ -18,8 +18,9 @@ import { GestionCreadoresComponent } from './gestion-creadores/gestion-creadores
 import { GestionPodcastsComponent } from './gestion-podcasts/gestion-podcasts.component';
 import { GestionEpisodiosComponent } from './gestion-episodios/gestion-episodios.component';
 import { SubirPublicidadesComponent } from './subir-publicidades/subir-publicidades.component';
-
 import { SubirPodcastComponent } from './subir-podcast/subir-podcast.component';
+import { BibliotecaComponent } from './biblioteca/biblioteca.component';
+import { PaginaListaComponent } from './pagina-lista/pagina-lista.component';
 
 export const routes: Routes = [
   { path: '', component: InicioComponent },
@@ -42,6 +43,8 @@ export const routes: Routes = [
   { path: 'gestion-creadores',component:GestionCreadoresComponent},
   { path: 'gestion-podcasts',component:GestionPodcastsComponent},
   { path: 'gestion-episodios',component:GestionEpisodiosComponent},
-  { path: 'subir-publicidad',component:SubirPublicidadesComponent}
+  { path: 'subir-publicidad',component:SubirPublicidadesComponent},
+  {path: 'biblioteca', component:BibliotecaComponent},
+  { path:'lista',component:PaginaListaComponent}
 
 ];

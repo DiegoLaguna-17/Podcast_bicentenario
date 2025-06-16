@@ -1,0 +1,20 @@
+<mat-card class="podcast-card">
+  <div class="podcast-header">
+    <div class="general">
+      <h3 class="podcast-title">
+        {{ lista.titulo }}
+      </h3>
+      
+    </div>
+  </div>
+
+  <div class="podcast-content">
+    <div class="podcast-footer">
+        <button (click)="borrarLista(lista)">Borrar</button>
+      <button mat-raised-button (click)="abrirLista(lista)">
+        <mat-icon>play_circle</mat-icon>
+        Abrir
+      </button>
+    </div>
+  </div>
+</mat-card>

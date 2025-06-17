@@ -16,10 +16,13 @@
     
   </div>
 
-  <div class="podcast-content">
+  <div class="podcast-content" *ngIf="suscrito">
     <app-list-episodios [episodios]="episodios"></app-list-episodios>
     
-   
+  </div>
+  <div class="podcast-content" *ngIf="!suscrito">
+    <h1>No estas suscrito, no puede accesar a este contenido</h1>
+    
   </div>
   <!-- Botón que abre el modal -->
 

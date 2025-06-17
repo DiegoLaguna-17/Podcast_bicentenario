@@ -28,7 +28,16 @@ export class GestionEpisodiosComponent {
   modalComentarios:boolean=false;
   comentarios:any[]=[]
   headers:any
+  rol:any
+  idoyente:any
   constructor(private route: ActivatedRoute,private http: HttpClient,) {
+    const usuarioStr = localStorage.getItem('usuario');
+    if (usuarioStr) {
+      const usuarioObj = JSON.parse(usuarioStr);
+      this.rol = usuarioObj.rol; 
+      this.idoyente=usuarioObj.id; // aquí está el id
+      // Usar idUsuario para lo que necesites, ej. en el query param
+    }
     const token = localStorage.getItem('access_token');
   
     if (!token) {
@@ -48,8 +57,8 @@ export class GestionEpisodiosComponent {
 cargarEpisodios(){
   this.cargando=true;
   const headers=this.headers
-  const enpoint= environment.apiUrl+'/podcast/episodios/?idpodcast='+this.idpodcast;
-  this.http.get<{episodios:any}>(enpoint,{headers}).subscribe({
+  let endpoint=environment.apiUrl+"/podcast/episodios/?idpodcast="+this.idpodcast+"&idusuario="+this.idoyente+"&rol="+this.rol;
+  this.http.get<{episodios:any}>(endpoint,{headers}).subscribe({
     next:(response)=>{
       console.log(response.episodios)
       this.episodios=response.episodios

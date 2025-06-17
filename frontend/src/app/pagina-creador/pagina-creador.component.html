@@ -1,6 +1,6 @@
 <div class="podcast-header">
     <img src="{{creador.fotoperfil}}" alt="foto perfil" class="profile-image">
-    <img src="{{creador.imgdonaciones}}" alt=""class="pago-image">
+    <button (click)="mostrarModal()">Donar</button>
     <div class="general">
         <button  style="width: 10vh;height: 5vh;" (click)="accionBotonSeguido()">{{seguidos}}</button>
       <h3 class="podcast-title">{{creador.nombre }}</h3>
@@ -21,3 +21,18 @@
     <app-podcast-list [podcasts]="podcasts"></app-podcast-list>
     
   </div>
+
+
+
+  <div class="modal" *ngIf="modal">
+  <div class="modal-contenido">
+    <span class="cerrar" (click)="modal = false">&times;</span>
+    <h2>Donación</h2>
+    <img src="{{creador.imgdonaciones}}" alt="">
+    <input type="text" placeholder="Monto" class="entrada" [(ngModel)]="monto">
+    <button (click)="donar()" >
+        Donar
+    </button>
+
+  </div>
+</div>

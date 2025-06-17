@@ -494,7 +494,8 @@ def perfil_usuario(request):
                     'rol': 'Creador',
                     'fotoPerfil': usuario_data['fotoperfil'],
                     'biografia': usuario_data['biografia'],
-                    'donaciones': usuario_data['imgdonaciones']
+                    'donaciones': usuario_data['imgdonaciones'],
+                    'recaudado':usuario_data['recaudado']
                 }
             return JsonResponse(usuario)
         except Exception as e:
@@ -1515,25 +1516,31 @@ def registro_usuario(request):
 @permission_classes([AllowAny])
 @token_required
 def listar_usuarios(request):
-    """Vista para listar todos los usuarios (GET)."""
-    conn = obtener_conexion()
-    if not conn:
-        return JsonResponse({'error': 'Error de conexión'}, status=500)
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM backend_usuario;")
-            usuarios = cursor.fetchall()
-            # Convertir resultados a JSON
-            column_names = [desc[0] for desc in cursor.description]
-            usuarios_json = [
-                dict(zip(column_names, row))
-                for row in usuarios
-            ]
-            return JsonResponse({'usuarios': usuarios_json}, safe=False)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-    finally:
-        conn.close()
+    if request.method == "GET":
+        try:
+            adminActual = request.GET.get('admin')
+            if not adminActual or not adminActual.isdigit():
+                return JsonResponse({'error': 'Parámetro admin inválido'}, status=400)
+
+            admin_id = int(adminActual)
+            print("admin actual:", admin_id)
+            admins = list(set([29, admin_id]))  # excluye 29 y el admin actual
+            admin_str = "(" + ",".join(str(id) for id in admins) + ")"
+            usuarios = supabase.table('backend_usuario').select("*").filter("idusuario", "not.in", admin_str).execute()
+
+            if hasattr(usuarios, 'error') and usuarios.error:
+                return JsonResponse({'error': usuarios.error}, status=400)
+
+            return JsonResponse({'usuarios': usuarios.data}, safe=False)
+
+        except Exception as e:
+            print("Error interno:", str(e))
+            return JsonResponse({'error': str(e)}, status=500)
+
+
+
+
+
 
 
 #########################################################################################################################
@@ -1862,24 +1869,42 @@ def crearListaReproduccion(request):
 @permission_classes([AllowAny])
 @token_required
 def agregarEpisodioLista(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         try:
-            episodio=request.POST.get('idepisodio')
-            lista=request.POST.get('idLista')
+            episodio = request.POST.get('idepisodio')
+            lista = request.POST.get('idLista')
+
             if not episodio or not lista:
                 return JsonResponse({'error': 'Datos faltantes'}, status=400)
-            data={
-                "episodios_idepisodio":episodio,
-                "listareproduccion_idlista":lista
+
+            # Verificar si el registro ya existe
+            existente = supabase.table('episodioslista')\
+                .select("*")\
+                .eq('episodios_idepisodio', episodio)\
+                .eq('listareproduccion_idlista', lista)\
+                .execute()
+
+            if existente.data and len(existente.data) > 0:
+                return JsonResponse({'error': 'El episodio ya está en la lista'}, status=409)
+
+            # Insertar el nuevo registro
+            data = {
+                "episodios_idepisodio": episodio,
+                "listareproduccion_idlista": lista
             }
-            agregado=supabase.table('episodioslista').insert(data).execute()
+            agregado = supabase.table('episodioslista').insert(data).execute()
+
             if hasattr(agregado, 'error') and agregado.error:
                 return JsonResponse({'error': 'Error al agregar episodio a lista'}, status=400)
-            return JsonResponse({'mensaje':'episodio agregado a lista'})
+
+            return JsonResponse({'mensaje': 'Episodio agregado a lista'})
+
         except Exception as e:
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 #########################################################################################################################
 @swagger_auto_schema(
     method='post',
@@ -3158,7 +3183,20 @@ def episodios_podcast(request):
     if request.method=='GET':
         try:
             idpodcast=request.GET.get('idpodcast')
-            episodios=supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))').eq('podcast_idpodcast',idpodcast).execute()
+            idusuario=request.GET.get('idusuario')
+            rol=request.GET.get('rol')
+            if rol=='Creador':
+                creador=supabase.table('backend_podcast').select('*').eq('idpodcast',idpodcast).execute()
+                if str(creador.data[0]['creadores_idcreador'])==idusuario:
+                    episodios=supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))').eq('podcast_idpodcast',idpodcast).execute()
+                else:
+                    episodios=supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))').eq('podcast_idpodcast',idpodcast).eq('visible',True).execute()
+            print('rol obtenido '+rol)
+            if rol=='Oyente':
+                episodios=supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))').eq('podcast_idpodcast',idpodcast).eq('visible',True).execute()
+            if rol=='Administrador':
+                episodios=supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))').eq('podcast_idpodcast',idpodcast).execute()
+            
             if hasattr(episodios,'error') and episodios.error:
                 return JsonResponse({'error':'error al obtener episodios del podcast'})
             return JsonResponse({'episodios':episodios.data})
@@ -3278,68 +3316,169 @@ def listarPodcasts(request):
 
 ##################################################################33
 
+@swagger_auto_schema(
+    tags=['Lista Reproduccion'],
+    method='get',
+    operation_description="Obtiene todas las listas de reproducción de un usuario dado su ID.",
+    manual_parameters=[
+        openapi.Parameter(
+            'idusuario',
+            openapi.IN_QUERY,
+            description="ID del usuario cuyas listas se desean obtener",
+            type=openapi.TYPE_INTEGER,
+            required=True
+        ),
+    ],
+    responses={
+        200: openapi.Response(description="Listas de reproducción obtenidas exitosamente"),
+        400: openapi.Response(description="Error al obtener listas de reproducción"),
+        500: openapi.Response(description="Error interno del servidor"),
+    },
+    security=[{'Bearer': []}]
+)
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def obtener_Listas(request):
-    if request.method=='GET':
+    if request.method == 'GET':
         try:
-            idusuario=request.GET.get('idusuario')
-            listas=supabase.table('listareproduccion').select('*').eq('usuarios_idusuario',idusuario).execute()
+            idusuario = request.GET.get('idusuario')
+            listas = supabase.table('listareproduccion').select('*').eq('usuarios_idusuario', idusuario).execute()
 
-            if hasattr(listas,'error') and listas.error:
-                return JsonResponse({'error':'error al obtener listas de reproduccion'})
-            return JsonResponse({'listas':listas.data})
+            if hasattr(listas, 'error') and listas.error:
+                return JsonResponse({'error': 'error al obtener listas de reproduccion'}, status=400)
+            return JsonResponse({'listas': listas.data}, status=200)
         except Exception as e:
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
         
+###################################################################################################################################
 
-
+@swagger_auto_schema(
+    tags=['Lista Reproduccion'],
+    method='get',
+    operation_description="Obtiene los episodios asociados a una lista de reproducción dado su ID.",
+    manual_parameters=[
+        openapi.Parameter(
+            'idlista',
+            openapi.IN_QUERY,
+            description="ID de la lista de reproducción",
+            type=openapi.TYPE_INTEGER,
+            required=True
+        ),
+    ],
+    responses={
+        200: openapi.Response(description="Episodios obtenidos correctamente"),
+        400: openapi.Response(description="Error al obtener episodios"),
+        500: openapi.Response(description="Error interno del servidor"),
+    },
+    security=[{'Bearer': []}]
+)
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@token_required
 def obtener_ep_lista(request):
-    if request.method=='GET':
+    if request.method == 'GET':
         try:
-            idlista=request.GET.get('idlista')
-            idsEpisodios=supabase.table('episodioslista').select('episodios_idepisodio').eq('listareproduccion_idlista',idlista).execute()
+            idlista = request.GET.get('idlista')
+            idsEpisodios = supabase.table('episodioslista') \
+                                   .select('episodios_idepisodio') \
+                                   .eq('listareproduccion_idlista', idlista) \
+                                   .execute()
+
             ids = [item['episodios_idepisodio'] for item in idsEpisodios.data]
-            episodios = supabase.table('backend_episodios').select('*','podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))').in_('idepisodio', ids).execute()
+            episodios = supabase.table('backend_episodios') \
+                                .select('*', 'podcast_idpodcast(titulo, creadores_idcreador(idcreador,nombre))') \
+                                .in_('idepisodio', ids) \
+                                .execute()
+
             if hasattr(episodios, 'error') and episodios.error:
-                return JsonResponse({'error': 'Error al obtener episodios'})
-            return JsonResponse({'episodios': episodios.data})
-            
+                return JsonResponse({'error': 'Error al obtener episodios'}, status=400)
+
+            return JsonResponse({'episodios': episodios.data}, status=200)
+
         except Exception as e:
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
  
 ##########################################################################################################       
-
+@swagger_auto_schema(
+    tags=['Lista Reproduccion'],
+    method='get',
+    operation_description="Elimina una lista de reproducción y sus episodios asociados dado su ID.",
+    manual_parameters=[
+        openapi.Parameter(
+            'idLista',
+            openapi.IN_QUERY,
+            description="ID de la lista de reproducción a eliminar",
+            type=openapi.TYPE_INTEGER,
+            required=True
+        ),
+    ],
+    responses={
+        200: openapi.Response(description="Lista eliminada correctamente"),
+        400: openapi.Response(description="Error al borrar lista"),
+        500: openapi.Response(description="Error interno del servidor"),
+    },
+    security=[{'Bearer': []}]
+)
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+@token_required
 def borrarLista(request):
-    if request.method=='GET':
+    if request.method == 'GET':
         try:
-            idlista=request.GET.get('idLista')
-            episodios=supabase.table('episodioslista').delete().eq('listareproduccion_idlista',idlista).execute()
-            borrar=supabase.table('listareproduccion').delete().eq('idlista',idlista).execute()
+            idlista = request.GET.get('idLista')
+            episodios = supabase.table('episodioslista').delete().eq('listareproduccion_idlista', idlista).execute()
+            borrar = supabase.table('listareproduccion').delete().eq('idlista', idlista).execute()
+
             if hasattr(borrar, 'error') and borrar.error:
-                return JsonResponse({'error': 'Error al borrar lista'})
-            return JsonResponse({'Mensaje': 'Lista borrada'})
-            
+                return JsonResponse({'error': 'Error al borrar lista'}, status=400)
+
+            return JsonResponse({'Mensaje': 'Lista borrada'}, status=200)
+
         except Exception as e:
             return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
+
 
 
 
 ##########################################################################################################
 
+@swagger_auto_schema(
+    tags=['Autenticación'],
+    method='post',
+    operation_description="Genera un nuevo token de acceso a partir de un token de refresco válido.",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['refresh'],
+        properties={
+            'refresh': openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description='Token de refresco JWT'
+            ),
+        }
+    ),
+    responses={
+        200: openapi.Response(description="Nuevo token de acceso generado exitosamente"),
+        400: openapi.Response(description="Refresh token faltante"),
+        401: openapi.Response(description="Refresh token inválido o expirado"),
+        500: openapi.Response(description="Error interno del servidor"),
+    }
+)
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
 def refresh_token(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         try:
             refresh = request.data.get('refresh')
             if not refresh:
                 return Response({'error': 'Refresh token faltante'}, status=400)
+
             payload = jwt.decode(refresh, settings.SECRET_KEY, algorithms=['HS256'])
 
             nuevo_payload = {
@@ -3348,9 +3487,10 @@ def refresh_token(request):
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1),
                 'iat': datetime.datetime.utcnow()
             }
+
             nuevo_access_token = jwt.encode(nuevo_payload, settings.SECRET_KEY, algorithm='HS256')
 
-            return JsonResponse({'access': nuevo_access_token})
+            return JsonResponse({'access': nuevo_access_token}, status=200)
 
         except jwt.ExpiredSignatureError:
             return JsonResponse({'error': 'Refresh token expirado'}, status=401)

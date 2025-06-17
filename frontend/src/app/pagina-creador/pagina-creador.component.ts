@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { environment } from '../../environments/environment';
 import { MatChipsModule } from '@angular/material/chips';
 import { PodcastListComponent } from '../podcast-list/podcast-list.component';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-pagina-creador',
   imports: [ CommonModule,
@@ -17,7 +18,8 @@ import { PodcastListComponent } from '../podcast-list/podcast-list.component';
     MatOptionModule,
      MatIconModule,
      MatChipsModule,
-    PodcastListComponent],
+    PodcastListComponent,
+  FormsModule],
   templateUrl: './pagina-creador.component.html',
   styleUrl: './pagina-creador.component.css'
 })
@@ -30,6 +32,8 @@ rol:any
   siguiendo:any
   podcasts:any[]=[]
   headers:any
+modal:boolean=false;
+monto:any
   constructor( private http: HttpClient, private router: Router) {
     const token = localStorage.getItem('access_token');
   
@@ -121,6 +125,33 @@ rol:any
                   console.error('Error al seguir creador:', error);
                 }
               });
+
+    }
+  }
+
+  mostrarModal(){
+    this.modal=true;
+  }
+  donar(){
+    if(this.monto>0){
+      const confirmar=window.confirm('Donar Bs. '+this.monto+' a '+this.creador.nombre+'?')
+      if(confirmar){
+        const endpoint=environment.apiUrl+"/usuarios/donar/"
+        const headers = this.headers
+        const form=new FormData()
+        form.append('idcreador',this.creador.idcreador);
+        form.append('monto',this.monto);
+        this.http.post(endpoint,form,{headers}).subscribe({
+          next:(response)=>{
+            alert("Donacion exitosa")
+            this.monto=0;
+            this.modal=false;
+          },
+          error:(error)=>{
+            alert("Error al donar al creador")
+          }
+        });
+      }
 
     }
   }

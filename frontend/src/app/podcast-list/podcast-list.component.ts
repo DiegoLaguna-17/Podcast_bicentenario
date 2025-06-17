@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit , SimpleChanges} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,12 +15,13 @@ import { environment } from '../../environments/environment';
     PodcastCardComponent,
     MatProgressSpinnerModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    
   ],
   templateUrl: './podcast-list.component.html',
   styleUrls: ['./podcast-list.component.css']
 })
-export class PodcastListComponent  {
+export class PodcastListComponent implements OnInit, OnChanges {
   @Input() podcasts: any[] = []; // Valor por defecto o recíbelo desde un padre
   
   
@@ -28,6 +29,28 @@ export class PodcastListComponent  {
   error: string | null = null;
   
   constructor(private  http: HttpClient) {}
+  
+  ngOnInit(): void {
+    // Ya no haces nada aquí porque los datos llegan después
+  }
+  esperar(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async ngOnChanges(changes: SimpleChanges) {
+    if (changes['podcasts']) {
+      // Espera un momento por si llegan datos
+      await this.esperar(1000);  // Puedes ajustar el tiempo
+
+      if (this.podcasts && this.podcasts.length > 0) {
+        this.isLoading = false;
+        console.log(this.podcasts)
+      } else {
+        // Si sigue vacío luego de esperar, también quitamos el loading
+        this.isLoading = false;
+      }
+    }
+  }
 /*
   ngOnInit(): void {
     console.log(this.creadorId);

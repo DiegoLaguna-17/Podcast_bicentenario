@@ -6,10 +6,11 @@ import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-siguiendo',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,MatIcon],
   templateUrl: './siguiendo.component.html',
   styleUrl: './siguiendo.component.css'
 })
@@ -70,15 +71,22 @@ export class SiguiendoComponent {
     });
   }
 
-  buscar() {
+sinResultados = false; // debe existir como propiedad
+
+buscar() {
   const terminoLimpio = this.termino.trim().toLowerCase();
+
   if (terminoLimpio === '') {
-    this.creadores = [...this.creadoresCompleto]; // Muestra todos
+    this.creadores = [...this.creadoresCompleto];
+    this.sinResultados = false;
   } else {
-    this.creadores = this.creadores.filter(creador =>
+    this.creadores = this.creadoresCompleto.filter(creador =>
       creador.nombre.toLowerCase().includes(terminoLimpio)
     );
+    this.sinResultados = this.creadores.length === 0;
   }
 }
+
+
 
 }

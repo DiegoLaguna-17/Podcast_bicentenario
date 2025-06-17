@@ -63,7 +63,8 @@ export class PerfilComponent {
         
         console.log(this.datosper.fotoperfil);
         console.log('id del perfil: ' + this.id + ' ' + this.rol);
-        this.datosCargados = true;
+        this.isLoading = false;
+
       },
       error: (error) => {
         console.error('Error en el perfil:', error);

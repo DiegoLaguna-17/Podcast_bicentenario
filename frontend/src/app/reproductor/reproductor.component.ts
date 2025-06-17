@@ -276,7 +276,13 @@ export class ReproductorComponent {
         this.cerrarModal
       },
       error:(error)=>{
-        console.log('error al agregar episodio'+ error)
+        if (error.status === 409) {
+        alert('⚠️ Este episodio ya está en la lista');
+      } else if (error.status === 400) {
+        alert('❌ Datos faltantes');
+      } else {
+        alert('🚨 Error interno del servidor');
+      }
       }
     })
 

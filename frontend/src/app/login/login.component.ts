@@ -89,7 +89,15 @@ rolverificar:any
 
       },
       error: (error) => {
-        console.error('Error en el login:', error);
+        if(error.status==400){
+          alert('Datos faltantes')
+        }
+        if(error.status==403 ||error.status==401){
+          alert('El correo, la contraseña o el rol son incorrectos')
+        }
+        if(error.status==404){
+          alert('Usuario no encontrado')
+        }
       }
     });
   }

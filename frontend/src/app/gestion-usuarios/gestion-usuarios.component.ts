@@ -23,9 +23,11 @@ export class GestionUsuariosComponent {
   imagenSeleccionada:any
   cargando:boolean=false;
   headers:any
+  usuario:any
   constructor(private router: Router,private http: HttpClient,) {
+     this.usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
      const token = localStorage.getItem('access_token');
-  
+    
     if (!token) {
       this.errorRespuesta = 'No se encontró token de autenticación.';
       return;
@@ -39,7 +41,7 @@ export class GestionUsuariosComponent {
   listarUsuarios(){
     this.cargando=true;
     const headers=this.headers
-    const endpoint=environment.apiUrl+'/usuarios/listar/';
+    const endpoint=environment.apiUrl+'/usuarios/listar/?admin='+this.usuario.id;
     this.http.get<{usuarios:any}>(endpoint,{headers}).subscribe({
       next:(response)=>{
         this.usuarios=response.usuarios

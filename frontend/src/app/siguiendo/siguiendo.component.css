@@ -307,3 +307,24 @@
     transform: rotate(360deg);
   }
 }
+
+.no-results {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #999;
+  margin-top: 2rem;
+}
+.empty-state {
+  text-align: center;
+  color: var(--blanco);
+  padding: 40px 20px;
+  border: 1px dashed var(--blanco);
+  border-radius: 12px;
+}
+
+.empty-icon {
+  font-size: 60px;
+  color: var(--dorado);
+  margin-bottom: 10px;
+  height: 10vh;
+}

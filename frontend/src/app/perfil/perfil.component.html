@@ -1,8 +1,15 @@
 <div class="contenedor">  
+   <div id="cargar" *ngIf="isLoading">
+            <div class="cargar-loader">
+              <div class="rueda"></div>
+            </div>
+            <div class="cargando">Cargando...</div>
+            
+          </div>
   <div *ngIf="datosper.rol == 'Creador'; else noDatos" class="profile-container">
     <div class="profile-card creator-view">
       <div class="profile-header">
-        <h2>Datos recibidos:</h2>
+        <h2>Perfil:</h2>
         <button class="cierre" (click)="cerrarSesion()">Cerrar Sesión</button>
       </div>
       
@@ -19,6 +26,7 @@
           <p><strong>Nombre:</strong> {{datosper.nombre}}</p>
           <p><strong>Correo:</strong> {{datosper.correo}}</p>
           <p><strong>Rol:</strong> <span class="role-badge">{{datosper.rol}}</span></p>
+          <p><strong>Reacaudado: </strong> Bs. {{datosper.recaudado}}</p>
 
           <div class="biography" *ngIf="datosper.biografia">
             <h3>Biografía</h3>
@@ -67,6 +75,7 @@
       </div>
     </div>
   </ng-template>
+ 
 
 
 </div>

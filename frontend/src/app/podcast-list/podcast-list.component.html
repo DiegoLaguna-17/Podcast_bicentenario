@@ -5,26 +5,40 @@
        
     </div>
     
-    @if (error) {
-      <div class="error-container">
-        <mat-icon>error_outline</mat-icon>
-        <p>{{ error }}</p>
-        
-      </div>
-    } @else {
-      @if (podcasts.length === 0) {
-        <div class="empty-state">
-          <mat-icon class="empty-icon">podcasts</mat-icon>
-          <h3>No se encontraron podcasts</h3>
-          <p>Este creador no tiene podcasts publicados aún</p>
+        <div id="cargar" *ngIf="isLoading">
+            <div class="cargar-loader">
+              <div class="rueda"></div>
+            </div>
+            <div class="cargando">Cargando...</div>
+            
+          </div>
+    
+      @if (error) {
+        <div class="error-container">
+          <mat-icon>error_outline</mat-icon>
+          <p>{{ error }}</p>
+          
         </div>
       } @else {
-        <div class="podcast-grid">
-          @for (podcast of podcasts; track podcast.id) {
-            <app-podcast-card [podcast]="podcast"></app-podcast-card>
+        
+          @if (podcasts.length === 0) {
+          <div class="empty-state">
+            <mat-icon class="empty-icon">podcasts</mat-icon>
+            <h3>No se encontraron podcasts</h3>
+            <p>Este creador no tiene podcasts publicados aún</p>
+          </div>
+          } @else {
+            @if(!isLoading){  
+              <div class="podcast-grid">
+                @for (podcast of podcasts; track podcast.id) {
+                  <app-podcast-card [podcast]="podcast"></app-podcast-card>
+                }
+              </div>
+            }
           }
-        </div>
+        
+        
       }
-    }
+    
   </div>
 </div>

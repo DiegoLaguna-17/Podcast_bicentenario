@@ -49,8 +49,8 @@ borrarLista(lista:any){
     const headers=this.headers
     this.http.get<{mensaje:string}>(endpoint,{headers}).subscribe({
       next:(response)=>{
-        alert("Lista Borrada")
-        window.location.reload
+        alert('Lista eliminada con exito')
+        window.location.reload();
       },
       error:(error)=>{
         alert("Error al borrar lista")

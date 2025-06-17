@@ -40,17 +40,6 @@ export class PaginaPodcastComponent {
  errorRespuesta:any
  headers:any
   constructor( private http: HttpClient, private router: Router) {
-    const token = localStorage.getItem('access_token');
-  
-    if (!token) {
-      this.errorRespuesta = 'No se encontró token de autenticación.';
-      return;
-    }
-    this.headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-    });
-    this.podcast=this.router.getCurrentNavigation()?.extras.state?.['datos'];
-    console.log(this.podcast)
     const usuarioStr = localStorage.getItem('usuario');
     if (usuarioStr) {
       const usuarioObj = JSON.parse(usuarioStr);
@@ -58,13 +47,31 @@ export class PaginaPodcastComponent {
       this.idoyente=usuarioObj.id; // aquí está el id
       // Usar idUsuario para lo que necesites, ej. en el query param
     }
+    this.podcast=this.router.getCurrentNavigation()?.extras.state?.['datos'];
+    const token = localStorage.getItem('access_token');
+    if(this.rol!="Creador"){
+      this.verificarSuscripcion()
+    }
+    if(this.rol=="Creador" && this.idoyente==this.podcast.creadores_idcreador){
+      this.suscrito=true;
+    }
+    if (!token) {
+      this.errorRespuesta = 'No se encontró token de autenticación.';
+      return;
+    }
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
+    
+    console.log(this.podcast)
+    
     this.obtenerEpisodios()
-    this.verificarSuscripcion()
+    
 
   }
   obtenerEpisodios(){
     const headers=this.headers
-    let endpoint=environment.apiUrl+"/podcast/episodios/?idpodcast="+this.podcast.idpodcast;
+    let endpoint=environment.apiUrl+"/podcast/episodios/?idpodcast="+this.podcast.idpodcast+"&idusuario="+this.idoyente+"&rol="+this.rol;
     this.http.get<{episodios: any[]}>(endpoint,{headers}).subscribe({
           next: (response) => {
             
@@ -79,9 +86,7 @@ export class PaginaPodcastComponent {
     let endpoint=environment.apiUrl+"/usuarios/verificarSuscripcion/?idusuario="+this.idoyente+"&idpodcast="+this.podcast.idpodcast;
     this.http.get<{suscrito:any}>(endpoint).subscribe({
           next: (response) => {
-            
             this.suscrito=response.suscrito;
-            console.log('sigue creador?:',this.suscrito)
             if(this.suscrito){
               this.suscripcion='Suscrito'
             }else{
@@ -93,6 +98,7 @@ export class PaginaPodcastComponent {
           }
         });
   }
+  
   accionBotonSuscribirse(){
     if(!this.suscrito){
       this.mostrarModal=true;
@@ -111,8 +117,8 @@ export class PaginaPodcastComponent {
           siSuscrito.append('idpodcast',this.podcast.idpodcast);
           this.http.post(endpoint,siSuscrito,{headers}).subscribe({
                 next: (response) => {
-                console.log('suscrito')
                   this.verificarSuscripcion()
+                  window.location.reload;
                 },
                 error: (error) => {
                   console.error('Error al suscribirse al podcast:', error);

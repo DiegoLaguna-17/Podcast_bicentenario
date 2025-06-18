@@ -1,3 +1,27 @@
+.volver {
+  margin-right: 90%;
+  margin-bottom: 1%;
+  background: transparent;
+  color: var(--color-light);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-sm) 3%;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.volver:hover {
+  background: rgba(212, 175, 55, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
 .registration-page {
   min-height: 100vh;
@@ -89,7 +113,6 @@
   gap: var(--space-lg);
 }
 
-
 .form-group {
   margin-bottom: var(--space-md);
 }
@@ -101,7 +124,9 @@
   font-weight: 500;
 }
 
-.form-group input:not([type="file"]){
+.form-group input:not([type="file"]),
+.form-group textarea,
+.form-group select {
   width: 95%;
   padding: var(--space-md);
   background: var(--color-light);
@@ -159,7 +184,6 @@
   justify-content: center;
   gap: var(--space-sm);
   margin-top: var(--space-lg);
-  margin-left: 37%;
 }
 
 .submit-btn:hover {
@@ -208,29 +232,4 @@
   cursor: pointer;
   transition: var(--transition);
   width: 93%;
-}
-
-.volver {
-  margin-right: 90%;
-  margin-bottom: 1%;
-  background: transparent;
-  color: var(--color-light);
-  border: 2px solid var(--color-accent);
-  border-radius: var(--border-radius-lg);
-  padding: var(--space-sm) 3%;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.volver:hover {
-  background: rgba(212, 175, 55, 0.1);
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

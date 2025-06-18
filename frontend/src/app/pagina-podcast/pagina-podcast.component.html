@@ -1,17 +1,23 @@
 
   <div class="podcast-header">
+    
     <div class="general">
-        <button (click)="accionBotonSuscribirse()">{{suscripcion}}</button>
-      <h3 class="podcast-title">{{ podcast.titulo }}</h3>
-      <span class="podcast-category">{{ podcast.categoria }}</span>
+      <h3 class="podcast-title">Título: {{ podcast.titulo }}</h3>
+
+      <h2 class="podcast-description" >
+        Descripción: 
+        {{ podcast.descripcion  }}
+      </h2>
+
+      <span class="podcast-category">Categoría: {{ podcast.categoria }}</span>
+      <br><br>
+      <button (click)="accionBotonSuscribirse()" class="sus">{{suscripcion}}</button>
     </div>
     <div class="extra">
       <mat-chip class="premium-chip" *ngIf="podcast.premium">
         Premium
       </mat-chip>
-      <h2 class="podcast-description">
-      {{ podcast.descripcion  }}
-      </h2>
+      
     </div>
     
   </div>
@@ -31,11 +37,11 @@
 <div class="modal" *ngIf="mostrarModal">
   <div class="modal-contenido">
     <span class="cerrar" (click)="mostrarModal = false">&times;</span>
-    <h2>Método de pago</h2>
+    <h2 style="color: white;">Método de pago</h2>
 
     <input type="text" placeholder="Numero de tarjeta" class="entrada">
     <input type="text" placeholder="Codigo de seguridad" class="entrada">
-    <button (click)="suscribirse()">
+    <button (click)="suscribirse()" class="view-creator-btn">
         pagar
     </button>
 

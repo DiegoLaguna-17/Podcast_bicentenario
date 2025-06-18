@@ -38,12 +38,13 @@
   <div class="notificaciones" *ngIf="notis==false && notificaciones.length>0">
     <div class="notificaciones-contenido">
       <span class="cerrar" (click)="cerrarModal()">&times;</span>
-      <h2>Lo que te perdiste</h2>
+      <h2 style="text-align: center;">Lo que te perdiste</h2>
+      <br> <br> 
       <div *ngFor="let notificacion of notificaciones" class="card-comentario">
         
-            <h2>Titulo: {{ notificacion.titulo }}</h2><br> 
+            <h2>Titulo: {{ notificacion.titulo }}</h2>
             <h2>Creador: {{notificacion.podcast_idpodcast.creadores_idcreador.nombre}}</h2>   
-            <h3></h3>  
+<br> 
       </div>
     </div>
   </div>
@@ -69,7 +70,7 @@
       
     </div>
     <div class="creator-dashboard" *ngIf="usuario.rol==='Creador' && !cargaDash">
-      <h1 style="margin-left: 77vh;">DashBoard informativo</h1>
+      <h1 style="text-align: center; margin-top: 20px;">DashBoard informativo</h1>
       <br><br>
       <div class="stats-container">
         <div class="stat-card">

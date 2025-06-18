@@ -1,0 +1,54 @@
+<div class="registration-page">
+  <div class="registration-container">
+    <div class="registration-card">
+      <div class="registration-header">
+        <button class="volver" (click)="volverAInicio()">←</button>
+        <h2>Registro de Administradores</h2>
+      </div>
+
+      <!-- Formulario para Administrador -->
+      <form #administradorForm="ngForm" 
+            (ngSubmit)="onSubmitAdministrador(administradorForm)" class="registration-form">
+        <div class="form-group">
+          <label for="admin-usuario">Usuario:</label>
+          <input type="text" id="admin-usuario" name="usuario" 
+                 [(ngModel)]="administrador.usuario" required>
+        </div>
+
+        <div class="form-group">
+          <label for="admin-contrasenia">Contraseña:</label>
+          <div class="input-container">
+            <input [type]="showPassword ? 'text' : 'password'" id="admin-contrasenia" 
+                   name="contrasenia" [(ngModel)]="administrador.contrasenia" required>
+            <i class="fas {{showPassword ? 'fa-eye-slash' : 'fa-eye'}} toggle-password" 
+               (click)="showPassword = !showPassword"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="admin-correo">Correo electrónico:</label>
+          <input type="email" id="admin-correo" name="correo" 
+                 [(ngModel)]="administrador.correo" required>
+        </div>
+
+        <div class="form-group">
+          <label for="administrador-telefono">Telefono:</label>
+          <input type="number" id="creador-telefono" name="administrador-telefono" 
+                 [(ngModel)]="administrador.telefono" required>
+        </div>
+        <div class="form-group">
+          <label for="admin-fotoPerfil">Foto de perfil:</label>
+          <input type="file" id="admin-fotoPerfil" name="fotoPerfil" 
+                 (change)="onFileChange($event, 'fotoPerfil', 'administrador')" accept="image/*">
+          <div *ngIf="administrador.fotoPerfilPreview" class="image-preview">
+            <img [src]="administrador.fotoPerfilPreview" alt="Vista previa foto de perfil" width="200" height="200">
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="administradorForm.invalid">
+          <i class="fas fa-user-plus"></i> Registrarse como Administrador
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

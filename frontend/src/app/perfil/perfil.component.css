@@ -181,12 +181,19 @@ h2 {
   background-color: rgba(212, 175, 55, 0.1);
 }
 
+.botones {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  gap: 4%; /* Separación de 1px entre botones */
+  flex-wrap: wrap; /* Permite que bajen de línea si no hay espacio */
+}
+
 .cierre {
   background: transparent;
   color: var(--color-light);
   border: 2px solid var(--color-accent);
   border-radius: var(--border-radius-lg);
-  padding: var(--space-sm) 6%;
+  padding: var(--space-sm) 3%;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -197,8 +204,6 @@ h2 {
   text-align: center;
   position: relative;
   overflow: hidden;
-  margin-left: 15%;
-  
 }
 
 .cierre::before {

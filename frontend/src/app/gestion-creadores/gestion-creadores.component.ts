@@ -160,5 +160,7 @@ eliminarCreador(creador:any){
   }
 }
 
-  
+  volverAInicio() {
+    this.router.navigate(['/menu-principal']);
+  }
 }

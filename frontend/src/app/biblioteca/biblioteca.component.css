@@ -92,9 +92,9 @@
 }
 
 .entrada {
-  width: 100%;
+  width: 94%;
   padding: 10px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-accent);
   border-radius: 8px;
   font-size: 16px;
   margin-bottom: 12px;
@@ -177,4 +177,116 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+}
+
+.btn_actualizar{
+  position: relative;
+    overflow: hidden;
+    z-index: 1;
+    padding: var(--space-md) var(--space-xl);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    box-shadow: var(--shadow-sm);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+    margin-left: 30%;
+}
+
+.btn_actualizar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+    transition: all 0.7s ease;
+    z-index: -1;
+}
+
+.btn_actualizar:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn_actualizar:hover::before {
+    left: 100%;
+}
+
+.btn_actualizar:hover {
+    background: var(--color-accent-light);
+    color: var(--color-primary-dark);
+}
+
+.btn_actualizar:active {
+    transform: translateY(2px);
+    transition: all 0.1s ease;
+}
+
+
+.buttonAgregar{
+  position: relative;
+    overflow: hidden;
+    z-index: 1;
+    padding: var(--space-md) var(--space-xl);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    box-shadow: var(--shadow-sm);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+}
+
+.buttonAgregar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+    transition: all 0.7s ease;
+    z-index: -1;
+}
+
+.buttonAgregar:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.buttonAgregar:hover::before {
+    left: 100%;
+}
+
+.buttonAgregar:hover {
+    background: var(--color-accent-light);
+    color: var(--color-primary-dark);
+}
+
+.buttonAgregar:active {
+    transform: translateY(2px);
+    transition: all 0.1s ease;
 }

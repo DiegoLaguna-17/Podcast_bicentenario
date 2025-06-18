@@ -21,6 +21,7 @@ import { SubirPublicidadesComponent } from './subir-publicidades/subir-publicida
 import { SubirPodcastComponent } from './subir-podcast/subir-podcast.component';
 import { BibliotecaComponent } from './biblioteca/biblioteca.component';
 import { PaginaListaComponent } from './pagina-lista/pagina-lista.component';
+import { RegistrarAdminComponent } from './registrar-admin/registrar-admin.component';
 
 export const routes: Routes = [
   { path: '', component: InicioComponent },
@@ -45,6 +46,7 @@ export const routes: Routes = [
   { path: 'gestion-episodios',component:GestionEpisodiosComponent},
   { path: 'subir-publicidad',component:SubirPublicidadesComponent},
   {path: 'biblioteca', component:BibliotecaComponent},
-  { path:'lista',component:PaginaListaComponent}
+  { path:'lista',component:PaginaListaComponent},
+  { path:'registrar-admin', component:RegistrarAdminComponent}
 
 ];

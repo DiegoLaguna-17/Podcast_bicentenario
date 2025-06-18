@@ -17,7 +17,7 @@
       <div class="profile-content">
         <div class="profile-image-container">
           <img src="{{datosper.fotoPerfil}}" alt="Foto de perfil" class="profile-image">
-          <button class="update-photo-button">Actualizar foto de perfil</button>
+          <!-- <button class="update-photo-button">Actualizar foto de perfil</button> -->
           <img src="{{datosper.donaciones}}" alt="Donación" class="donation-image" *ngIf="datosper.donaciones">
         </div>
 
@@ -68,11 +68,12 @@
           </div>
         </div>
         <br>
-        <div style="display: flex;">
-        <button class="cierre" (click)="cerrarSesion()">Cerrar Sesión</button>
-        <button class="cierre" (click)="volverAMenuPrincipal()">Volver</button>
-        
-        <button class="cierre" (click)="subirPubli()" *ngIf="datosper.rol=='Administrador'">Subir publicidad</button>
+        <div class="botones">
+          
+          <button class="cierre" (click)="volverAMenuPrincipal()">Volver</button>
+          <button class="cierre" (click)="registrarAdmin()" *ngIf="datosper.rol=='Administrador'">Registrar Admin</button>
+          <button class="cierre" (click)="subirPubli()" *ngIf="datosper.rol=='Administrador'">Subir publicidad</button>
+          <button class="cierre" (click)="cerrarSesion()">Cerrar Sesión</button>
         </div>
       </div>
     </div>

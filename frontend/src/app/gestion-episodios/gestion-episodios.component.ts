@@ -30,7 +30,7 @@ export class GestionEpisodiosComponent {
   headers:any
   rol:any
   idoyente:any
-  constructor(private route: ActivatedRoute,private http: HttpClient,) {
+  constructor(private route: ActivatedRoute,private http: HttpClient,private router: Router) {
     const usuarioStr = localStorage.getItem('usuario');
     if (usuarioStr) {
       const usuarioObj = JSON.parse(usuarioStr);
@@ -119,6 +119,7 @@ eliminarComentario(comentario:any){
     }
 }
 
+ 
   editar(episodio:any){
     this.mostrarModal=true;
     this.idEditar=episodio.idepisodio;
@@ -187,5 +188,7 @@ eliminarEpisodio(episodio:any){
   }
 }
 
-  
+ volverAInicio() {
+    this.router.navigate(['gestion-podcasts']);
+  }
 }

@@ -133,6 +133,8 @@ eliminarUsuario(usuario:any){
     }
   }
 }
-
+volverAInicio() {
+    this.router.navigate(['/menu-principal']);
+  }
   
 }

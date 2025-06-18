@@ -3,6 +3,8 @@ import { HttpClient , HttpHeaders} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-subir-publicidades',
   templateUrl: './subir-publicidades.component.html',
@@ -19,7 +21,7 @@ headers:any
   selectedFileName: string = '';
   imagePreview: string | ArrayBuffer | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     const token = localStorage.getItem('access_token');
   
     if (!token) {
@@ -80,5 +82,9 @@ headers:any
     this.selectedFile = null;
     this.selectedFileName = '';
     this.imagePreview = null;
+  }
+
+  volverAInicio() {
+    this.router.navigate(['/menu-principal']);
   }
 }

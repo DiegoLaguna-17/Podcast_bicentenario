@@ -1,4 +1,5 @@
 <div class="container">  
+  <button class="volver" (click)="volverAInicio()">←</button>
   <h1 class="titulo">Gestión de Podcasts</h1>
 
   <!-- Mostrar error si existe -->
@@ -11,8 +12,11 @@
     <div *ngFor="let podcast of podcasts" class="card-creador">
       <div class="info-creador">
         <h2>🎙️ {{ podcast.titulo }}</h2>
+        <br><br>
         <p><strong>Descripción:</strong> {{ podcast.descripcion }}</p>
+        <br>
         <p><strong>Categoría:</strong> {{ podcast.categoria }}</p>
+        <br>
         <p><strong>Creador:</strong> {{ podcast.creadores_idcreador.nombre }}</p>
       </div>
 
@@ -30,10 +34,10 @@
         <h2>Editar Podcast</h2>
 
         <label for="titulo">Título</label>
-        <input id="titulo" type="text" class="entrada" [(ngModel)]="tituloEditar" />
+        <input id="titulo" type="text" class="entrada" [(ngModel)]="tituloEditar" style="width: 94%;"/>
 
         <label for="descripcion">Descripción</label>
-        <textarea id="descripcion" class="entrada" [(ngModel)]="descripcionEditar"></textarea>
+        <textarea id="descripcion" class="entrada" [(ngModel)]="descripcionEditar" style="width: 94%;"></textarea>
 
         <button class="btn actualizar" (click)="actualizarPodcast()">Actualizar Podcast</button>
       </div>

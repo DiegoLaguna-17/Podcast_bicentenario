@@ -188,8 +188,10 @@ export class RegistrarAdminComponent {
     this.http.post(endpoint, formData).subscribe({
       next: (response) => {
         console.log('Registro exitoso:', response);
+        alert('Administrador registrado')
         this.mensajeRespuesta = `¡Usuario registrado exitosamente como ${formData.get('tipoUsuario')}!`;
         this.resetForm(form);
+        window.location.reload();
       },
       error: (error) => {
         console.error('Error en el registro:', error);

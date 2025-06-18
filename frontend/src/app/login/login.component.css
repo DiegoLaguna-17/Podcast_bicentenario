@@ -212,6 +212,31 @@
   }
 }
 
+.volver {
+  margin-right: 90%;
+  margin-bottom: 1%;
+  background: transparent;
+  color: var(--color-light);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-sm) 3%;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.volver:hover {
+  background: rgba(212, 175, 55, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .button_verifi{
   background: transparent;
   color: var(--color-light);

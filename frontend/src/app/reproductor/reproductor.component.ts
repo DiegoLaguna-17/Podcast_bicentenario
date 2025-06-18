@@ -91,6 +91,11 @@ export class ReproductorComponent {
   cambiarVelocidad(event: any, audioPlayer: HTMLAudioElement) {
     audioPlayer.playbackRate = event.value;
   }
+
+  volverABuscar() {
+    this.router.navigate(['/buscar']);
+  }
+
   obtenerTranscripcion(){
     let url=this.episodio.audio;
     let endpoint=environment.apiUrl +'/transcribir/';

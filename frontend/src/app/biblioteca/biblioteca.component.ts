@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-biblioteca',
@@ -20,7 +21,7 @@ export class BibliotecaComponent {
   modal: boolean = false;
   isLoading: boolean = true;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     const token = localStorage.getItem('access_token');
 
@@ -48,6 +49,10 @@ export class BibliotecaComponent {
         this.isLoading = false;
       }
     });
+  }
+
+  volverAMenuPrincipal() {
+    this.router.navigate(['/menu-principal']);
   }
 
   crearLista() {

@@ -73,6 +73,10 @@ export class SiguiendoComponent {
 
 sinResultados = false; // debe existir como propiedad
 
+volverAMenuPrincipal() {
+  this.router.navigate(['/menu-principal']);
+}
+
 buscar() {
   const terminoLimpio = this.termino.trim().toLowerCase();
 

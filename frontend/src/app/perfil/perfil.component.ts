@@ -86,6 +86,10 @@ export class PerfilComponent {
     this.router.navigate(['/subir-publicidad']);
   }
 
+  volverAMenuPrincipal() {
+    this.router.navigate(['/menu-principal']);
+  }
+
   loadPodcasts(): void {
     const token = localStorage.getItem('access_token');
   

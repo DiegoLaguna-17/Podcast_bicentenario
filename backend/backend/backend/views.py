@@ -658,9 +658,13 @@ def buscar_general(request):
         podcasts2 = supabase.table('backend_podcast').select("*").ilike('descripcion', f'%{query}%').execute()
         podcasts = {p['idpodcast']: p for p in (podcasts1.data + podcasts2.data)}.values()
         # Buscar en episodios (por título y descripción)
-        episodios1 = supabase.table('backend_episodios').select("*",'podcast_idpodcast(titulo, creadores_idcreador(nombre))').ilike('titulo', f'%{query}%').execute()
-        episodios2 = supabase.table('backend_episodios').select("*",'podcast_idpodcast(titulo, creadores_idcreador(nombre))').ilike('descripcion', f'%{query}%').execute()
-        episodios = {e['idepisodio']: e for e in (episodios1.data + episodios2.data)}.values()
+        episodios1 = supabase.table('backend_episodios').select("*",'podcast_idpodcast(titulo, creadores_idcreador(nombre),premium)').ilike('titulo', f'%{query}%').execute()
+        episodios2 = supabase.table('backend_episodios').select("*",'podcast_idpodcast(titulo, creadores_idcreador(nombre),premium)').ilike('descripcion', f'%{query}%').execute()
+        todos_episodios = {e['idepisodio']: e for e in (episodios1.data + episodios2.data)}.values()
+        episodios = [
+            e for e in todos_episodios
+            if e.get('podcast_idpodcast', {}).get('premium') in [False, 'false', 0]
+        ]
         return JsonResponse({
             'creadores': list(creadores),
             'podcasts': list(podcasts),
@@ -722,13 +726,17 @@ def buscar_anio (request):
         fecha_inicio = f"{anio}-01-01"
         fecha_fin = f"{int(anio)+1}-01-01"
         try:
-            episodios = supabase.table('backend_episodios') .select("*",'podcast_idpodcast(titulo, creadores_idcreador(nombre))').gte('fechapublicacion', fecha_inicio).lt('fechapublicacion', fecha_fin).execute()
+            episodios_raw = supabase.table('backend_episodios') .select("*",'podcast_idpodcast(titulo, creadores_idcreador(nombre),premium)').gte('fechapublicacion', fecha_inicio).lt('fechapublicacion', fecha_fin).execute()
+            episodios = [
+                e for e in episodios_raw.data
+                if e.get('podcast_idpodcast', {}).get('premium') in [False, 'false', 0]
+            ]
             podcasts=supabase.table('backend_podcast') .select("*").gte('fecha', fecha_inicio).lt('fecha', fecha_fin).execute()
             creadores=supabase.table('backend_creadores') .select("*").gte('fechaingreso', fecha_inicio).lt('fechaingreso', fecha_fin).execute()
             return JsonResponse({
                 'creadores':creadores.data,
                 'podcasts': podcasts.data,
-                'episodios': episodios.data
+                'episodios': episodios
             })
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
@@ -792,10 +800,15 @@ def buscar_tematica(request):
             idsP=supabase.table('backend_podcast').select('idpodcast').ilike('categoria',f'%{tematica}%').execute()
             idpodcasts = [p['idpodcast'] for p in idsP.data]
             # Episodios con info de podcast (incluye categoría), filtrados por categoría del podcast
-            episodios = supabase.table('backend_episodios')\
-                .select('*','podcast_idpodcast(titulo, creadores_idcreador(nombre))')\
+            episodios_raw = supabase.table('backend_episodios')\
+                .select('*','podcast_idpodcast(titulo, creadores_idcreador(nombre),premium)')\
                 .in_('podcast_idpodcast', idpodcasts)\
                 .execute()
+            episodios = [
+                e for e in episodios_raw.data
+                if e.get('podcast_idpodcast', {}).get('premium') in [False, 'false', 0]
+            ]
+            
             # Creadores con info de podcast (incluye categoría), filtrados por categoría del podcast
             idsC=supabase.table('backend_podcast').select('creadores_idcreador').ilike('categoria',f'%{tematica}%').execute()
             idCreadores=[c['creadores_idcreador'] for c in idsC.data]
@@ -806,7 +819,7 @@ def buscar_tematica(request):
             return JsonResponse({
                 'creadores':creadores.data,
                 'podcasts': podcasts.data,
-                'episodios': episodios.data
+                'episodios': episodios
             })
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)

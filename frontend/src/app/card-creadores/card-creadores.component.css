@@ -45,6 +45,9 @@
   font-weight: 500;
   margin-bottom: 4px;
   width: 70%;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
 }
 
 .podcast-category {

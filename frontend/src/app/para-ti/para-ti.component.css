@@ -41,7 +41,7 @@
   }
 }
 .title {
-  color: var(--color-accent);
+  color: var(--color-light);
   font-family: 'Playfair Display', serif;
   font-size: 50px;
   margin-bottom: var(--space-md);

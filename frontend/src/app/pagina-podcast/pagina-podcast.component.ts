@@ -39,6 +39,7 @@ export class PaginaPodcastComponent {
  mostrarModal:boolean=false
  errorRespuesta:any
  headers:any
+ esPremium:boolean=false;
   constructor( private http: HttpClient, private router: Router) {
     const usuarioStr = localStorage.getItem('usuario');
     if (usuarioStr) {
@@ -62,6 +63,9 @@ export class PaginaPodcastComponent {
     this.headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
     });
+    if(this.podcast.premium==true){
+      this.esPremium=true;
+    }
     
     console.log(this.podcast)
     
@@ -117,8 +121,10 @@ export class PaginaPodcastComponent {
           siSuscrito.append('idpodcast',this.podcast.idpodcast);
           this.http.post(endpoint,siSuscrito,{headers}).subscribe({
                 next: (response) => {
+                  alert('Ahora estas suscrito')
                   this.verificarSuscripcion()
-                  window.location.reload;
+                  this.obtenerEpisodios()
+                  this.mostrarModal=false;
                 },
                 error: (error) => {
                   console.error('Error al suscribirse al podcast:', error);

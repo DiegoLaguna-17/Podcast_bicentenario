@@ -16,11 +16,11 @@
     
   </div>
 
-  <div class="podcast-content" *ngIf="suscrito">
+  <div class="podcast-content" *ngIf="suscrito || !esPremium">
     <app-list-episodios [episodios]="episodios"></app-list-episodios>
     
   </div>
-  <div class="podcast-content" *ngIf="!suscrito">
+  <div class="podcast-content" *ngIf="!suscrito && esPremium ">
     <h1>No estas suscrito, no puede accesar a este contenido</h1>
     
   </div>

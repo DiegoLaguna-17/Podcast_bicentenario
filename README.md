@@ -165,9 +165,7 @@ Esto es lo que se debe hacer para hacer que funcione y se ejecute el proyecto
 <!-- USAGE EXAMPLES -->
 ## Usos
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+La Plataforma de Podcast del Bicentenario aportará una herramienta accesible y escalable para preservar y difundir podcasts del bicentenario. La implementación de un backend moderno, respaldado por tecnologías modernas y reconocimiento de voz, permitirá que este proyecto tenga un impacto nacional y continúe creciendo en el futuro.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -177,18 +175,18 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ## Desarrollo
 
 - [x] Investigación y definición de requisitos
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+- [x] Diseño del backend y base de datos
+- [x] Desarrollo del backend con Django
+- [x] Integración de API de Speech-to-Text
+- [x] Desarrollo de la API REST
+- [x] Pruebas y optimización
+- [x] Despliegue y ajustes finales
 
-See the [open issues](https://github.com/DiegoLaguna-17/Podcast_bicentenario/issues) for a full list of proposed features (and known issues).
+Mira aqui [open issues](https://github.com/DiegoLaguna-17/Podcast_bicentenario/issues) para los problemas registrados que hayamos tenido.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Top contributors:
+### Contribuidores top:
 
 <a href="https://github.com/DiegoLaguna-17/Podcast_bicentenario/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=DiegoLaguna-17/Podcast_bicentenario" alt="contrib.rocks image" />
@@ -242,8 +240,6 @@ Use this space to list resources you find helpful and would like to give credit 
 [product-screenshot]: images/screenshot.png
 [Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
 [Angular-url]: https://angular.io/
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com 
 [Django.com]: https://img.shields.io/badge/Django-blue?style=for-the-badge&logo=Django
 [Django-url]: https://www.djangoproject.com
 [Vosk.com]: https://img.shields.io/badge/Vosk-black?style=for-the-badge

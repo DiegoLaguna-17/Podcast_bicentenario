@@ -82,8 +82,6 @@
 <!-- ABOUT THE PROJECT -->
 ## Acerca del proyecto
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 En conmemoración del Bicentenario de Bolivia en 2025, se busca promover la difusión de 
 contenido histórico a través de formatos digitales modernos. La Universidad Católica 
 Boliviana desarrollará una Plataforma de Podcast del Bicentenario, la cual permitirá 
@@ -92,8 +90,6 @@ historia de Bolivia.
 El sistema proporcionará una infraestructura backend escalable para el almacenamiento de 
 episodios, la generación de transcripciones automáticas y la distribución a diversas 
 plataformas de audio. 
-
-Use the `BLANK_README.md` to get started.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -199,27 +195,9 @@ Mira aqui [open issues](https://github.com/DiegoLaguna-17/Podcast_bicentenario/i
 <!-- CONTACT -->
 ## Contactos
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Diego Laguna - diego.laguna@ucb.edu.bo
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+Project Link: [https://github.com/DiegoLaguna-17/Podcast_bicentenario](https://github.com/Podcast_bicentenario)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

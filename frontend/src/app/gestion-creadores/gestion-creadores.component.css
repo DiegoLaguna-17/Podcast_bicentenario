@@ -21,6 +21,7 @@
   font-family: 'Playfair Display', serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   letter-spacing: 1px;
+  margin-top: -4%;
 }
 
 .error {
@@ -67,7 +68,7 @@
   gap: 10px;
 }
 
-.btn.editar, .btn.eliminar {
+.btn.editar, .btn.eliminar, .btn.actualizar {
     position: relative;
     overflow: hidden;
     z-index: 1;
@@ -86,7 +87,7 @@
     letter-spacing: 1px;
 }
 
-.btn.editar {
+.btn.editar, .btn.actualizar {
     background: var(--color-accent);
     color: var(--color-primary-dark);
 }
@@ -97,7 +98,7 @@
     border: 2px solid var(--color-accent);
 }
 
-.btn.editar::before, .btn.eliminar::before {
+.btn.editar::before, .btn.eliminar::before, .btn.actualizar::before {
     content: '';
     position: absolute;
     top: 0;
@@ -112,16 +113,16 @@
     z-index: -1;
 }
 
-.btn.editar:hover, .btn.eliminar:hover {
+.btn.editar:hover, .btn.eliminar:hover, .btn.actualizar:hover{
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
 }
 
-.btn.editar:hover::before, .btn.eliminar:hover::before {
+.btn.editar:hover::before, .btn.eliminar:hover::before, .btn.actualizar:hover::before {
     left: 100%;
 }
 
-.btn.editar:hover {
+.btn.editar:hover, .btn.actualizar:hover {
     background: var(--color-accent-light);
     color: var(--color-primary-dark);
 }
@@ -130,11 +131,15 @@
     background: rgba(212, 175, 55, 0.2);
 }
 
-.btn.editar:active, .btn.eliminar:active {
+.btn.editar:active, .btn.eliminar:active, .btn.actualizar:active {
     transform: translateY(2px);
     transition: all 0.1s ease;
 }
 
+.btn.actualizar{
+  margin-top: 20px;
+  margin-left: 17%;
+}
 /* Reutilizado del modal mejorado anterior */
 .modal {
   position: fixed;
@@ -176,7 +181,7 @@
 }
 
 .entrada {
-  width: 100%;
+  width: 94%;
   padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -225,4 +230,29 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.volver {
+  margin-right: 90%;
+  margin-bottom: 1%;
+  background: transparent;
+  color: var(--color-light);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-sm) 3%;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.volver:hover {
+  background: rgba(212, 175, 55, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

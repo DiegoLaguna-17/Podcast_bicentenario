@@ -1,4 +1,5 @@
 <div class="container">  
+  <button class="volver" (click)="volverAInicio()">←</button>
   <h1 class="titulo">Gestión de Creadores</h1>
   <div class="loader" *ngIf="cargando"></div>
 
@@ -46,10 +47,12 @@
         <label>Teléfono</label>
         <input type="text" class="entrada" [(ngModel)]="telefonoEditar" />
 
+        <br><br>
         <label>Imagen de perfil</label>
         <img [src]="imagen" class="imagen-preview" />
         <input type="file" (change)="onFileSelected($event)" />
 
+        <br><br><br>
         <label>Imagen de donaciones</label>
         <img [src]="donaciones" class="imagen-preview" />
         <input type="file" (change)="onFileSelected2($event)" />

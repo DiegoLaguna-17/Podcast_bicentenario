@@ -90,6 +90,10 @@ export class PerfilComponent {
     this.router.navigate(['/menu-principal']);
   }
 
+  registrarAdmin() {
+    this.router.navigate(['/registrar-admin'])
+  }
+
   loadPodcasts(): void {
     const token = localStorage.getItem('access_token');
   

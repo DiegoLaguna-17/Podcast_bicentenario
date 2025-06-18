@@ -128,7 +128,9 @@ monto:any
 
     }
   }
-
+  volverAMenuPrincipal() {
+    this.router.navigate(['/menu-principal']);
+  }
   mostrarModal(){
     this.modal=true;
   }

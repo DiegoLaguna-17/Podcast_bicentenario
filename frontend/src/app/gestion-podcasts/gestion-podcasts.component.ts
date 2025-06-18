@@ -122,4 +122,8 @@ gestionarEpisodios(podcast: any) {
     }
   });
 }
+
+volverAInicio() {
+    this.router.navigate(['/menu-principal']);
+  }
 }

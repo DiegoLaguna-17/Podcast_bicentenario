@@ -6,6 +6,7 @@
       <div class="modal-contenido">
         <span class="cerrar" (click)="cerrarModal()">&times;</span>
         <h2>Crear Lista de reproduccion</h2>
+        <br>
         <label>Titulo</label>
         <input type="text" class="entrada" [(ngModel)]="titulo" />
 
@@ -13,7 +14,7 @@
 
         <br><br>
 
-        <button class="btn actualizar" (click)="crearLista()">Crear Lista</button>
+        <button class="btn_actualizar" (click)="crearLista()">Crear Lista</button>
       </div>
     </div>
     @if(isLoading==true){

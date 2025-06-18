@@ -11,6 +11,7 @@
       <div class="profile-header">
         <h2>Perfil:</h2>
         <button class="cierre" (click)="cerrarSesion()">Cerrar Sesión</button>
+        <button class="cierre" (click)="volverAMenuPrincipal()">←</button>
       </div>
       
       <div class="profile-content">
@@ -69,6 +70,7 @@
         <br>
         <div style="display: flex;">
         <button class="cierre" (click)="cerrarSesion()">Cerrar Sesión</button>
+        <button class="cierre" (click)="volverAMenuPrincipal()">Volver</button>
         
         <button class="cierre" (click)="subirPubli()" *ngIf="datosper.rol=='Administrador'">Subir publicidad</button>
         </div>

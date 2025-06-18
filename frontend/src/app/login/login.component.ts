@@ -57,6 +57,10 @@ rolverificar:any
     });
     codigo.value=''
   }
+
+  volverAInicio() {
+    this.router.navigate(['/inicio']);
+  }
   onSubmit() {
     if (this.loginForm.invalid) {
       return;

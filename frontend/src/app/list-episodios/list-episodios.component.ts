@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CardEpisodiosComponent } from '../card-episodios/card-episodios.component';
 import { HttpClient , HttpHeaders} from '@angular/common/http';
+import { Route, Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -25,7 +26,7 @@ export class ListEpisodiosComponent {
   isLoading = false;
   error: string | null = null;
   @Input ()episodios:any[]=[]
-  constructor(private  http: HttpClient) {}
+  constructor(private  http: HttpClient, private router: Router) {}
 
 /*
   ngOnInit(): void {
@@ -68,6 +69,10 @@ export class ListEpisodiosComponent {
       
   }
 */
+
+  volverABuscar() {
+    this.router.navigate(['/buscar']);
+  }
   
 
 }

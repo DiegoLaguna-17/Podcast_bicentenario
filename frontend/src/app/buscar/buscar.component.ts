@@ -7,6 +7,7 @@ import { PodcastListComponent } from '../podcast-list/podcast-list.component';
 import { ListCreadoresComponent } from '../list-creadores/list-creadores.component';
 import { ListEpisodiosComponent } from '../list-episodios/list-episodios.component';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router'; 
 interface PodcastData {
   id: number;
   titulo: string;
@@ -40,7 +41,7 @@ export class BuscarComponent implements OnInit {
   private apiUrl = '/'; // De aqui se jalan los podcasts
   errorRespuesta:any
   headers:any
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     const token = localStorage.getItem('access_token');
   
     if (!token) {
@@ -50,6 +51,10 @@ export class BuscarComponent implements OnInit {
     this.headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
     }); 
+  }
+
+  volverAMenuPrincipal() {
+    this.router.navigate(['/menu-principal']);
   }
 
   ngOnInit(): void {

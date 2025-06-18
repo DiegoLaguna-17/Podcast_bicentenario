@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registrar',
@@ -56,8 +57,11 @@ export class RegistrarComponent {
   mensajeRespuesta: string | null = null;
   errorRespuesta: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
+  volverAInicio() {
+    this.router.navigate(['/inicio']);
+  }
   // Maneja el cambio de archivos para todos los tipos de usuario
   onFileChange(event: any, field: string, userType: string) {
     const file = event.target.files[0];

@@ -30,6 +30,9 @@ export class ParaTiComponent {
      
   }
 
+  volverAMenuPrincipal() {
+    this.router.navigate(['/menu-principal']);
+  }
   
   ngOnInit(): void {
     this.isLoading=true;
